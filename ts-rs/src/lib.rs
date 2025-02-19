@@ -25,26 +25,24 @@
 //! </div>
 //!
 //! ## Why?
-//! When building a web application in rust, data structures have to be shared between backend and frontend.
-//! Using this library, you can easily generate Python bindings to your rust structs & enums so that you can keep your
-//! types in one place.
-//!
-//! ts-rs might also come in handy when working with webassembly.
+//! When building an api in rust, data structures have to be shared between backend
+//! and client. Using this library, you can easily generate python bindings to your
+//! rust structs & enums so that you can keep your types in one place.
 //!
 //! ## How?
-//! ts-rs exposes a single trait, `PY`. Using a derive macro, you can implement this interface for your types.
+//! py-rs exposes a single trait, `PY`. Using a derive macro, you can implement this interface for your types.
 //! Then, you can use this trait to obtain the Python bindings.
 //! We recommend doing this in your tests.
-//! [See the example](https://github.com/Aleph-Alpha/ts-rs/blob/main/example/src/lib.rs) and [the docs](https://docs.rs/ts-rs/latest/ts_rs/).
+//! [See the example](https://github.com/Blue-Chestnut/py-rs/blob/main/example/src/lib.rs) and [the docs](https://docs.rs/py-rs/latest/py_rs/).
 //!
 //! ## Get started
 //! ```toml
 //! [dependencies]
-//! ts-rs = "10.1"
+//! py-rs = "0.1"
 //! ```
 //!
 //! ```rust
-//! use ts_rs::PY;
+//! use py_rs::PY;
 //!
 //! #[derive(PY)]
 //! #[py(export)]
@@ -55,11 +53,17 @@
 //! }
 //! ```
 //!
-//! When running `cargo test` or `cargo test export_bindings`, the Python bindings will be exported to the file `bindings/User.ts`
+//! When running `cargo test` or `cargo test export_bindings`, the Python bindings will be exported to the file `bindings/User.py`
 //! and will contain the following code:
 //!
-//! ```ts
-//! export type User = { user_id: number, first_name: string, last_name: string, };
+//! ```python
+//! import attr
+//!
+//! @attr.s(slots=True)
+//! class User(object):
+//!     user_id = attr.ib(validator=attr.validators.instance_of(int))
+//!     first_name = attr.ib(validator=attr.validators.instance_of(str))
+//!     last_name = attr.ib(validator=attr.validators.instance_of(str))
 //! ```
 //!
 //! ## Features
@@ -76,9 +80,8 @@
 //! | **Feature**        | **Description**                                                                                                                                                                                           |
 //! |:-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 //! | serde-compat       | **Enabled by default** <br/>See the *"serde compatibility"* section below for more information.                                                                                                           |
-//! | format             | Enables formatting of the generated Python bindings. <br/>Currently, this unfortunately adds quite a few dependencies.                                                                                |
+//! | format             | Enables formatting of the generated Python bindings. <br/>Currently, this unfortunately adds quite a few dependencies.                                                                                    |
 //! | no-serde-warnings  | By default, warnings are printed during build if unsupported serde attributes are encountered. <br/>Enabling this feature silences these warnings.                                                        |
-//! | import-esm         | When enabled,`import` statements in the generated file will have the `.js` extension in the end of the path to conform to the ES Modules spec. <br/> Example: `import { MyStruct } from "./my_struct.js"` |
 //! | serde-json-impl    | Implement `PY` for types from *serde_json*                                                                                                                                                                |
 //! | chrono-impl        | Implement `PY` for types from *chrono*                                                                                                                                                                    |
 //! | bigdecimal-impl    | Implement `PY` for types from *bigdecimal*                                                                                                                                                                |
@@ -90,8 +93,8 @@
 //! | ordered-float-impl | Implement `PY` for types from *ordered_float*                                                                                                                                                             |
 //! | heapless-impl      | Implement `PY` for types from *heapless*                                                                                                                                                                  |
 //! | semver-impl        | Implement `PY` for types from *semver*                                                                                                                                                                    |
-//! | smol_str-impl      | Implement `PY` for types from *smol_str*                                                                                                                                                                    |
-//! | tokio-impl         | Implement `PY` for types from *tokio*                                                                                                                                                                    |
+//! | smol_str-impl      | Implement `PY` for types from *smol_str*                                                                                                                                                                  |
+//! | tokio-impl         | Implement `PY` for types from *tokio*                                                                                                                                                                     |
 //!
 //! <br/>
 //!
@@ -119,7 +122,7 @@
 //! ## Contributing
 //! Contributions are always welcome!
 //! Feel free to open an issue, discuss using GitHub discussions or open a PR.
-//! [See CONTRIBUTING.md](https://github.com/Aleph-Alpha/ts-rs/blob/main/CONTRIBUTING.md)
+//! [See CONTRIBUTING.md](https://github.com/Blue-Chestnut/py-rs/blob/main/CONTRIBUTING.md)
 //!
 //! ## MSRV
 //! The Minimum Supported Rust Version for this crate is 1.63.0
@@ -150,14 +153,14 @@ mod tokio;
 
 /// A type which can be represented in Python.  
 /// Most of the time, you'd want to derive this trait instead of implementing it manually.  
-/// ts-rs comes with implementations for all primitives, most collections, tuples,
+/// py-rs comes with implementations for all primitives, most collections, tuples,
 /// arrays and containers.
 ///
 /// ### exporting
 /// Because Rusts procedural macros are evaluated before other compilation steps, Python
 /// bindings __cannot__ be exported during compile time.
 ///
-/// Bindings can be exported within a test, which ts-rs generates for you by adding `#[py(export)]`
+/// Bindings can be exported within a test, which py-rs generates for you by adding `#[py(export)]`
 /// to a type you wish to export to a file.  
 /// When `cargo test` is run, all types annotated with `#[py(export)]` and all of their
 /// dependencies will be written to `PY_RS_EXPORT_DIR`, or `./bindings` by default.
@@ -184,11 +187,11 @@ mod tokio;
 /// attributes applicable for both structs and enums
 ///
 /// - **`#[py(crate = "..")]`**
-///   Generates code which references the module passed to it instead of defaulting to `::ts_rs`
+///   Generates code which references the module passed to it instead of defaulting to `::py_rs`
 ///   This is useful for cases where you have to re-export the crate.
 ///
 /// - **`#[py(export)]`**  
-///   Generates a test which will export the type, by default to `bindings/<name>.ts` when running
+///   Generates a test which will export the type, by default to `bindings/<name>.py` when running
 ///   `cargo test`. The default base directory can be overridden with the `PY_RS_EXPORT_DIR` environment variable.
 ///   Adding the variable to a project's [config.toml](https://doc.rust-lang.org/cargo/reference/config.html#env) can
 ///   make it easier to manage.
@@ -200,7 +203,7 @@ mod tokio;
 ///   <br/>
 ///
 /// - **`#[py(export_to = "..")]`**  
-///   Specifies where the type should be exported to. Defaults to `<name>.ts`.  
+///   Specifies where the type should be exported to. Defaults to `<name>.py`.  
 ///   The path given to the `export_to` attribute is relative to the `PY_RS_EXPORT_DIR` environment variable,
 ///   or, if `PY_RS_EXPORT_DIR` is not set, to `./bindings`  
 ///   If the provided path ends in a trailing `/`, it is interpreted as a directory.   
@@ -208,7 +211,7 @@ mod tokio;
 ///   <br/><br/>
 ///
 /// - **`#[py(as = "..")]`**  
-///   Overrides the type used in Typescript, using the provided Rust type instead.
+///   Overrides the type used in Python, using the provided Rust type instead.
 ///   This is useful when you have a custom serializer and deserializer and don't want to implement `PY` manually
 ///   <br/><br/>
 ///
@@ -235,11 +238,11 @@ mod tokio;
 ///   for them. Using `#[py(concrete(..)]`, we can however generate a non-generic definition.
 ///   Example:
 ///   ```
-///   # use ts_rs::PY;
+///   # use py_rs::PY;
 ///   ##[derive(PY)]
 ///   ##[py(concrete(I = std::vec::IntoIter<String>))]
 ///   struct SearchResult<I: Iterator>(Vec<I::Item>);
-///   // will always generate `type SearchResult = Array<String>`.
+///   // will always generate `type SearchResult = list[str]`.
 ///   ```
 ///   <br/><br/>
 ///
@@ -250,7 +253,7 @@ mod tokio;
 ///
 ///   Example:
 ///   ```
-///   # use ts_rs::PY;
+///   # use py_rs::PY;
 ///
 ///   trait Container {
 ///       type Value: PY;
@@ -371,7 +374,7 @@ mod tokio;
 pub trait PY {
     /// If this type does not have generic parameters, then `WithoutGenerics` should just be `Self`.
     /// If the type does have generic parameters, then all generic parameters must be replaced with
-    /// a dummy type, e.g `ts_rs::Dummy` or `()`.
+    /// a dummy type, e.g `py_rs::Dummy` or `()`.
     /// The only requirement for these dummy types is that `EXPORT_TO` must be `None`.
     ///
     /// # Example:
@@ -390,7 +393,7 @@ pub trait PY {
     /// ```
     type WithoutGenerics: PY + ?Sized;
 
-    /// JSDoc comment to describe this type in Python - when `PY` is derived, docs are
+    /// comment to describe this type in Python - when `PY` is derived, docs are
     /// automatically read from your doc comments or `#[doc = ".."]` attributes
     const DOCS: Option<&'static str> = None;
 
@@ -400,18 +403,19 @@ pub trait PY {
         let name = Self::name();
 
         match name.find('<') {
+            // TODO check if this needs to be changed. I guess this is because of things like Array<Number>
             Some(i) => name[..i].to_owned(),
             None => name,
         }
     }
 
-    /// Declaration of this type, e.g. `type User = { user_id: number, ... }`.
+    /// Declaration of this type, e.g. `type User = { user_id: number, ... }`. TODO update
     /// This function will panic if the type has no declaration.
     ///
     /// If this type is generic, then all provided generic parameters will be swapped for
     /// placeholders, resulting in a generic python definition.
     /// Both `SomeType::<i32>::decl()` and `SomeType::<String>::decl()` will therefore result in
-    /// the same Python declaration `type SomeType<A> = ...`.
+    /// the same Python declaration `T = TypeVar('T')\n type SomeType[T] = ...`.
     fn decl() -> String;
 
     /// Declaration of this type using the supplied generic arguments.
@@ -598,7 +602,7 @@ pub struct Dependency {
     /// Type ID of the rust type
     pub type_id: TypeId,
     /// Name of the type in Python
-    pub ts_name: String,
+    pub py_name: String,
     /// Path to where the type would be exported. By default a filename is derived from the types
     /// name, which can be customized with `#[py(export_to = "..")]`.  
     /// This path does _not_ include a base directory.
@@ -613,7 +617,7 @@ impl Dependency {
         let output_path = T::output_path()?;
         Some(Dependency {
             type_id: TypeId::of::<T>(),
-            ts_name: T::ident(),
+            py_name: T::ident(),
             output_path,
         })
     }
@@ -805,15 +809,15 @@ impl<T: PY> PY for Vec<T> {
     type WithoutGenerics = Vec<Dummy>;
 
     fn ident() -> String {
-        "Array".to_owned()
+        "list".to_owned()
     }
 
     fn name() -> String {
-        format!("Array<{}>", T::name())
+        format!("list[{}]", T::name())
     }
 
     fn inline() -> String {
-        format!("Array<{}>", T::inline())
+        format!("list[{}]", T::inline())
     }
 
     fn visit_dependencies(v: &mut impl TypeVisitor)
@@ -906,7 +910,7 @@ impl<K: PY, V: PY, H> PY for HashMap<K, V, H> {
     }
 
     fn name() -> String {
-        format!("{{ [key in {}]?: {} }}", K::name(), V::name())
+        format!("{{ [key in {}]?: {} }}", K::name(), V::name()) // TODO update
     }
 
     fn inline() -> String {
@@ -1003,28 +1007,28 @@ impl_wrapper!(impl<T: PY> PY for std::marker::PhantomData<T>);
 impl_tuples!(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10);
 
 #[cfg(feature = "bigdecimal-impl")]
-impl_primitives! { bigdecimal::BigDecimal => "string" }
+impl_primitives! { bigdecimal::BigDecimal => "str" }
 
 #[cfg(feature = "smol_str-impl")]
-impl_primitives! { smol_str::SmolStr => "string" }
+impl_primitives! { smol_str::SmolStr => "str" }
 
 #[cfg(feature = "uuid-impl")]
-impl_primitives! { uuid::Uuid => "string" }
+impl_primitives! { uuid::Uuid => "str" }
 
 #[cfg(feature = "url-impl")]
-impl_primitives! { url::Url => "string" }
+impl_primitives! { url::Url => "str" }
 
 #[cfg(feature = "ordered-float-impl")]
-impl_primitives! { ordered_float::OrderedFloat<f32> => "number" }
+impl_primitives! { ordered_float::OrderedFloat<f32> => "float" }
 
 #[cfg(feature = "ordered-float-impl")]
-impl_primitives! { ordered_float::OrderedFloat<f64> => "number" }
+impl_primitives! { ordered_float::OrderedFloat<f64> => "float" }
 
 #[cfg(feature = "bson-uuid-impl")]
-impl_primitives! { bson::oid::ObjectId => "string" }
+impl_primitives! { bson::oid::ObjectId => "str" }
 
 #[cfg(feature = "bson-uuid-impl")]
-impl_primitives! { bson::Uuid => "string" }
+impl_primitives! { bson::Uuid => "str" }
 
 #[cfg(feature = "indexmap-impl")]
 impl_shadow!(as Vec<T>: impl<T: PY> PY for indexmap::IndexSet<T>);
@@ -1036,7 +1040,7 @@ impl_shadow!(as HashMap<K, V>: impl<K: PY, V: PY> PY for indexmap::IndexMap<K, V
 impl_shadow!(as Vec<T>: impl<T: PY, const N: usize> PY for heapless::Vec<T, N>);
 
 #[cfg(feature = "semver-impl")]
-impl_primitives! { semver::Version => "string" }
+impl_primitives! { semver::Version => "str" }
 
 #[cfg(feature = "bytes-impl")]
 mod bytes {
@@ -1050,13 +1054,14 @@ impl_primitives! {
     u8, i8, NonZeroU8, NonZeroI8,
     u16, i16, NonZeroU16, NonZeroI16,
     u32, i32, NonZeroU32, NonZeroI32,
-    usize, isize, NonZeroUsize, NonZeroIsize, f32, f64 => "number",
+    usize, isize, NonZeroUsize, NonZeroIsize, u64,
     u64, i64, NonZeroU64, NonZeroI64,
-    u128, i128, NonZeroU128, NonZeroI128 => "bigint",
-    bool => "boolean",
+    u128, i128, NonZeroU128, NonZeroI128 => "int",
+    f32, f64 => "float",
+    bool => "bool",
     char, Path, PathBuf, String, str,
-    Ipv4Addr, Ipv6Addr, IpAddr, SocketAddrV4, SocketAddrV6, SocketAddr => "string",
-    () => "null"
+    Ipv4Addr, Ipv6Addr, IpAddr, SocketAddrV4, SocketAddrV6, SocketAddr => "str",
+    () => "None"
 }
 
 #[rustfmt::skip]
