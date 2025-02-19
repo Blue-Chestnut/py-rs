@@ -63,8 +63,8 @@ macro_rules! impl_parse {
     };
 }
 
-/// Converts a rust identifier to a typescript identifier.
-pub fn to_ts_ident(ident: &Ident) -> String {
+/// Converts a rust identifier to a python identifier.
+pub fn to_py_ident(ident: &Ident) -> String {
     let ident = ident.to_string();
     if ident.starts_with("r#") {
         ident.trim_start_matches("r#").to_owned()
@@ -73,11 +73,11 @@ pub fn to_ts_ident(ident: &Ident) -> String {
     }
 }
 
-/// Convert an arbitrary name to a valid Typescript field name.
+/// Convert an arbitrary name to a valid Python field name.
 ///
 /// If the name contains special characters or if its first character
 /// is a number it will be wrapped in quotes.
-pub fn raw_name_to_ts_field(value: String) -> String {
+pub fn raw_name_to_py_field(value: String) -> String {
     let valid_chars = value
         .chars()
         .all(|c| c.is_alphanumeric() || c == '_' || c == '$');
@@ -92,18 +92,18 @@ pub fn raw_name_to_ts_field(value: String) -> String {
     if valid {
         value
     } else {
-        format!(r#""{value}""#)
+        format!(r#""{value}""#) // TODO check if this is correct or need to panic here
     }
 }
 
-/// Parse all `#[ts(..)]` attributes from the given slice.
+/// Parse all `#[py(..)]` attributes from the given slice.
 pub(crate) fn parse_attrs<'a, A>(attrs: &'a [Attribute]) -> Result<A>
 where
     A: TryFrom<&'a Attribute, Error = Error> + Attr,
 {
     Ok(attrs
         .iter()
-        .filter(|a| a.path().is_ident("ts"))
+        .filter(|a| a.path().is_ident("py"))
         .map(A::try_from)
         .collect::<Result<Vec<A>>>()?
         .into_iter()
@@ -129,7 +129,7 @@ where
                 warning::print_warning(
                     "failed to parse serde attribute",
                     format!("{}", attr.to_token_stream()),
-                    "ts-rs failed to parse this attribute. It will be ignored.",
+                    "py-rs failed to parse this attribute. It will be ignored.",
                 )
                 .unwrap();
                 None
@@ -138,7 +138,7 @@ where
         .fold(Serde::<A>::default(), |acc, cur| acc.merge(cur))
 }
 
-/// Return doc comments parsed and formatted as JSDoc.
+/// Return doc comments parsed and formatted as Python docstring.
 pub fn parse_docs(attrs: &[Attribute]) -> Result<String> {
     let doc_attrs = attrs
         .iter()
@@ -149,7 +149,7 @@ pub fn parse_docs(attrs: &[Attribute]) -> Result<String> {
                 lit: Lit::Str(ref str),
                 ..
             }) => Ok(str.value()),
-            _ => syn_err!(attr.span(); "doc  with non literal expression found"),
+            _ => syn_err!(attr.span(); "doc with non literal expression found"),
         })
         .collect::<Result<Vec<_>>>()?;
 
@@ -157,12 +157,12 @@ pub fn parse_docs(attrs: &[Attribute]) -> Result<String> {
         // No docs
         0 => String::new(),
 
-        // Multi-line block doc comment (/** ... */)
-        1 if doc_attrs[0].contains('\n') => format!("/**{}*/\n", &doc_attrs[0]),
+        // Multi-line block doc comment (""" ... """)
+        1 if doc_attrs[0].contains('\n') => format!("\"\"\"{}\"\"\"\n", &doc_attrs[0]),
 
         // Regular doc comment(s) (///) or single line block doc comment
         _ => {
-            let mut buffer = String::from("/**\n");
+            let mut buffer = String::from("#\n");
             let mut lines = doc_attrs.iter().peekable();
 
             while let Some(line) = lines.next() {

@@ -1,9 +1,9 @@
 #![allow(dead_code)]
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "arrays/")]
+#[derive(PY)]
+#[py(export, export_to = "arrays/")]
 struct Interface {
     a: [i32; 4],
 }
@@ -23,7 +23,7 @@ fn interface() {
 
 #[test]
 fn newtype() {
-    #[derive(TS)]
+    #[derive(PY)]
     struct Newtype(#[allow(dead_code)] [i32; 4]);
 
     assert_eq!(Newtype::inline(), "[number, number, number, number]")

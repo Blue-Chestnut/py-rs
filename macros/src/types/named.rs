@@ -7,7 +7,7 @@ use syn::{
 use crate::{
     attr::{Attr, ContainerAttr, FieldAttr, Inflection, Optional, StructAttr},
     deps::Dependencies,
-    utils::{raw_name_to_ts_field, to_ts_ident},
+    utils::{raw_name_to_py_field, to_py_ident},
     DerivedPY,
 };
 
@@ -139,13 +139,13 @@ fn format_field(
             }
         });
 
-    let field_name = to_ts_ident(field.ident.as_ref().unwrap());
+    let field_name = to_py_ident(field.ident.as_ref().unwrap());
     let name = match (field_attr.rename, rename_all) {
         (Some(rn), _) => rn,
         (None, Some(rn)) => rn.apply(&field_name),
         (None, None) => field_name,
     };
-    let valid_name = raw_name_to_ts_field(name);
+    let valid_name = raw_name_to_py_field(name);
 
     // Start every doc string with a newline, because when other characters are in front, it is not "understood" by VSCode
     let docs = match field_attr.docs.is_empty() {
