@@ -19,7 +19,7 @@ mod attr;
 mod deps;
 mod types;
 
-struct DerivedTS {
+struct DerivedPY {
     crate_rename: Path,
     ts_name: String,
     docs: String,
@@ -33,7 +33,7 @@ struct DerivedTS {
     export_to: Option<String>,
 }
 
-impl DerivedTS {
+impl DerivedPY {
     fn into_impl(mut self, rust_ty: Ident, generics: Generics) -> TokenStream {
         let export = self
             .export
@@ -113,7 +113,7 @@ impl DerivedTS {
             .type_params()
             .filter(|ty| !self.concrete.contains_key(&ty.ident))
             .map(|ty| &ty.ident)
-            .map(|generic| quote!(<#generic as #crate_rename::TS>::name()))
+            .map(|generic| quote!(<#generic as #crate_rename::PY>::name()))
             .peekable();
 
         if generics_ts_names.peek().is_some() {
@@ -133,10 +133,10 @@ impl DerivedTS {
     /// has two generic type parameters, `A` and `B`. This function will therefore generate
     /// ```compile_fail
     /// struct A;
-    /// impl ts_rs::TS for A { /* .. */ }
+    /// impl ts_rs::PY for A { /* .. */ }
     ///
     /// struct B;
-    /// impl ts_rs::TS for B { /* .. */ }
+    /// impl ts_rs::PY for B { /* .. */ }
     /// ```
     fn generate_generic_types(&self, generics: &Generics) -> TokenStream {
         let crate_rename = &self.crate_rename;
@@ -144,7 +144,7 @@ impl DerivedTS {
             .type_params()
             .filter(|ty| !self.concrete.contains_key(&ty.ident))
             .map(|ty| ty.ident.clone());
-        let name = quote![<Self as #crate_rename::TS>::name()];
+        let name = quote![<Self as #crate_rename::PY>::name()];
         quote! {
             #(
                 #[derive(Copy, Clone, Debug, Hash, Eq, PartialEq, Ord, PartialOrd)]
@@ -154,7 +154,7 @@ impl DerivedTS {
                         write!(f, "{:?}", self)
                     }
                 }
-                impl #crate_rename::TS for #generics {
+                impl #crate_rename::PY for #generics {
                     type WithoutGenerics = #generics;
                     fn name() -> String { stringify!(#generics).to_owned() }
                     fn inline() -> String { panic!("{} cannot be inlined", #name) }
@@ -178,7 +178,7 @@ impl DerivedTS {
                 None => quote! { #crate_rename::Dummy },
                 Some(ty) => quote! { #ty },
             });
-        let ty = quote!(<#rust_ty<#(#generic_params),*> as #crate_rename::TS>);
+        let ty = quote!(<#rust_ty<#(#generic_params),*> as #crate_rename::PY>);
 
         quote! {
             #[cfg(test)]
@@ -197,7 +197,7 @@ impl DerivedTS {
             .map(|TypeParam { ident, .. }| {
                 quote![
                     v.visit::<#ident>();
-                    <#ident as #crate_rename::TS>::visit_generics(v);
+                    <#ident as #crate_rename::PY>::visit_generics(v);
                 ]
             });
         quote! {
@@ -227,7 +227,7 @@ impl DerivedTS {
             || {
                 quote! {
                     fn inline_flattened() -> String {
-                        panic!("{} cannot be flattened", <Self as #crate_rename::TS>::name())
+                        panic!("{} cannot be flattened", <Self as #crate_rename::PY>::name())
                     }
                 }
             },
@@ -274,7 +274,7 @@ impl DerivedTS {
                 // the identifier of the generic parameter - its name is shadowed by the dummy struct.
                 None => Some(quote!(#ident)),
                 // If the type parameter is concrete, we use the type the user provided using
-                // `#[ts(concrete)]`
+                // `#[py(concrete)]`
                 Some(concrete) => Some(quote!(#concrete)),
             },
             // We keep const parameters as they are, since there's no sensible default value we can
@@ -283,11 +283,11 @@ impl DerivedTS {
         });
         quote! {
             fn decl_concrete() -> String {
-                format!("type {} = {};", #name, <Self as #crate_rename::TS>::inline())
+                format!("type {} = {};", #name, <Self as #crate_rename::PY>::inline())
             }
             fn decl() -> String {
                 #generic_types
-                let inline = <#rust_ty<#(#generic_idents,)*> as #crate_rename::TS>::inline();
+                let inline = <#rust_ty<#(#generic_idents,)*> as #crate_rename::PY>::inline();
                 let generics = #ts_generics;
                 format!("type {}{generics} = {inline};", #name)
             }
@@ -315,7 +315,7 @@ fn generate_assoc_type(
     quote! { type WithoutGenerics = #rust_ty<#(#generics_params),*>; }
 }
 
-// generate start of the `impl TS for #ty` block, up to (excluding) the open brace
+// generate start of the `impl PY for #ty` block, up to (excluding) the open brace
 fn generate_impl_block_header(
     crate_rename: &Path,
     ty: &Ident,
@@ -359,7 +359,7 @@ fn generate_impl_block_header(
         }
     };
 
-    quote!(impl <#(#params),*> #crate_rename::TS for #ty <#(#type_args),*> #where_bound)
+    quote!(impl <#(#params),*> #crate_rename::PY for #ty <#(#type_args),*> #where_bound)
 }
 
 fn generate_where_clause(
@@ -379,7 +379,7 @@ fn generate_where_clause(
 
     let existing = generics.where_clause.iter().flat_map(|w| &w.predicates);
     parse_quote! {
-        where #(#existing,)* #(#used_types: #crate_rename::TS),*
+        where #(#existing,)* #(#used_types: #crate_rename::PY),*
     }
 }
 
@@ -425,9 +425,9 @@ fn used_type_params<'ty, 'out>(
     }
 }
 
-/// Derives [TS](./trait.TS.html) for a struct or enum.
-/// Please take a look at [TS](./trait.TS.html) for documentation.
-#[proc_macro_derive(TS, attributes(ts))]
+/// Derives [PY](./trait.PY.html) for a struct or enum.
+/// Please take a look at [PY](./trait.PY.html) for documentation.
+#[proc_macro_derive(PY, attributes(ts))]
 pub fn typescript(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     match entry(input) {
         Err(err) => err.to_compile_error(),

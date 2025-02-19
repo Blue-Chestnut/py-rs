@@ -14,7 +14,7 @@ use lazy_static::lazy_static;
 use path::diff_paths;
 pub(crate) use recursive_export::export_all_into;
 
-use crate::TS;
+use crate::PY;
 
 mod error;
 mod path;
@@ -29,12 +29,12 @@ mod recursive_export {
     use std::{any::TypeId, collections::HashSet, path::Path};
 
     use super::export_into;
-    use crate::{ExportError, TypeVisitor, TS};
+    use crate::{ExportError, TypeVisitor, PY};
 
-    /// Exports `T` to the file specified by the `#[ts(export_to = ..)]` attribute within the given
+    /// Exports `T` to the file specified by the `#[py(export_to = ..)]` attribute within the given
     /// base directory.  
     /// Additionally, all dependencies of `T` will be exported as well.
-    pub(crate) fn export_all_into<T: TS + ?Sized + 'static>(
+    pub(crate) fn export_all_into<T: PY + ?Sized + 'static>(
         out_dir: impl AsRef<Path>,
     ) -> Result<(), ExportError> {
         let mut seen = HashSet::new();
@@ -48,7 +48,7 @@ mod recursive_export {
     }
 
     impl<'a> TypeVisitor for Visit<'a> {
-        fn visit<T: TS + 'static + ?Sized>(&mut self) {
+        fn visit<T: PY + 'static + ?Sized>(&mut self) {
             // if an error occurred previously, or the type cannot be exported (it's a primitive),
             // we return
             if self.error.is_some() || T::output_path().is_none() {
@@ -60,7 +60,7 @@ mod recursive_export {
     }
 
     // exports T, then recursively calls itself with all of its dependencies
-    fn export_recursive<T: TS + ?Sized + 'static>(
+    fn export_recursive<T: PY + ?Sized + 'static>(
         seen: &mut HashSet<TypeId>,
         out_dir: impl AsRef<Path>,
     ) -> Result<(), ExportError> {
@@ -86,8 +86,8 @@ mod recursive_export {
     }
 }
 
-/// Export `T` to the file specified by the `#[ts(export_to = ..)]` attribute
-pub(crate) fn export_into<T: TS + ?Sized + 'static>(
+/// Export `T` to the file specified by the `#[py(export_to = ..)]` attribute
+pub(crate) fn export_into<T: PY + ?Sized + 'static>(
     out_dir: impl AsRef<Path>,
 ) -> Result<(), ExportError> {
     let path = T::output_path()
@@ -99,7 +99,7 @@ pub(crate) fn export_into<T: TS + ?Sized + 'static>(
 }
 
 /// Export `T` to the file specified by the `path` argument.
-pub(crate) fn export_to<T: TS + ?Sized + 'static, P: AsRef<Path>>(
+pub(crate) fn export_to<T: PY + ?Sized + 'static, P: AsRef<Path>>(
     path: P,
 ) -> Result<(), ExportError> {
     let path = path.as_ref().to_owned();
@@ -259,7 +259,7 @@ fn merge(original_contents: String, new_contents: String) -> String {
 }
 
 /// Returns the generated definition for `T`.
-pub(crate) fn export_to_string<T: TS + ?Sized + 'static>() -> Result<String, ExportError> {
+pub(crate) fn export_to_string<T: PY + ?Sized + 'static>() -> Result<String, ExportError> {
     let mut buffer = String::with_capacity(1024);
     buffer.push_str(NOTE);
     generate_imports::<T::WithoutGenerics>(&mut buffer, default_out_dir())?;
@@ -269,14 +269,14 @@ pub(crate) fn export_to_string<T: TS + ?Sized + 'static>() -> Result<String, Exp
 }
 
 pub(crate) fn default_out_dir() -> Cow<'static, Path> {
-    match std::env::var("TS_RS_EXPORT_DIR") {
+    match std::env::var("PY_RS_EXPORT_DIR") {
         Err(..) => Cow::Borrowed(Path::new("./bindings")),
         Ok(dir) => Cow::Owned(PathBuf::from(dir)),
     }
 }
 
 /// Push the declaration of `T`
-fn generate_decl<T: TS + ?Sized>(out: &mut String) {
+fn generate_decl<T: PY + ?Sized>(out: &mut String) {
     // Type Docs
     let docs = &T::DOCS;
     if let Some(docs) = docs {
@@ -289,7 +289,7 @@ fn generate_decl<T: TS + ?Sized>(out: &mut String) {
 }
 
 /// Push an import statement for all dependencies of `T`.
-fn generate_imports<T: TS + ?Sized + 'static>(
+fn generate_imports<T: PY + ?Sized + 'static>(
     out: &mut String,
     out_dir: impl AsRef<Path>,
 ) -> Result<(), ExportError> {
@@ -302,7 +302,7 @@ fn generate_imports<T: TS + ?Sized + 'static>(
     let deduplicated_deps = deps
         .iter()
         .filter(|dep| dep.type_id != TypeId::of::<T>())
-        .map(|dep| (&dep.ts_name, dep))
+        .map(|dep| (&dep.py_name, dep))
         .collect::<BTreeMap<_, _>>();
 
     for (_, dep) in deduplicated_deps {
@@ -324,7 +324,7 @@ fn generate_imports<T: TS + ?Sized + 'static>(
         writeln!(
             out,
             r#"import type {{ {} }} from "{}";"#,
-            &dep.ts_name, rel_path
+            &dep.py_name, rel_path
         )?;
     }
     writeln!(out)?;

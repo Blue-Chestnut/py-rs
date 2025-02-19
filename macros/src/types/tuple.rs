@@ -5,10 +5,10 @@ use syn::{Field, FieldsUnnamed, Path, Result};
 use crate::{
     attr::{Attr, ContainerAttr, FieldAttr, StructAttr},
     deps::Dependencies,
-    DerivedTS,
+    DerivedPY,
 };
 
-pub(crate) fn tuple(attr: &StructAttr, name: &str, fields: &FieldsUnnamed) -> Result<DerivedTS> {
+pub(crate) fn tuple(attr: &StructAttr, name: &str, fields: &FieldsUnnamed) -> Result<DerivedPY> {
     let crate_rename = attr.crate_rename();
     let mut formatted_fields = Vec::new();
     let mut dependencies = Dependencies::new(crate_rename.clone());
@@ -21,7 +21,7 @@ pub(crate) fn tuple(attr: &StructAttr, name: &str, fields: &FieldsUnnamed) -> Re
         )?;
     }
 
-    Ok(DerivedTS {
+    Ok(DerivedPY {
         crate_rename,
         inline: quote! {
             format!(

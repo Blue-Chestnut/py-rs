@@ -3,80 +3,80 @@
 use std::{collections::BTreeSet, rc::Rc};
 
 use chrono::NaiveDateTime;
+use py_rs::PY;
 use serde::Serialize;
-use ts_rs::TS;
 use uuid::Uuid;
 
-#[derive(Serialize, TS)]
-#[ts(rename_all = "lowercase")]
-#[ts(export, export_to = "UserRole.ts")]
+#[derive(Serialize, PY)]
+#[py(rename_all = "lowercase")]
+#[py(export, export_to = "UserRole.ts")]
 enum Role {
     User,
-    #[ts(rename = "administrator")]
+    #[py(rename = "administrator")]
     Admin,
 }
 
-#[derive(Serialize, TS)]
+#[derive(Serialize, PY)]
 // when 'serde-compat' is enabled, ts-rs tries to use supported serde attributes.
 #[serde(rename_all = "UPPERCASE")]
-#[ts(export)]
+#[py(export)]
 enum Gender {
     Male,
     Female,
     Other,
 }
 
-#[derive(Serialize, TS)]
-#[ts(export)]
+#[derive(Serialize, PY)]
+#[py(export)]
 struct User {
     user_id: i32,
     first_name: String,
     last_name: String,
     role: Role,
     family: Vec<User>,
-    #[ts(inline)]
+    #[py(inline)]
     gender: Gender,
     token: Uuid,
-    #[ts(type = "string")]
+    #[py(type = "string")]
     created_at: NaiveDateTime,
 }
 
-#[derive(Serialize, TS)]
+#[derive(Serialize, PY)]
 #[serde(tag = "type", rename_all = "snake_case")]
-#[ts(export)]
+#[py(export)]
 enum Vehicle {
     Bicycle { color: String },
     Car { brand: String, color: String },
 }
 
-#[derive(Serialize, TS)]
-#[ts(export)]
+#[derive(Serialize, PY)]
+#[py(export)]
 struct Point<T>
 where
-    T: TS,
+    T: PY,
 {
     time: u64,
     value: T,
 }
 
-#[derive(Serialize, TS)]
+#[derive(Serialize, PY)]
 #[serde(default)]
-#[ts(export)]
+#[py(export)]
 struct Series {
     points: Vec<Point<u64>>,
 }
 
-#[derive(Serialize, TS)]
+#[derive(Serialize, PY)]
 #[serde(tag = "kind", content = "d")]
-#[ts(export)]
+#[py(export)]
 enum SimpleEnum {
     A,
     B,
 }
 
-#[derive(Serialize, TS)]
+#[derive(Serialize, PY)]
 #[serde(tag = "kind", content = "data")]
-#[ts(export)]
+#[py(export)]
 enum ComplexEnum {
     A,
     B { foo: String, bar: f64 },
@@ -86,9 +86,9 @@ enum ComplexEnum {
     U(Box<User>),
 }
 
-#[derive(Serialize, TS)]
+#[derive(Serialize, PY)]
 #[serde(tag = "kind")]
-#[ts(export)]
+#[py(export)]
 enum InlineComplexEnum {
     A,
     B { foo: String, bar: f64 },
@@ -98,9 +98,9 @@ enum InlineComplexEnum {
     U(Box<User>),
 }
 
-#[derive(Serialize, TS)]
+#[derive(Serialize, PY)]
 #[serde(rename_all = "camelCase")]
-#[ts(export)]
+#[py(export)]
 struct ComplexStruct {
     #[serde(default)]
     pub string_tree: Option<Rc<BTreeSet<String>>>,

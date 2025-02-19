@@ -2,7 +2,7 @@ use syn::{Fields, ItemStruct, Result};
 
 use crate::{
     attr::{Attr, StructAttr},
-    DerivedTS,
+    DerivedPY,
 };
 
 mod r#enum;
@@ -15,13 +15,13 @@ mod unit;
 
 pub(crate) use r#enum::r#enum_def;
 
-pub(crate) fn struct_def(s: &ItemStruct) -> Result<DerivedTS> {
+pub(crate) fn struct_def(s: &ItemStruct) -> Result<DerivedPY> {
     let attr = StructAttr::from_attrs(&s.attrs)?;
 
     type_def(&attr, &s.ident.to_string(), &s.fields)
 }
 
-fn type_def(attr: &StructAttr, ident: &str, fields: &Fields) -> Result<DerivedTS> {
+fn type_def(attr: &StructAttr, ident: &str, fields: &Fields) -> Result<DerivedPY> {
     attr.assert_validity(fields)?;
 
     let name = attr

@@ -4,13 +4,13 @@ use syn::{Result, Type};
 use crate::{
     attr::{ContainerAttr, EnumAttr, StructAttr},
     deps::Dependencies,
-    DerivedTS,
+    DerivedPY,
 };
 
-pub(crate) fn type_as_struct(attr: &StructAttr, name: &str, type_as: &Type) -> Result<DerivedTS> {
+pub(crate) fn type_as_struct(attr: &StructAttr, name: &str, type_as: &Type) -> Result<DerivedPY> {
     let crate_rename = attr.crate_rename();
 
-    Ok(DerivedTS {
+    Ok(DerivedPY {
         crate_rename: crate_rename.clone(),
         inline: quote!(#type_as::inline()),
         inline_flattened: None,
@@ -24,10 +24,10 @@ pub(crate) fn type_as_struct(attr: &StructAttr, name: &str, type_as: &Type) -> R
     })
 }
 
-pub(crate) fn type_as_enum(attr: &EnumAttr, name: &str, type_as: &Type) -> Result<DerivedTS> {
+pub(crate) fn type_as_enum(attr: &EnumAttr, name: &str, type_as: &Type) -> Result<DerivedPY> {
     let crate_rename = attr.crate_rename();
 
-    Ok(DerivedTS {
+    Ok(DerivedPY {
         crate_rename: crate_rename.clone(),
         inline: quote!(#type_as::inline()),
         inline_flattened: None,

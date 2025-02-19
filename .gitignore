@@ -1,6 +1,7 @@
 target/
 /.idea
 *.ts
+*.py
 tsconfig.json
 
-/ts-rs/tests-out
+/py-rs/tests-out

@@ -4,17 +4,17 @@ use syn::Result;
 use crate::{
     attr::{ContainerAttr, EnumAttr, StructAttr},
     deps::Dependencies,
-    DerivedTS,
+    DerivedPY,
 };
 
 pub(crate) fn type_override_struct(
     attr: &StructAttr,
     name: &str,
     type_override: &str,
-) -> Result<DerivedTS> {
+) -> Result<DerivedPY> {
     let crate_rename = attr.crate_rename();
 
-    Ok(DerivedTS {
+    Ok(DerivedPY {
         crate_rename: crate_rename.clone(),
         inline: quote!(#type_override.to_owned()),
         inline_flattened: None,
@@ -32,10 +32,10 @@ pub(crate) fn type_override_enum(
     attr: &EnumAttr,
     name: &str,
     type_override: &str,
-) -> Result<DerivedTS> {
+) -> Result<DerivedPY> {
     let crate_rename = attr.crate_rename();
 
-    Ok(DerivedTS {
+    Ok(DerivedPY {
         crate_rename: crate_rename.clone(),
         inline: quote!(#type_override.to_owned()),
         inline_flattened: None,

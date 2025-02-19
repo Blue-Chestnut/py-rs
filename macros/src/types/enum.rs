@@ -6,10 +6,10 @@ use crate::{
     attr::{Attr, EnumAttr, FieldAttr, StructAttr, Tagged, VariantAttr},
     deps::Dependencies,
     types::{self, type_as, type_override},
-    DerivedTS,
+    DerivedPY,
 };
 
-pub(crate) fn r#enum_def(s: &ItemEnum) -> syn::Result<DerivedTS> {
+pub(crate) fn r#enum_def(s: &ItemEnum) -> syn::Result<DerivedPY> {
     let enum_attr: EnumAttr = EnumAttr::from_attrs(&s.attrs)?;
 
     enum_attr.assert_validity(s)?;
@@ -24,7 +24,7 @@ pub(crate) fn r#enum_def(s: &ItemEnum) -> syn::Result<DerivedTS> {
     if let Some(attr_type_override) = &enum_attr.type_override {
         return type_override::type_override_enum(&enum_attr, &name, attr_type_override);
     }
- 
+
     if let Some(attr_type_as) = &enum_attr.type_as {
         return type_as::type_as_enum(&enum_attr, &name, attr_type_as);
     }
@@ -45,7 +45,7 @@ pub(crate) fn r#enum_def(s: &ItemEnum) -> syn::Result<DerivedTS> {
         )?;
     }
 
-    Ok(DerivedTS {
+    Ok(DerivedPY {
         crate_rename,
         inline: quote!([#(#formatted_variants),*].join(" | ")),
         inline_flattened: Some(quote!(
@@ -192,10 +192,10 @@ fn format_variant(
 }
 
 // bindings for an empty enum (`never` in TS)
-fn empty_enum(name: impl Into<String>, enum_attr: EnumAttr) -> DerivedTS {
+fn empty_enum(name: impl Into<String>, enum_attr: EnumAttr) -> DerivedPY {
     let name = name.into();
     let crate_rename = enum_attr.crate_rename();
-    DerivedTS {
+    DerivedPY {
         crate_rename: crate_rename.clone(),
         inline: quote!("never".to_owned()),
         docs: enum_attr.docs,

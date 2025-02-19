@@ -6,5 +6,5 @@ edition = "2021"
 [workspace]
 
 [dependencies]
-ts-rs = { path = "../../../ts-rs" }
+py-rs = { path = "../../../py-rs" }
 dependency1 = { path = "../dependency1" }

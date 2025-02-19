@@ -4,14 +4,14 @@ use syn::Result;
 use crate::{
     attr::{ContainerAttr, StructAttr},
     deps::Dependencies,
-    DerivedTS,
+    DerivedPY,
 };
 
-pub(crate) fn empty_object(attr: &StructAttr, name: &str) -> Result<DerivedTS> {
+pub(crate) fn empty_object(attr: &StructAttr, name: &str) -> Result<DerivedPY> {
     check_attributes(attr)?;
     let crate_rename = attr.crate_rename();
 
-    Ok(DerivedTS {
+    Ok(DerivedPY {
         crate_rename: crate_rename.clone(),
         inline: quote!("Record<string, never>".to_owned()),
         inline_flattened: None,
@@ -25,11 +25,11 @@ pub(crate) fn empty_object(attr: &StructAttr, name: &str) -> Result<DerivedTS> {
     })
 }
 
-pub(crate) fn empty_array(attr: &StructAttr, name: &str) -> Result<DerivedTS> {
+pub(crate) fn empty_array(attr: &StructAttr, name: &str) -> Result<DerivedPY> {
     check_attributes(attr)?;
     let crate_rename = attr.crate_rename();
 
-    Ok(DerivedTS {
+    Ok(DerivedPY {
         crate_rename: crate_rename.clone(),
         inline: quote!("never[]".to_owned()),
         inline_flattened: None,
@@ -43,11 +43,11 @@ pub(crate) fn empty_array(attr: &StructAttr, name: &str) -> Result<DerivedTS> {
     })
 }
 
-pub(crate) fn null(attr: &StructAttr, name: &str) -> Result<DerivedTS> {
+pub(crate) fn null(attr: &StructAttr, name: &str) -> Result<DerivedPY> {
     check_attributes(attr)?;
     let crate_rename = attr.crate_rename();
 
-    Ok(DerivedTS {
+    Ok(DerivedPY {
         crate_rename: crate_rename.clone(),
         inline: quote!("null".to_owned()),
         inline_flattened: None,

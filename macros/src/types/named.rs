@@ -8,10 +8,10 @@ use crate::{
     attr::{Attr, ContainerAttr, FieldAttr, Inflection, Optional, StructAttr},
     deps::Dependencies,
     utils::{raw_name_to_ts_field, to_ts_ident},
-    DerivedTS,
+    DerivedPY,
 };
 
-pub(crate) fn named(attr: &StructAttr, name: &str, fields: &FieldsNamed) -> Result<DerivedTS> {
+pub(crate) fn named(attr: &StructAttr, name: &str, fields: &FieldsNamed) -> Result<DerivedPY> {
     let crate_rename = attr.crate_rename();
 
     let mut formatted_fields = Vec::new();
@@ -60,7 +60,7 @@ pub(crate) fn named(attr: &StructAttr, name: &str, fields: &FieldsNamed) -> Resu
         (_, _) => quote!(format!("{{ {} }} & {}", #fields, #flattened)),
     };
 
-    Ok(DerivedTS {
+    Ok(DerivedPY {
         crate_rename,
         // the `replace` combines `{ ... } & { ... }` into just one `{ ... }`. Not necessary, but it
         // results in simpler type definitions.

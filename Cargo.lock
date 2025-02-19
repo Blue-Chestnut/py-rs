@@ -393,8 +393,8 @@ name = "example"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "py-rs",
  "serde",
- "ts-rs",
  "uuid",
 ]
 
@@ -898,6 +898,40 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "200b9ff220857e53e184257720a14553b2f4aa02577d2ed9842d45d4b9654810"
 dependencies = [
  "cc",
+]
+
+[[package]]
+name = "py-rs"
+version = "0.1.0"
+dependencies = [
+ "bigdecimal",
+ "bson",
+ "bytes",
+ "chrono",
+ "dprint-plugin-typescript",
+ "heapless",
+ "indexmap",
+ "lazy_static",
+ "ordered-float",
+ "py-rs-macros",
+ "semver",
+ "serde",
+ "serde_json",
+ "smol_str",
+ "thiserror 2.0.3",
+ "tokio",
+ "url",
+ "uuid",
+]
+
+[[package]]
+name = "py-rs-macros"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.90",
+ "termcolor",
 ]
 
 [[package]]
@@ -1431,40 +1465,6 @@ checksum = "ef8f7726da4807b58ea5c96fdc122f80702030edc33b35aff9190a51148ccc85"
 dependencies = [
  "serde",
  "stable_deref_trait",
-]
-
-[[package]]
-name = "ts-rs"
-version = "10.1.0"
-dependencies = [
- "bigdecimal",
- "bson",
- "bytes",
- "chrono",
- "dprint-plugin-typescript",
- "heapless",
- "indexmap",
- "lazy_static",
- "ordered-float",
- "semver",
- "serde",
- "serde_json",
- "smol_str",
- "thiserror 2.0.3",
- "tokio",
- "ts-rs-macros",
- "url",
- "uuid",
-]
-
-[[package]]
-name = "ts-rs-macros"
-version = "10.1.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.90",
- "termcolor",
 ]
 
 [[package]]

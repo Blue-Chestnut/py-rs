@@ -4,10 +4,10 @@ use syn::{FieldsUnnamed, Result};
 use crate::{
     attr::{Attr, ContainerAttr, FieldAttr, StructAttr},
     deps::Dependencies,
-    DerivedTS,
+    DerivedPY,
 };
 
-pub(crate) fn newtype(attr: &StructAttr, name: &str, fields: &FieldsUnnamed) -> Result<DerivedTS> {
+pub(crate) fn newtype(attr: &StructAttr, name: &str, fields: &FieldsUnnamed) -> Result<DerivedPY> {
     let inner = fields.unnamed.first().unwrap();
 
     let field_attr = FieldAttr::from_attrs(&inner.attrs)?;
@@ -35,7 +35,7 @@ pub(crate) fn newtype(attr: &StructAttr, name: &str, fields: &FieldsUnnamed) -> 
         None => quote!(<#inner_ty as #crate_rename::TS>::name()),
     };
 
-    Ok(DerivedTS {
+    Ok(DerivedPY {
         crate_rename,
         inline: inline_def,
         inline_flattened: None,

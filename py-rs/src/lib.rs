@@ -1054,7 +1054,7 @@ impl_primitives! {
     u8, i8, NonZeroU8, NonZeroI8,
     u16, i16, NonZeroU16, NonZeroI16,
     u32, i32, NonZeroU32, NonZeroI32,
-    usize, isize, NonZeroUsize, NonZeroIsize, u64,
+    usize, isize, NonZeroUsize, NonZeroIsize,
     u64, i64, NonZeroU64, NonZeroI64,
     u128, i128, NonZeroU128, NonZeroI128 => "int",
     f32, f64 => "float",
