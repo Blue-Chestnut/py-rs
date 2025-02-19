@@ -4,7 +4,7 @@
 //! ts-rs
 //! </h1>
 //! <p align="center">
-//! Generate typescript type declarations from rust types
+//! Generate python type declarations from rust types
 //! </p>
 //!
 //! <div align="center">
@@ -26,14 +26,14 @@
 //!
 //! ## Why?
 //! When building a web application in rust, data structures have to be shared between backend and frontend.
-//! Using this library, you can easily generate TypeScript bindings to your rust structs & enums so that you can keep your
+//! Using this library, you can easily generate Python bindings to your rust structs & enums so that you can keep your
 //! types in one place.
 //!
 //! ts-rs might also come in handy when working with webassembly.
 //!
 //! ## How?
-//! ts-rs exposes a single trait, `TS`. Using a derive macro, you can implement this interface for your types.
-//! Then, you can use this trait to obtain the TypeScript bindings.
+//! ts-rs exposes a single trait, `PY`. Using a derive macro, you can implement this interface for your types.
+//! Then, you can use this trait to obtain the Python bindings.
 //! We recommend doing this in your tests.
 //! [See the example](https://github.com/Aleph-Alpha/ts-rs/blob/main/example/src/lib.rs) and [the docs](https://docs.rs/ts-rs/latest/ts_rs/).
 //!
@@ -44,10 +44,10 @@
 //! ```
 //!
 //! ```rust
-//! use ts_rs::TS;
+//! use ts_rs::PY;
 //!
-//! #[derive(TS)]
-//! #[ts(export)]
+//! #[derive(PY)]
+//! #[py(export)]
 //! struct User {
 //!     user_id: i32,
 //!     first_name: String,
@@ -55,7 +55,7 @@
 //! }
 //! ```
 //!
-//! When running `cargo test` or `cargo test export_bindings`, the TypeScript bindings will be exported to the file `bindings/User.ts`
+//! When running `cargo test` or `cargo test export_bindings`, the Python bindings will be exported to the file `bindings/User.ts`
 //! and will contain the following code:
 //!
 //! ```ts
@@ -76,27 +76,27 @@
 //! | **Feature**        | **Description**                                                                                                                                                                                           |
 //! |:-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 //! | serde-compat       | **Enabled by default** <br/>See the *"serde compatibility"* section below for more information.                                                                                                           |
-//! | format             | Enables formatting of the generated TypeScript bindings. <br/>Currently, this unfortunately adds quite a few dependencies.                                                                                |
+//! | format             | Enables formatting of the generated Python bindings. <br/>Currently, this unfortunately adds quite a few dependencies.                                                                                |
 //! | no-serde-warnings  | By default, warnings are printed during build if unsupported serde attributes are encountered. <br/>Enabling this feature silences these warnings.                                                        |
 //! | import-esm         | When enabled,`import` statements in the generated file will have the `.js` extension in the end of the path to conform to the ES Modules spec. <br/> Example: `import { MyStruct } from "./my_struct.js"` |
-//! | serde-json-impl    | Implement `TS` for types from *serde_json*                                                                                                                                                                |
-//! | chrono-impl        | Implement `TS` for types from *chrono*                                                                                                                                                                    |
-//! | bigdecimal-impl    | Implement `TS` for types from *bigdecimal*                                                                                                                                                                |
-//! | url-impl           | Implement `TS` for types from *url*                                                                                                                                                                       |
-//! | uuid-impl          | Implement `TS` for types from *uuid*                                                                                                                                                                      |
-//! | bson-uuid-impl     | Implement `TS` for *bson::oid::ObjectId* and *bson::uuid*                                                                                                                                                 |
-//! | bytes-impl         | Implement `TS` for types from *bytes*                                                                                                                                                                     |
-//! | indexmap-impl      | Implement `TS` for types from *indexmap*                                                                                                                                                                  |
-//! | ordered-float-impl | Implement `TS` for types from *ordered_float*                                                                                                                                                             |
-//! | heapless-impl      | Implement `TS` for types from *heapless*                                                                                                                                                                  |
-//! | semver-impl        | Implement `TS` for types from *semver*                                                                                                                                                                    |
-//! | smol_str-impl      | Implement `TS` for types from *smol_str*                                                                                                                                                                    |
-//! | tokio-impl         | Implement `TS` for types from *tokio*                                                                                                                                                                    |
+//! | serde-json-impl    | Implement `PY` for types from *serde_json*                                                                                                                                                                |
+//! | chrono-impl        | Implement `PY` for types from *chrono*                                                                                                                                                                    |
+//! | bigdecimal-impl    | Implement `PY` for types from *bigdecimal*                                                                                                                                                                |
+//! | url-impl           | Implement `PY` for types from *url*                                                                                                                                                                       |
+//! | uuid-impl          | Implement `PY` for types from *uuid*                                                                                                                                                                      |
+//! | bson-uuid-impl     | Implement `PY` for *bson::oid::ObjectId* and *bson::uuid*                                                                                                                                                 |
+//! | bytes-impl         | Implement `PY` for types from *bytes*                                                                                                                                                                     |
+//! | indexmap-impl      | Implement `PY` for types from *indexmap*                                                                                                                                                                  |
+//! | ordered-float-impl | Implement `PY` for types from *ordered_float*                                                                                                                                                             |
+//! | heapless-impl      | Implement `PY` for types from *heapless*                                                                                                                                                                  |
+//! | semver-impl        | Implement `PY` for types from *semver*                                                                                                                                                                    |
+//! | smol_str-impl      | Implement `PY` for types from *smol_str*                                                                                                                                                                    |
+//! | tokio-impl         | Implement `PY` for types from *tokio*                                                                                                                                                                    |
 //!
 //! <br/>
 //!
-//! If there's a type you're dealing with which doesn't implement `TS`, use either
-//! `#[ts(as = "..")]` or `#[ts(type = "..")]`, or open a PR.
+//! If there's a type you're dealing with which doesn't implement `PY`, use either
+//! `#[py(as = "..")]` or `#[py(type = "..")]`, or open a PR.
 //!
 //! ## `serde` compatability
 //! With the `serde-compat` feature (enabled by default), serde attributes can be parsed for enums and structs.
@@ -112,7 +112,7 @@
 //! - `default`
 //!
 //! Note: `skip_serializing` and `skip_deserializing` are ignored. If you wish to exclude a field
-//! from the generated type, but cannot use `#[serde(skip)]`, use `#[ts(skip)]` instead.
+//! from the generated type, but cannot use `#[serde(skip)]`, use `#[py(skip)]` instead.
 //!
 //! When ts-rs encounters an unsupported serde attribute, a warning is emitted, unless the feature `no-serde-warnings` is enabled.
 //!
@@ -136,7 +136,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-pub use ts_rs_macros::TS;
+pub use py_rs_macros::PY;
 
 pub use crate::export::ExportError;
 
@@ -148,133 +148,133 @@ mod serde_json;
 #[cfg(feature = "tokio-impl")]
 mod tokio;
 
-/// A type which can be represented in TypeScript.  
+/// A type which can be represented in Python.  
 /// Most of the time, you'd want to derive this trait instead of implementing it manually.  
 /// ts-rs comes with implementations for all primitives, most collections, tuples,
 /// arrays and containers.
 ///
 /// ### exporting
-/// Because Rusts procedural macros are evaluated before other compilation steps, TypeScript
+/// Because Rusts procedural macros are evaluated before other compilation steps, Python
 /// bindings __cannot__ be exported during compile time.
 ///
-/// Bindings can be exported within a test, which ts-rs generates for you by adding `#[ts(export)]`
+/// Bindings can be exported within a test, which ts-rs generates for you by adding `#[py(export)]`
 /// to a type you wish to export to a file.  
-/// When `cargo test` is run, all types annotated with `#[ts(export)]` and all of their
-/// dependencies will be written to `TS_RS_EXPORT_DIR`, or `./bindings` by default.
+/// When `cargo test` is run, all types annotated with `#[py(export)]` and all of their
+/// dependencies will be written to `PY_RS_EXPORT_DIR`, or `./bindings` by default.
 ///
 /// For each individual type, path and filename within the output directory can be changed using
-/// `#[ts(export_to = "...")]`. By default, the filename will be derived from the name of the type.
+/// `#[py(export_to = "...")]`. By default, the filename will be derived from the name of the type.
 ///
-/// If, for some reason, you need to do this during runtime or cannot use `#[ts(export)]`, bindings
+/// If, for some reason, you need to do this during runtime or cannot use `#[py(export)]`, bindings
 /// can be exported manually:
 ///
 /// | Function              | Includes Dependencies | To                 |
 /// |-----------------------|-----------------------|--------------------|
-/// | [`TS::export`]        | ❌                    | `TS_RS_EXPORT_DIR` |
-/// | [`TS::export_all`]    | ✔️                    | `TS_RS_EXPORT_DIR` |
-/// | [`TS::export_all_to`] | ✔️                    | _custom_           |
+/// | [`PY::export`]        | ❌                    | `PY_RS_EXPORT_DIR` |
+/// | [`PY::export_all`]    | ✔️                    | `PY_RS_EXPORT_DIR` |
+/// | [`PY::export_all_to`] | ✔️                    | _custom_           |
 ///
 /// ### serde compatibility
 /// By default, the feature `serde-compat` is enabled.
-/// ts-rs then parses serde attributes and adjusts the generated typescript bindings accordingly.
+/// ts-rs then parses serde attributes and adjusts the generated python bindings accordingly.
 /// Not all serde attributes are supported yet - if you use an unsupported attribute, you'll see a
 /// warning.
 ///
 /// ### container attributes
 /// attributes applicable for both structs and enums
 ///
-/// - **`#[ts(crate = "..")]`**
+/// - **`#[py(crate = "..")]`**
 ///   Generates code which references the module passed to it instead of defaulting to `::ts_rs`
 ///   This is useful for cases where you have to re-export the crate.
 ///
-/// - **`#[ts(export)]`**  
+/// - **`#[py(export)]`**  
 ///   Generates a test which will export the type, by default to `bindings/<name>.ts` when running
-///   `cargo test`. The default base directory can be overridden with the `TS_RS_EXPORT_DIR` environment variable.
+///   `cargo test`. The default base directory can be overridden with the `PY_RS_EXPORT_DIR` environment variable.
 ///   Adding the variable to a project's [config.toml](https://doc.rust-lang.org/cargo/reference/config.html#env) can
 ///   make it easier to manage.
 ///   ```toml
 ///   # <project-root>/.cargo/config.toml
 ///   [env]
-///   TS_RS_EXPORT_DIR = { value = "<OVERRIDE_DIR>", relative = true }
+///   PY_RS_EXPORT_DIR = { value = "<OVERRIDE_DIR>", relative = true }
 ///   ```
 ///   <br/>
 ///
-/// - **`#[ts(export_to = "..")]`**  
+/// - **`#[py(export_to = "..")]`**  
 ///   Specifies where the type should be exported to. Defaults to `<name>.ts`.  
-///   The path given to the `export_to` attribute is relative to the `TS_RS_EXPORT_DIR` environment variable,
-///   or, if `TS_RS_EXPORT_DIR` is not set, to `./bindings`  
+///   The path given to the `export_to` attribute is relative to the `PY_RS_EXPORT_DIR` environment variable,
+///   or, if `PY_RS_EXPORT_DIR` is not set, to `./bindings`  
 ///   If the provided path ends in a trailing `/`, it is interpreted as a directory.   
 ///   Note that you need to add the `export` attribute as well, in order to generate a test which exports the type.
 ///   <br/><br/>
 ///
-/// - **`#[ts(as = "..")]`**  
+/// - **`#[py(as = "..")]`**  
 ///   Overrides the type used in Typescript, using the provided Rust type instead.
-///   This is useful when you have a custom serializer and deserializer and don't want to implement `TS` manually
+///   This is useful when you have a custom serializer and deserializer and don't want to implement `PY` manually
 ///   <br/><br/>
 ///
-/// - **`#[ts(type = "..")]`**  
-///   Overrides the type used in TypeScript.  
-///   This is useful when you have a custom serializer and deserializer and don't want to implement `TS` manually
+/// - **`#[py(type = "..")]`**  
+///   Overrides the type used in Python.  
+///   This is useful when you have a custom serializer and deserializer and don't want to implement `PY` manually
 ///   <br/><br/>
 ///
-/// - **`#[ts(rename = "..")]`**  
-///   Sets the typescript name of the generated type
+/// - **`#[py(rename = "..")]`**  
+///   Sets the python name of the generated type
 ///   <br/><br/>
 ///
-/// - **`#[ts(rename_all = "..")]`**  
+/// - **`#[py(rename_all = "..")]`**  
 ///   Rename all fields/variants of the type.  
 ///   Valid values are `lowercase`, `UPPERCASE`, `camelCase`, `snake_case`, `PascalCase`, `SCREAMING_SNAKE_CASE`, "kebab-case" and "SCREAMING-KEBAB-CASE"
 ///   <br/><br/>
 ///
-/// - **`#[ts(concrete(..)]`**  
+/// - **`#[py(concrete(..)]`**  
 ///   Disables one ore more generic type parameters by specifying a concrete type for them.  
-///   The resulting TypeScript definition will not be generic over these parameters and will use the
+///   The resulting Python definition will not be generic over these parameters and will use the
 ///   provided type instead.  
-///   This is especially useful for generic types containing associated types. Since TypeScript does
+///   This is especially useful for generic types containing associated types. Since Python does
 ///   not have an equivalent construct to associated types, we cannot generate a generic definition
-///   for them. Using `#[ts(concrete(..)]`, we can however generate a non-generic definition.
+///   for them. Using `#[py(concrete(..)]`, we can however generate a non-generic definition.
 ///   Example:
 ///   ```
-///   # use ts_rs::TS;
-///   ##[derive(TS)]
-///   ##[ts(concrete(I = std::vec::IntoIter<String>))]
+///   # use ts_rs::PY;
+///   ##[derive(PY)]
+///   ##[py(concrete(I = std::vec::IntoIter<String>))]
 ///   struct SearchResult<I: Iterator>(Vec<I::Item>);
 ///   // will always generate `type SearchResult = Array<String>`.
 ///   ```
 ///   <br/><br/>
 ///
-/// - **`#[ts(bound)]`**
-///   Override the bounds generated on the `TS` implementation for this type. This is useful in
-///   combination with `#[ts(concrete)]`, when the type's generic parameters aren't directly used
+/// - **`#[py(bound)]`**
+///   Override the bounds generated on the `PY` implementation for this type. This is useful in
+///   combination with `#[py(concrete)]`, when the type's generic parameters aren't directly used
 ///   in a field or variant.
 ///
 ///   Example:
 ///   ```
-///   # use ts_rs::TS;
+///   # use ts_rs::PY;
 ///
 ///   trait Container {
-///       type Value: TS;
+///       type Value: PY;
 ///   }
 ///
 ///   struct MyContainer;
 ///
-///   ##[derive(TS)]
+///   ##[derive(PY)]
 ///   struct MyValue;
 ///
 ///   impl Container for MyContainer {
 ///       type Value = MyValue;
 ///   }
 ///
-///   ##[derive(TS)]
-///   ##[ts(export, concrete(C = MyContainer))]
+///   ##[derive(PY)]
+///   ##[py(export, concrete(C = MyContainer))]
 ///   struct Inner<C: Container> {
 ///       value: C::Value,
 ///   }
 ///
-///   ##[derive(TS)]
-///   // Without `#[ts(bound)]`, `#[derive(TS)]` would generate an unnecessary
-///   // `C: TS` bound
-///   ##[ts(export, concrete(C = MyContainer), bound = "C::Value: TS")]
+///   ##[derive(PY)]
+///   // Without `#[py(bound)]`, `#[derive(PY)]` would generate an unnecessary
+///   // `C: PY` bound
+///   ##[py(export, concrete(C = MyContainer), bound = "C::Value: PY")]
 ///   struct Outer<C: Container> {
 ///       inner: Inner<C>,
 ///   }
@@ -282,93 +282,93 @@ mod tokio;
 ///   <br/><br/>
 ///
 /// ### struct attributes
-/// - **`#[ts(tag = "..")]`**  
-///   Include the structs name (or value of `#[ts(rename = "..")]`) as a field with the given key.
+/// - **`#[py(tag = "..")]`**  
+///   Include the structs name (or value of `#[py(rename = "..")]`) as a field with the given key.
 ///   <br/><br/>
 ///
 /// ### struct field attributes
 ///
-/// - **`#[ts(type = "..")]`**  
-///   Overrides the type used in TypeScript.  
-///   This is useful when there's a type for which you cannot derive `TS`.
+/// - **`#[py(type = "..")]`**  
+///   Overrides the type used in Python.  
+///   This is useful when there's a type for which you cannot derive `PY`.
 ///   <br/><br/>
 ///
-/// - **`#[ts(as = "..")]`**  
+/// - **`#[py(as = "..")]`**  
 ///   Overrides the type of the annotated field, using the provided Rust type instead.
-///   This is useful when there's a type for which you cannot derive `TS`.  
-///   `_` may be used to refer to the type of the field, e.g `#[ts(as = "Option<_>")]`.
+///   This is useful when there's a type for which you cannot derive `PY`.  
+///   `_` may be used to refer to the type of the field, e.g `#[py(as = "Option<_>")]`.
 ///   <br/><br/>
 ///
-/// - **`#[ts(rename = "..")]`**  
-///   Renames this field. To rename all fields of a struct, see the container attribute `#[ts(rename_all = "..")]`.
+/// - **`#[py(rename = "..")]`**  
+///   Renames this field. To rename all fields of a struct, see the container attribute `#[py(rename_all = "..")]`.
 ///   <br/><br/>
 ///
-/// - **`#[ts(inline)]`**  
+/// - **`#[py(inline)]`**  
 ///   Inlines the type of this field, replacing its name with its definition.
 ///   <br/><br/>
 ///
-/// - **`#[ts(skip)]`**  
-///   Skips this field, omitting it from the generated *TypeScript* type.
+/// - **`#[py(skip)]`**  
+///   Skips this field, omitting it from the generated *Python* type.
 ///   <br/><br/>
 ///
-/// - **`#[ts(optional)]`**  
+/// - **`#[py(optional)]`**  
 ///   May be applied on a struct field of type `Option<T>`. By default, such a field would turn into `t: T | null`.  
-///   If `#[ts(optional)]` is present, `t?: T` is generated instead.  
-///   If `#[ts(optional = nullable)]` is present, `t?: T | null` is generated.
+///   If `#[py(optional)]` is present, `t?: T` is generated instead.  
+///   If `#[py(optional = nullable)]` is present, `t?: T | null` is generated.
 ///   <br/><br/>
 ///
-/// - **`#[ts(flatten)]`**  
+/// - **`#[py(flatten)]`**  
 ///   Flatten this field, inlining all the keys of the field's type into its parent.
 ///   <br/><br/>
 ///   
 /// ### enum attributes
 ///
-/// - **`#[ts(tag = "..")]`**  
+/// - **`#[py(tag = "..")]`**  
 ///   Changes the representation of the enum to store its tag in a separate field.  
 ///   See [the serde docs](https://serde.rs/enum-representations.html) for more information.
 ///   <br/><br/>
 ///
-/// - **`#[ts(content = "..")]`**  
+/// - **`#[py(content = "..")]`**  
 ///   Changes the representation of the enum to store its content in a separate field.  
 ///   See [the serde docs](https://serde.rs/enum-representations.html) for more information.
 ///   <br/><br/>
 ///
-/// - **`#[ts(untagged)]`**  
+/// - **`#[py(untagged)]`**  
 ///   Changes the representation of the enum to not include its tag.  
 ///   See [the serde docs](https://serde.rs/enum-representations.html) for more information.
 ///   <br/><br/>
 ///
-/// - **`#[ts(rename_all = "..")]`**  
+/// - **`#[py(rename_all = "..")]`**  
 ///   Rename all variants of this enum.  
 ///   Valid values are `lowercase`, `UPPERCASE`, `camelCase`, `snake_case`, `PascalCase`, `SCREAMING_SNAKE_CASE`, "kebab-case" and "SCREAMING-KEBAB-CASE"
 ///   <br/><br/>
 ///
-/// - **`#[ts(rename_all_fields = "..")]`**  
+/// - **`#[py(rename_all_fields = "..")]`**  
 ///   Renames the fields of all the struct variants of this enum. This is equivalent to using
-///   `#[ts(rename_all = "..")]` on all of the enum's variants.
+///   `#[py(rename_all = "..")]` on all of the enum's variants.
 ///   Valid values are `lowercase`, `UPPERCASE`, `camelCase`, `snake_case`, `PascalCase`, `SCREAMING_SNAKE_CASE`, "kebab-case" and "SCREAMING-KEBAB-CASE"
 ///   <br/><br/>
 ///  
 /// ### enum variant attributes
 ///
-/// - **`#[ts(rename = "..")]`**  
-///   Renames this variant. To rename all variants of an enum, see the container attribute `#[ts(rename_all = "..")]`.
+/// - **`#[py(rename = "..")]`**  
+///   Renames this variant. To rename all variants of an enum, see the container attribute `#[py(rename_all = "..")]`.
 ///   <br/><br/>
 ///
-/// - **`#[ts(skip)]`**  
-///   Skip this variant, omitting it from the generated *TypeScript* type.
+/// - **`#[py(skip)]`**  
+///   Skip this variant, omitting it from the generated *Python* type.
 ///   <br/><br/>
 ///
-/// - **`#[ts(untagged)]`**  
+/// - **`#[py(untagged)]`**  
 ///   Changes this variant to be treated as if the enum was untagged, regardless of the enum's tag
 ///   and content attributes
 ///   <br/><br/>
 ///
-/// - **`#[ts(rename_all = "..")]`**  
+/// - **`#[py(rename_all = "..")]`**  
 ///   Renames all the fields of a struct variant.
 ///   Valid values are `lowercase`, `UPPERCASE`, `camelCase`, `snake_case`, `PascalCase`, `SCREAMING_SNAKE_CASE`, "kebab-case" and "SCREAMING-KEBAB-CASE"
 ///   <br/><br/>
-pub trait TS {
+pub trait PY {
     /// If this type does not have generic parameters, then `WithoutGenerics` should just be `Self`.
     /// If the type does have generic parameters, then all generic parameters must be replaced with
     /// a dummy type, e.g `ts_rs::Dummy` or `()`.
@@ -376,10 +376,10 @@ pub trait TS {
     ///
     /// # Example:
     /// ```
-    /// use ts_rs::TS;
+    /// use py_rs::PY;
     /// struct GenericType<A, B>(A, B);
-    /// impl<A, B> TS for GenericType<A, B> {
-    ///     type WithoutGenerics = GenericType<ts_rs::Dummy, ts_rs::Dummy>;
+    /// impl<A, B> PY for GenericType<A, B> {
+    ///     type WithoutGenerics = GenericType<py_rs::Dummy, py_rs::Dummy>;
     ///     // ...
     ///     # fn decl() -> String { todo!() }
     ///     # fn decl_concrete() -> String { todo!() }
@@ -388,15 +388,15 @@ pub trait TS {
     ///     # fn inline_flattened() -> String { todo!() }
     /// }
     /// ```
-    type WithoutGenerics: TS + ?Sized;
+    type WithoutGenerics: PY + ?Sized;
 
-    /// JSDoc comment to describe this type in TypeScript - when `TS` is derived, docs are
+    /// JSDoc comment to describe this type in Python - when `PY` is derived, docs are
     /// automatically read from your doc comments or `#[doc = ".."]` attributes
     const DOCS: Option<&'static str> = None;
 
     /// Identifier of this type, excluding generic parameters.
     fn ident() -> String {
-        // by default, fall back to `TS::name()`.
+        // by default, fall back to `PY::name()`.
         let name = Self::name();
 
         match name.find('<') {
@@ -409,20 +409,20 @@ pub trait TS {
     /// This function will panic if the type has no declaration.
     ///
     /// If this type is generic, then all provided generic parameters will be swapped for
-    /// placeholders, resulting in a generic typescript definition.
+    /// placeholders, resulting in a generic python definition.
     /// Both `SomeType::<i32>::decl()` and `SomeType::<String>::decl()` will therefore result in
-    /// the same TypeScript declaration `type SomeType<A> = ...`.
+    /// the same Python declaration `type SomeType<A> = ...`.
     fn decl() -> String;
 
     /// Declaration of this type using the supplied generic arguments.
-    /// The resulting TypeScript definition will not be generic. For that, see `TS::decl()`.
-    /// If this type is not generic, then this function is equivalent to `TS::decl()`.
+    /// The resulting Python definition will not be generic. For that, see `PY::decl()`.
+    /// If this type is not generic, then this function is equivalent to `PY::decl()`.
     fn decl_concrete() -> String;
 
-    /// Name of this type in TypeScript, including generic parameters
+    /// Name of this type in Python, including generic parameters
     fn name() -> String;
 
-    /// Formats this types definition in TypeScript, e.g `{ user_id: number }`.
+    /// Formats this types definition in Python, e.g `{ user_id: number }`.
     /// This function will panic if the type cannot be inlined.
     fn inline() -> String;
 
@@ -452,7 +452,7 @@ pub trait TS {
         let mut deps: Vec<Dependency> = vec![];
         struct Visit<'a>(&'a mut Vec<Dependency>);
         impl<'a> TypeVisitor for Visit<'a> {
-            fn visit<T: TS + 'static + ?Sized>(&mut self) {
+            fn visit<T: PY + 'static + ?Sized>(&mut self) {
                 if let Some(dep) = Dependency::from_ty::<T>() {
                     self.0.push(dep);
                 }
@@ -464,22 +464,22 @@ pub trait TS {
     }
 
     /// Manually export this type to the filesystem.
-    /// To export this type together with all of its dependencies, use [`TS::export_all`].
+    /// To export this type together with all of its dependencies, use [`PY::export_all`].
     ///
     /// # Automatic Exporting
-    /// Types annotated with `#[ts(export)]`, together with all of their dependencies, will be
+    /// Types annotated with `#[py(export)]`, together with all of their dependencies, will be
     /// exported automatically whenever `cargo test` is run.  
     /// In that case, there is no need to manually call this function.
     ///
     /// # Target Directory
     /// The target directory to which the type will be exported may be changed by setting the
-    /// `TS_RS_EXPORT_DIR` environment variable. By default, `./bindings` will be used.
+    /// `PY_RS_EXPORT_DIR` environment variable. By default, `./bindings` will be used.
     ///
-    /// To specify a target directory manually, use [`TS::export_all_to`], which also exports all
+    /// To specify a target directory manually, use [`PY::export_all_to`], which also exports all
     /// dependencies.
     ///
     /// To alter the filename or path of the type within the target directory,
-    /// use `#[ts(export_to = "...")]`.
+    /// use `#[py(export_to = "...")]`.
     fn export() -> Result<(), ExportError>
     where
         Self: 'static,
@@ -492,21 +492,21 @@ pub trait TS {
     }
 
     /// Manually export this type to the filesystem, together with all of its dependencies.  
-    /// To export only this type, without its dependencies, use [`TS::export`].
+    /// To export only this type, without its dependencies, use [`PY::export`].
     ///
     /// # Automatic Exporting
-    /// Types annotated with `#[ts(export)]`, together with all of their dependencies, will be
+    /// Types annotated with `#[py(export)]`, together with all of their dependencies, will be
     /// exported automatically whenever `cargo test` is run.  
     /// In that case, there is no need to manually call this function.
     ///
     /// # Target Directory
     /// The target directory to which the types will be exported may be changed by setting the
-    /// `TS_RS_EXPORT_DIR` environment variable. By default, `./bindings` will be used.
+    /// `PY_RS_EXPORT_DIR` environment variable. By default, `./bindings` will be used.
     ///
-    /// To specify a target directory manually, use [`TS::export_all_to`].
+    /// To specify a target directory manually, use [`PY::export_all_to`].
     ///
     /// To alter the filenames or paths of the types within the target directory,
-    /// use `#[ts(export_to = "...")]`.
+    /// use `#[py(export_to = "...")]`.
     fn export_all() -> Result<(), ExportError>
     where
         Self: 'static,
@@ -515,16 +515,16 @@ pub trait TS {
     }
 
     /// Manually export this type into the given directory, together with all of its dependencies.  
-    /// To export only this type, without its dependencies, use [`TS::export`].
+    /// To export only this type, without its dependencies, use [`PY::export`].
     ///
-    /// Unlike [`TS::export_all`], this function disregards `TS_RS_EXPORT_DIR`, using the provided
+    /// Unlike [`PY::export_all`], this function disregards `PY_RS_EXPORT_DIR`, using the provided
     /// directory instead.
     ///
     /// To alter the filenames or paths of the types within the target directory,
-    /// use `#[ts(export_to = "...")]`.
+    /// use `#[py(export_to = "...")]`.
     ///
     /// # Automatic Exporting
-    /// Types annotated with `#[ts(export)]`, together with all of their dependencies, will be
+    /// Types annotated with `#[py(export)]`, together with all of their dependencies, will be
     /// exported automatically whenever `cargo test` is run.  
     /// In that case, there is no need to manually call this function.
     fn export_all_to(out_dir: impl AsRef<Path>) -> Result<(), ExportError>
@@ -538,7 +538,7 @@ pub trait TS {
     /// This function does not format the output, even if the `format` feature is enabled.
     ///
     /// # Automatic Exporting
-    /// Types annotated with `#[ts(export)]`, together with all of their dependencies, will be
+    /// Types annotated with `#[py(export)]`, together with all of their dependencies, will be
     /// exported automatically whenever `cargo test` is run.  
     /// In that case, there is no need to manually call this function.
     fn export_to_string() -> Result<String, ExportError>
@@ -549,14 +549,14 @@ pub trait TS {
     }
 
     /// Returns the output path to where `T` should be exported.  
-    /// The returned path does _not_ include the base directory from `TS_RS_EXPORT_DIR`.  
+    /// The returned path does _not_ include the base directory from `PY_RS_EXPORT_DIR`.  
     ///
-    /// To get the output path containing `TS_RS_EXPORT_DIR`, use [`TS::default_output_path`].
+    /// To get the output path containing `PY_RS_EXPORT_DIR`, use [`PY::default_output_path`].
     ///
-    /// When deriving `TS`, the output path can be altered using `#[ts(export_to = "...")]`.  
-    /// See the documentation of [`TS`] for more details.
+    /// When deriving `PY`, the output path can be altered using `#[py(export_to = "...")]`.  
+    /// See the documentation of [`PY`] for more details.
     ///
-    /// The output of this function depends on the environment variable `TS_RS_EXPORT_DIR`, which is
+    /// The output of this function depends on the environment variable `PY_RS_EXPORT_DIR`, which is
     /// used as base directory. If it is not set, `./bindings` is used as default directory.
     ///
     /// If `T` cannot be exported (e.g because it's a primitive type), this function will return
@@ -567,14 +567,14 @@ pub trait TS {
 
     /// Returns the output path to where `T` should be exported.  
     ///
-    /// The output of this function depends on the environment variable `TS_RS_EXPORT_DIR`, which is
+    /// The output of this function depends on the environment variable `PY_RS_EXPORT_DIR`, which is
     /// used as base directory. If it is not set, `./bindings` is used as default directory.
     ///
-    /// To get the output path relative to `TS_RS_EXPORT_DIR` and without reading the environment
-    /// variable, use [`TS::output_path`].
+    /// To get the output path relative to `PY_RS_EXPORT_DIR` and without reading the environment
+    /// variable, use [`PY::output_path`].
     ///
-    /// When deriving `TS`, the output path can be altered using `#[ts(export_to = "...")]`.  
-    /// See the documentation of [`TS`] for more details.
+    /// When deriving `PY`, the output path can be altered using `#[py(export_to = "...")]`.  
+    /// See the documentation of [`PY`] for more details.
     ///
     /// If `T` cannot be exported (e.g because it's a primitive type), this function will return
     /// `None`.
@@ -584,23 +584,23 @@ pub trait TS {
 }
 
 /// A visitor used to iterate over all dependencies or generics of a type.
-/// When an instance of [`TypeVisitor`] is passed to [`TS::visit_dependencies`] or
-/// [`TS::visit_generics`], the [`TypeVisitor::visit`] method will be invoked for every dependency
+/// When an instance of [`TypeVisitor`] is passed to [`PY::visit_dependencies`] or
+/// [`PY::visit_generics`], the [`TypeVisitor::visit`] method will be invoked for every dependency
 /// or generic parameter respectively.
 pub trait TypeVisitor: Sized {
-    fn visit<T: TS + 'static + ?Sized>(&mut self);
+    fn visit<T: PY + 'static + ?Sized>(&mut self);
 }
 
-/// A typescript type which is depended upon by other types.
+/// A python type which is depended upon by other types.
 /// This information is required for generating the correct import statements.
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Dependency {
     /// Type ID of the rust type
     pub type_id: TypeId,
-    /// Name of the type in TypeScript
+    /// Name of the type in Python
     pub ts_name: String,
     /// Path to where the type would be exported. By default a filename is derived from the types
-    /// name, which can be customized with `#[ts(export_to = "..")]`.  
+    /// name, which can be customized with `#[py(export_to = "..")]`.  
     /// This path does _not_ include a base directory.
     pub output_path: &'static Path,
 }
@@ -609,7 +609,7 @@ impl Dependency {
     /// Constructs a [`Dependency`] from the given type `T`.
     /// If `T` is not exportable (meaning `T::EXPORT_TO` is `None`), this function will return
     /// `None`
-    pub fn from_ty<T: TS + 'static + ?Sized>() -> Option<Self> {
+    pub fn from_ty<T: PY + 'static + ?Sized>() -> Option<Self> {
         let output_path = T::output_path()?;
         Some(Dependency {
             type_id: TypeId::of::<T>(),
@@ -622,23 +622,23 @@ impl Dependency {
 // generate impls for primitive types
 macro_rules! impl_primitives {
     ($($($ty:ty),* => $l:literal),*) => { $($(
-        impl TS for $ty {
+        impl PY for $ty {
             type WithoutGenerics = Self;
             fn name() -> String { $l.to_owned() }
-            fn inline() -> String { <Self as $crate::TS>::name() }
-            fn inline_flattened() -> String { panic!("{} cannot be flattened", <Self as $crate::TS>::name()) }
-            fn decl() -> String { panic!("{} cannot be declared", <Self as $crate::TS>::name()) }
-            fn decl_concrete() -> String { panic!("{} cannot be declared", <Self as $crate::TS>::name()) }
+            fn inline() -> String { <Self as $crate::PY>::name() }
+            fn inline_flattened() -> String { panic!("{} cannot be flattened", <Self as $crate::PY>::name()) }
+            fn decl() -> String { panic!("{} cannot be declared", <Self as $crate::PY>::name()) }
+            fn decl_concrete() -> String { panic!("{} cannot be declared", <Self as $crate::PY>::name()) }
         }
     )*)* };
 }
 // generate impls for tuples
 macro_rules! impl_tuples {
     ( impl $($i:ident),* ) => {
-        impl<$($i: TS),*> TS for ($($i,)*) {
+        impl<$($i: PY),*> PY for ($($i,)*) {
             type WithoutGenerics = (Dummy, );
             fn name() -> String {
-                format!("[{}]", [$(<$i as $crate::TS>::name()),*].join(", "))
+                format!("[{}]", [$(<$i as $crate::PY>::name()),*].join(", "))
             }
             fn inline() -> String {
                 panic!("tuple cannot be inlined!");
@@ -692,35 +692,35 @@ macro_rules! impl_wrapper {
     };
 }
 
-// implement TS for the $shadow, deferring to the impl $s
+// implement PY for the $shadow, deferring to the impl $s
 macro_rules! impl_shadow {
     (as $s:ty: $($impl:tt)*) => {
         $($impl)* {
-            type WithoutGenerics = <$s as $crate::TS>::WithoutGenerics;
-            fn ident() -> String { <$s as $crate::TS>::ident() }
-            fn name() -> String { <$s as $crate::TS>::name() }
-            fn inline() -> String { <$s as $crate::TS>::inline() }
-            fn inline_flattened() -> String { <$s as $crate::TS>::inline_flattened() }
+            type WithoutGenerics = <$s as $crate::PY>::WithoutGenerics;
+            fn ident() -> String { <$s as $crate::PY>::ident() }
+            fn name() -> String { <$s as $crate::PY>::name() }
+            fn inline() -> String { <$s as $crate::PY>::inline() }
+            fn inline_flattened() -> String { <$s as $crate::PY>::inline_flattened() }
             fn visit_dependencies(v: &mut impl $crate::TypeVisitor)
             where
                 Self: 'static,
             {
-                <$s as $crate::TS>::visit_dependencies(v);
+                <$s as $crate::PY>::visit_dependencies(v);
             }
             fn visit_generics(v: &mut impl $crate::TypeVisitor)
             where
                 Self: 'static,
             {
-                <$s as $crate::TS>::visit_generics(v);
+                <$s as $crate::PY>::visit_generics(v);
             }
-            fn decl() -> String { <$s as $crate::TS>::decl() }
-            fn decl_concrete() -> String { <$s as $crate::TS>::decl_concrete() }
-            fn output_path() -> Option<&'static std::path::Path> { <$s as $crate::TS>::output_path() }
+            fn decl() -> String { <$s as $crate::PY>::decl() }
+            fn decl_concrete() -> String { <$s as $crate::PY>::decl_concrete() }
+            fn output_path() -> Option<&'static std::path::Path> { <$s as $crate::PY>::output_path() }
         }
     };
 }
 
-impl<T: TS> TS for Option<T> {
+impl<T: PY> PY for Option<T> {
     type WithoutGenerics = Self;
 
     fn name() -> String {
@@ -759,7 +759,7 @@ impl<T: TS> TS for Option<T> {
     }
 }
 
-impl<T: TS, E: TS> TS for Result<T, E> {
+impl<T: PY, E: PY> PY for Result<T, E> {
     type WithoutGenerics = Result<Dummy, Dummy>;
 
     fn name() -> String {
@@ -801,7 +801,7 @@ impl<T: TS, E: TS> TS for Result<T, E> {
     }
 }
 
-impl<T: TS> TS for Vec<T> {
+impl<T: PY> PY for Vec<T> {
     type WithoutGenerics = Vec<Dummy>;
 
     fn ident() -> String {
@@ -846,7 +846,7 @@ impl<T: TS> TS for Vec<T> {
 
 // Arrays longer than this limit will be emitted as Array<T>
 const ARRAY_TUPLE_LIMIT: usize = 64;
-impl<T: TS, const N: usize> TS for [T; N] {
+impl<T: PY, const N: usize> PY for [T; N] {
     type WithoutGenerics = [Dummy; N];
     fn name() -> String {
         if N > ARRAY_TUPLE_LIMIT {
@@ -898,7 +898,7 @@ impl<T: TS, const N: usize> TS for [T; N] {
     }
 }
 
-impl<K: TS, V: TS, H> TS for HashMap<K, V, H> {
+impl<K: PY, V: PY, H> PY for HashMap<K, V, H> {
     type WithoutGenerics = HashMap<Dummy, Dummy>;
 
     fn ident() -> String {
@@ -944,7 +944,7 @@ impl<K: TS, V: TS, H> TS for HashMap<K, V, H> {
     }
 }
 
-impl<I: TS> TS for Range<I> {
+impl<I: PY> PY for Range<I> {
     type WithoutGenerics = Range<Dummy>;
     fn name() -> String {
         format!("{{ start: {}, end: {}, }}", I::name(), I::name())
@@ -982,23 +982,23 @@ impl<I: TS> TS for Range<I> {
     }
 }
 
-impl_shadow!(as Range<I>: impl<I: TS> TS for RangeInclusive<I>);
-impl_shadow!(as Vec<T>: impl<T: TS, H> TS for HashSet<T, H>);
-impl_shadow!(as Vec<T>: impl<T: TS> TS for BTreeSet<T>);
-impl_shadow!(as HashMap<K, V>: impl<K: TS, V: TS> TS for BTreeMap<K, V>);
-impl_shadow!(as Vec<T>: impl<T: TS> TS for [T]);
+impl_shadow!(as Range<I>: impl<I: PY> PY for RangeInclusive<I>);
+impl_shadow!(as Vec<T>: impl<T: PY, H> PY for HashSet<T, H>);
+impl_shadow!(as Vec<T>: impl<T: PY> PY for BTreeSet<T>);
+impl_shadow!(as HashMap<K, V>: impl<K: PY, V: PY> PY for BTreeMap<K, V>);
+impl_shadow!(as Vec<T>: impl<T: PY> PY for [T]);
 
-impl_wrapper!(impl<T: TS + ?Sized> TS for &T);
-impl_wrapper!(impl<T: TS + ?Sized> TS for Box<T>);
-impl_wrapper!(impl<T: TS + ?Sized> TS for std::sync::Arc<T>);
-impl_wrapper!(impl<T: TS + ?Sized> TS for std::rc::Rc<T>);
-impl_wrapper!(impl<'a, T: TS + ToOwned + ?Sized> TS for std::borrow::Cow<'a, T>);
-impl_wrapper!(impl<T: TS> TS for std::cell::Cell<T>);
-impl_wrapper!(impl<T: TS> TS for std::cell::RefCell<T>);
-impl_wrapper!(impl<T: TS> TS for std::sync::Mutex<T>);
-impl_wrapper!(impl<T: TS> TS for std::sync::RwLock<T>);
-impl_wrapper!(impl<T: TS + ?Sized> TS for std::sync::Weak<T>);
-impl_wrapper!(impl<T: TS> TS for std::marker::PhantomData<T>);
+impl_wrapper!(impl<T: PY + ?Sized> PY for &T);
+impl_wrapper!(impl<T: PY + ?Sized> PY for Box<T>);
+impl_wrapper!(impl<T: PY + ?Sized> PY for std::sync::Arc<T>);
+impl_wrapper!(impl<T: PY + ?Sized> PY for std::rc::Rc<T>);
+impl_wrapper!(impl<'a, T: PY + ToOwned + ?Sized> PY for std::borrow::Cow<'a, T>);
+impl_wrapper!(impl<T: PY> PY for std::cell::Cell<T>);
+impl_wrapper!(impl<T: PY> PY for std::cell::RefCell<T>);
+impl_wrapper!(impl<T: PY> PY for std::sync::Mutex<T>);
+impl_wrapper!(impl<T: PY> PY for std::sync::RwLock<T>);
+impl_wrapper!(impl<T: PY + ?Sized> PY for std::sync::Weak<T>);
+impl_wrapper!(impl<T: PY> PY for std::marker::PhantomData<T>);
 
 impl_tuples!(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10);
 
@@ -1027,23 +1027,23 @@ impl_primitives! { bson::oid::ObjectId => "string" }
 impl_primitives! { bson::Uuid => "string" }
 
 #[cfg(feature = "indexmap-impl")]
-impl_shadow!(as Vec<T>: impl<T: TS> TS for indexmap::IndexSet<T>);
+impl_shadow!(as Vec<T>: impl<T: PY> PY for indexmap::IndexSet<T>);
 
 #[cfg(feature = "indexmap-impl")]
-impl_shadow!(as HashMap<K, V>: impl<K: TS, V: TS> TS for indexmap::IndexMap<K, V>);
+impl_shadow!(as HashMap<K, V>: impl<K: PY, V: PY> PY for indexmap::IndexMap<K, V>);
 
 #[cfg(feature = "heapless-impl")]
-impl_shadow!(as Vec<T>: impl<T: TS, const N: usize> TS for heapless::Vec<T, N>);
+impl_shadow!(as Vec<T>: impl<T: PY, const N: usize> PY for heapless::Vec<T, N>);
 
 #[cfg(feature = "semver-impl")]
 impl_primitives! { semver::Version => "string" }
 
 #[cfg(feature = "bytes-impl")]
 mod bytes {
-    use super::TS;
+    use super::PY;
 
-    impl_shadow!(as Vec<u8>: impl TS for bytes::Bytes);
-    impl_shadow!(as Vec<u8>: impl TS for bytes::BytesMut);
+    impl_shadow!(as Vec<u8>: impl PY for bytes::Bytes);
+    impl_shadow!(as Vec<u8>: impl PY for bytes::BytesMut);
 }
 
 impl_primitives! {
@@ -1076,7 +1076,7 @@ impl std::fmt::Display for Dummy {
     }
 }
 
-impl TS for Dummy {
+impl PY for Dummy {
     type WithoutGenerics = Self;
     fn name() -> String {
         "Dummy".to_owned()

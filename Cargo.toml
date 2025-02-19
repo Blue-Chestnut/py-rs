@@ -1,4 +1,3 @@
 [workspace]
-members = ["macros", "ts-rs", "example"]
+members = ["macros", "py-rs", "example"]
 resolver = "2"
-

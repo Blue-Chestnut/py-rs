@@ -1,4 +1,4 @@
-# ts-rs
+# py-rs
 
 <h1 align="center" style="padding-top: 0; margin-top: 0;">
 <img width="150px" src="https://raw.githubusercontent.com/Aleph-Alpha/ts-rs/main/logo.png" alt="logo">

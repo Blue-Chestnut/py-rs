@@ -1,12 +1,12 @@
 [package]
-name = "ts-rs-macros"
-version = "10.1.0"
-authors = ["Moritz Bischof <moritz.bischof1@gmail.com>"]
+name = "py-rs-macros"
+version = "0.1.0"
+authors = ["Matthias Ruiz <matthias.ruiz@blue-chestnut.com>"]
 edition = "2021"
-description = "derive macro for ts-rs"
+description = "derive macro for py-rs"
 license = "MIT"
-homepage = "https://github.com/Aleph-Alpha/ts-rs"
-repository = "https://github.com/Aleph-Alpha/ts-rs"
+homepage = "https://github.com/Blue-Chestnut/py-rs"
+repository = "https://github.com/Blue-Chestnut/py-rs"
 
 [features]
 serde-compat = ["termcolor"]
