@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use ts_rs::TS;
+use py_rs::PY;
 
 trait Driver {
     type Info;
@@ -8,23 +8,23 @@ trait Driver {
 
 struct TsDriver;
 
-#[derive(TS)]
+#[derive(PY)]
 struct TsInfo;
 
 impl Driver for TsDriver {
     type Info = TsInfo;
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "bound/")]
-#[ts(concrete(D = TsDriver))]
+#[derive(PY)]
+#[py(export, export_to = "bound/")]
+#[py(concrete(D = TsDriver))]
 struct Inner<D: Driver> {
     info: D::Info,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "bound/")]
-#[ts(concrete(D = TsDriver), bound = "D::Info: TS")]
+#[derive(PY)]
+#[py(export, export_to = "bound/")]
+#[py(concrete(D = TsDriver), bound = "D::Info: PY")]
 struct Outer<D: Driver> {
     inner: Inner<D>,
 }
