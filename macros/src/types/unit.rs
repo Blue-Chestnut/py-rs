@@ -49,7 +49,7 @@ pub(crate) fn null(attr: &StructAttr, name: &str) -> Result<DerivedPY> {
 
     Ok(DerivedPY {
         crate_rename: crate_rename.clone(),
-        inline: quote!("null".to_owned()),
+        inline: quote!("None".to_owned()),
         inline_flattened: None,
         docs: attr.docs.clone(),
         dependencies: Dependencies::new(crate_rename),

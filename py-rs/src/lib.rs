@@ -315,9 +315,9 @@ mod tokio;
 ///   <br/><br/>
 ///
 /// - **`#[py(optional)]`**  
-///   May be applied on a struct field of type `Option<T>`. By default, such a field would turn into `t: T | null`.  
+///   May be applied on a struct field of type `Option<T>`. By default, such a field would turn into `t: T | None`.  
 ///   If `#[py(optional)]` is present, `t?: T` is generated instead.  
-///   If `#[py(optional = nullable)]` is present, `t?: T | null` is generated.
+///   If `#[py(optional = nullable)]` is present, `t?: T | None` is generated.
 ///   <br/><br/>
 ///
 /// - **`#[py(flatten)]`**  
@@ -728,11 +728,11 @@ impl<T: PY> PY for Option<T> {
     type WithoutGenerics = Self;
 
     fn name() -> String {
-        format!("{} | null", T::name())
+        format!("{} | None", T::name())
     }
 
     fn inline() -> String {
-        format!("{} | null", T::inline())
+        format!("{} | None", T::inline())
     }
 
     fn visit_dependencies(v: &mut impl TypeVisitor)
