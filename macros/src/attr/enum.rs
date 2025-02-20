@@ -64,7 +64,7 @@ impl EnumAttr {
     pub fn crate_rename(&self) -> Path {
         self.crate_rename
             .clone()
-            .unwrap_or_else(|| parse_quote!(::ts_rs))
+            .unwrap_or_else(|| parse_quote!(::py_rs))
     }
 }
 
@@ -200,7 +200,7 @@ impl ContainerAttr for EnumAttr {
     fn crate_rename(&self) -> Path {
         self.crate_rename
             .clone()
-            .unwrap_or_else(|| parse_quote!(::ts_rs))
+            .unwrap_or_else(|| parse_quote!(::py_rs))
     }
 }
 

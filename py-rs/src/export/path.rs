@@ -2,7 +2,7 @@ use std::path::{Component as C, Path, PathBuf};
 
 use super::ExportError as E;
 
-const ERROR_MESSAGE: &str = r#"The path provided with `#[ts(export_to = "..")]` is not valid"#;
+const ERROR_MESSAGE: &str = r#"The path provided with `#[py(export_to = "..")]` is not valid"#;
 
 pub fn absolute<T: AsRef<Path>>(path: T) -> Result<PathBuf, E> {
     let path = std::env::current_dir()?.join(path.as_ref());

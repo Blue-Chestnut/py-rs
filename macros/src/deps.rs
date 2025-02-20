@@ -18,7 +18,7 @@ enum Dependency {
         crate_rename: Rc<Path>,
         ty: Rc<Type>,
     },
-    // A dependency on all type parameters of `ty`, as returned by `TS::generics()`.
+    // A dependency on all type parameters of `ty`, as returned by `PY::generics()`.
     // This does not include a dependency on `ty` itself.
     Generics {
         crate_rename: Rc<Path>,
@@ -91,10 +91,10 @@ impl ToTokens for Dependency {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         tokens.extend(match self {
             Dependency::Transitive { crate_rename, ty } => {
-                quote![<#ty as #crate_rename::TS>::visit_dependencies(v)]
+                quote![<#ty as #crate_rename::PY>::visit_dependencies(v)]
             }
             Dependency::Generics { crate_rename, ty } => {
-                quote![<#ty as #crate_rename::TS>::visit_generics(v)]
+                quote![<#ty as #crate_rename::PY>::visit_generics(v)]
             }
             Dependency::Type(ty) => quote![v.visit::<#ty>()],
         });

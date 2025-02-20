@@ -57,8 +57,8 @@ fn format_field(
 
     formatted_fields.push(match field_attr.type_override {
         Some(ref o) => quote!(#o.to_owned()),
-        None if field_attr.inline => quote!(<#ty as #crate_rename::TS>::inline()),
-        None => quote!(<#ty as #crate_rename::TS>::name()),
+        None if field_attr.inline => quote!(<#ty as #crate_rename::PY>::inline()),
+        None => quote!(<#ty as #crate_rename::PY>::name()),
     });
 
     match (field_attr.inline, field_attr.type_override) {

@@ -269,7 +269,7 @@ pub fn format_generics(
                 if let Some(default) = &type_param.default {
                     deps.push(default);
                     Some(quote!(
-                        format!("{} = {}", #ty, <#default as #crate_rename::TS>::name())
+                        format!("{} = {}", #ty, <#default as #crate_rename::PY>::name())
                     ))
                 } else {
                     Some(quote!(#ty.to_owned()))

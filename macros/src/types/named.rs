@@ -121,7 +121,7 @@ fn format_field(
     };
 
     if field_attr.flatten {
-        flattened_fields.push(quote!(<#ty as #crate_rename::TS>::inline_flattened()));
+        flattened_fields.push(quote!(<#ty as #crate_rename::PY>::inline_flattened()));
         dependencies.append_from(ty);
         return Ok(());
     }
@@ -132,10 +132,10 @@ fn format_field(
         .unwrap_or_else(|| {
             if field_attr.inline {
                 dependencies.append_from(ty);
-                quote!(<#ty as #crate_rename::TS>::inline())
+                quote!(<#ty as #crate_rename::PY>::inline())
             } else {
                 dependencies.push(ty);
-                quote!(<#ty as #crate_rename::TS>::name())
+                quote!(<#ty as #crate_rename::PY>::name())
             }
         });
 

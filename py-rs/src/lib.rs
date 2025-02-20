@@ -1,7 +1,7 @@
 //! <h1 align="center" style="padding-top: 0; margin-top: 0;">
-//! <img width="150px" src="https://raw.githubusercontent.com/Aleph-Alpha/ts-rs/main/logo.png" alt="logo">
+//! <img width="150px" src="https://raw.githubusercontent.com/Aleph-Alpha/py-rs/main/logo.png" alt="logo">
 //! <br/>
-//! ts-rs
+//! py-rs
 //! </h1>
 //! <p align="center">
 //! Generate python type declarations from rust types
@@ -9,17 +9,17 @@
 //!
 //! <div align="center">
 //! <!-- Github Actions -->
-//! <img src="https://img.shields.io/github/actions/workflow/status/Aleph-Alpha/ts-rs/test.yml?branch=main" alt="actions status" />
-//! <a href="https://crates.io/crates/ts-rs">
-//! <img src="https://img.shields.io/crates/v/ts-rs.svg?style=flat-square"
+//! <img src="https://img.shields.io/github/actions/workflow/status/Aleph-Alpha/py-rs/test.yml?branch=main" alt="actions status" />
+//! <a href="https://crates.io/crates/py-rs">
+//! <img src="https://img.shields.io/crates/v/py-rs.svg?style=flat-square"
 //! alt="Crates.io version" />
 //! </a>
-//! <a href="https://docs.rs/ts-rs">
+//! <a href="https://docs.rs/py-rs">
 //! <img src="https://img.shields.io/badge/docs-latest-blue.svg?style=flat-square"
 //! alt="docs.rs docs" />
 //! </a>
-//! <a href="https://crates.io/crates/ts-rs">
-//! <img src="https://img.shields.io/crates/d/ts-rs.svg?style=flat-square"
+//! <a href="https://crates.io/crates/py-rs">
+//! <img src="https://img.shields.io/crates/d/py-rs.svg?style=flat-square"
 //! alt="Download" />
 //! </a>
 //! </div>
@@ -117,7 +117,7 @@
 //! Note: `skip_serializing` and `skip_deserializing` are ignored. If you wish to exclude a field
 //! from the generated type, but cannot use `#[serde(skip)]`, use `#[py(skip)]` instead.
 //!
-//! When ts-rs encounters an unsupported serde attribute, a warning is emitted, unless the feature `no-serde-warnings` is enabled.
+//! When py-rs encounters an unsupported serde attribute, a warning is emitted, unless the feature `no-serde-warnings` is enabled.
 //!
 //! ## Contributing
 //! Contributions are always welcome!
@@ -179,7 +179,7 @@ mod tokio;
 ///
 /// ### serde compatibility
 /// By default, the feature `serde-compat` is enabled.
-/// ts-rs then parses serde attributes and adjusts the generated python bindings accordingly.
+/// py-rs then parses serde attributes and adjusts the generated python bindings accordingly.
 /// Not all serde attributes are supported yet - if you use an unsupported attribute, you'll see a
 /// warning.
 ///

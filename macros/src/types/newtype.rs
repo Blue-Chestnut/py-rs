@@ -31,8 +31,8 @@ pub(crate) fn newtype(attr: &StructAttr, name: &str, fields: &FieldsUnnamed) -> 
 
     let inline_def = match field_attr.type_override {
         Some(ref o) => quote!(#o.to_owned()),
-        None if field_attr.inline => quote!(<#inner_ty as #crate_rename::TS>::inline()),
-        None => quote!(<#inner_ty as #crate_rename::TS>::name()),
+        None if field_attr.inline => quote!(<#inner_ty as #crate_rename::PY>::inline()),
+        None => quote!(<#inner_ty as #crate_rename::PY>::name()),
     };
 
     Ok(DerivedPY {

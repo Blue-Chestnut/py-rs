@@ -136,7 +136,7 @@ impl ContainerAttr for StructAttr {
     fn crate_rename(&self) -> Path {
         self.crate_rename
             .clone()
-            .unwrap_or_else(|| parse_quote!(::ts_rs))
+            .unwrap_or_else(|| parse_quote!(::py_rs))
     }
 }
 

@@ -1,4 +1,4 @@
-// we want to implement TS for deprecated types as well
+// we want to implement PY for deprecated types as well
 #![allow(deprecated)]
 
 use chrono::{
@@ -6,11 +6,11 @@ use chrono::{
     TimeZone, Utc, Weekday,
 };
 
-use super::{impl_primitives, TS};
+use super::{impl_primitives, PY};
 
 macro_rules! impl_dummy {
     ($($t:ty),*) => {$(
-        impl TS for $t {
+        impl PY for $t {
             type WithoutGenerics = $t;
             fn name() -> String { String::new() }
             fn inline() -> String { String::new() }
@@ -24,7 +24,7 @@ macro_rules! impl_dummy {
 impl_primitives!(NaiveDateTime, NaiveDate, NaiveTime, Month, Weekday, Duration => "string");
 impl_dummy!(Utc, Local, FixedOffset);
 
-impl<T: TimeZone + 'static> TS for DateTime<T> {
+impl<T: TimeZone + 'static> PY for DateTime<T> {
     type WithoutGenerics = Self;
     fn ident() -> String {
         "string".to_owned()
@@ -46,7 +46,7 @@ impl<T: TimeZone + 'static> TS for DateTime<T> {
     }
 }
 
-impl<T: TimeZone + 'static> TS for Date<T> {
+impl<T: TimeZone + 'static> PY for Date<T> {
     type WithoutGenerics = Self;
     fn ident() -> String {
         "string".to_owned()

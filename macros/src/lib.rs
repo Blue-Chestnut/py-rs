@@ -109,16 +109,16 @@ impl DerivedPY {
     fn name_with_generics(&self, generics: &Generics) -> TokenStream {
         let name = &self.py_name;
         let crate_rename = &self.crate_rename;
-        let mut generics_ts_names = generics
+        let mut generics_py_names = generics
             .type_params()
             .filter(|ty| !self.concrete.contains_key(&ty.ident))
             .map(|ty| &ty.ident)
             .map(|generic| quote!(<#generic as #crate_rename::PY>::name()))
             .peekable();
 
-        if generics_ts_names.peek().is_some() {
+        if generics_py_names.peek().is_some() {
             quote! {
-                format!("{}<{}>", #name, vec![#(#generics_ts_names),*].join(", "))
+                format!("{}<{}>", #name, vec![#(#generics_py_names),*].join(", "))
             }
         } else {
             quote!(#name.to_owned())
@@ -133,10 +133,10 @@ impl DerivedPY {
     /// has two generic type parameters, `A` and `B`. This function will therefore generate
     /// ```compile_fail
     /// struct A;
-    /// impl ts_rs::PY for A { /* .. */ }
+    /// impl py_rs::PY for A { /* .. */ }
     ///
     /// struct B;
-    /// impl ts_rs::PY for B { /* .. */ }
+    /// impl py_rs::PY for B { /* .. */ }
     /// ```
     fn generate_generic_types(&self, generics: &Generics) -> TokenStream {
         let crate_rename = &self.crate_rename;
@@ -258,7 +258,7 @@ impl DerivedPY {
         let name = &self.py_name;
         let crate_rename = &self.crate_rename;
         let generic_types = self.generate_generic_types(generics);
-        let ts_generics = format_generics(
+        let py_generics = format_generics(
             &mut self.dependencies,
             crate_rename,
             generics,
@@ -288,7 +288,7 @@ impl DerivedPY {
             fn decl() -> String {
                 #generic_types
                 let inline = <#rust_ty<#(#generic_idents,)*> as #crate_rename::PY>::inline();
-                let generics = #ts_generics;
+                let generics = #py_generics;
                 format!("type {}{generics} = {inline};", #name)
             }
         }
@@ -312,7 +312,7 @@ fn generate_assoc_type(
         G::Lifetime(LifetimeParam { lifetime, .. }) => quote! { #lifetime },
     });
 
-    quote! { type WithoutGenerics = #rust_ty<#(#generics_params),*>; }
+    quote! { type WithoutGenerics = #rust_ty<#(#generics_params),*>; } // This error is not actually breaking the build
 }
 
 // generate start of the `impl PY for #ty` block, up to (excluding) the open brace
@@ -427,7 +427,7 @@ fn used_type_params<'ty, 'out>(
 
 /// Derives [PY](./trait.PY.html) for a struct or enum.
 /// Please take a look at [PY](./trait.PY.html) for documentation.
-#[proc_macro_derive(PY, attributes(ts))]
+#[proc_macro_derive(PY, attributes(py))]
 pub fn typescript(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     match entry(input) {
         Err(err) => err.to_compile_error(),
@@ -438,11 +438,11 @@ pub fn typescript(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 
 fn entry(input: proc_macro::TokenStream) -> Result<TokenStream> {
     let input = syn::parse::<Item>(input)?;
-    let (ts, ident, generics) = match input {
+    let (py, ident, generics) = match input {
         Item::Struct(s) => (types::struct_def(&s)?, s.ident, s.generics),
         Item::Enum(e) => (types::enum_def(&e)?, e.ident, e.generics),
         _ => syn_err!(input.span(); "unsupported item"),
     };
 
-    Ok(ts.into_impl(ident, generics))
+    Ok(py.into_impl(ident, generics))
 }

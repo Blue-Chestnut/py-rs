@@ -72,7 +72,7 @@ impl Attr for FieldAttr {
 
             using_serde_with: self.using_serde_with || other.using_serde_with,
 
-            // We can't emit TSDoc for a flattened field
+            // We can't emit Doc for a flattened field
             // and we cant make this invalid in assert_validity because
             // this documentation is totally valid in Rust
             docs: if self.flatten || other.flatten {

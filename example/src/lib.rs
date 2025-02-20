@@ -9,7 +9,7 @@ use uuid::Uuid;
 
 #[derive(Serialize, PY)]
 #[py(rename_all = "lowercase")]
-#[py(export, export_to = "UserRole.ts")]
+#[py(export, export_to = "UserRole.py")]
 enum Role {
     User,
     #[py(rename = "administrator")]
@@ -17,7 +17,7 @@ enum Role {
 }
 
 #[derive(Serialize, PY)]
-// when 'serde-compat' is enabled, ts-rs tries to use supported serde attributes.
+// when 'serde-compat' is enabled, py-rs tries to use supported serde attributes.
 #[serde(rename_all = "UPPERCASE")]
 #[py(export)]
 enum Gender {

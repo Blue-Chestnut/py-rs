@@ -102,7 +102,7 @@ fn format_variant(
         (Some(_), Some(_)) => syn_err_spanned!(variant; "`type` is not compatible with `as`"),
         (Some(ty), None) => {
             dependencies.push(ty);
-            quote!(<#ty as #crate_rename::TS>::name())
+            quote!(<#ty as #crate_rename::PY>::name())
         }
         (None, Some(ty)) => quote!(#ty.to_owned()),
         (None, None) => {
@@ -143,7 +143,7 @@ fn format_variant(
                         Some(type_override) => quote!(#type_override),
                         None => {
                             let ty = field_attr.type_as(&field.ty);
-                            quote!(<#ty as #crate_rename::TS>::name())
+                            quote!(<#ty as #crate_rename::PY>::name())
                         }
                     };
                     quote!(format!("{{ \"{}\": \"{}\", \"{}\": {} }}", #tag, #name, #content, #ty))
@@ -172,7 +172,7 @@ fn format_variant(
                             Some(type_override) => quote! { #type_override },
                             None => {
                                 let ty = field_attr.type_as(&field.ty);
-                                quote!(<#ty as #crate_rename::TS>::name())
+                                quote!(<#ty as #crate_rename::PY>::name())
                             }
                         };
 
@@ -191,7 +191,7 @@ fn format_variant(
     Ok(())
 }
 
-// bindings for an empty enum (`never` in TS)
+// bindings for an empty enum (`never` in PY)
 fn empty_enum(name: impl Into<String>, enum_attr: EnumAttr) -> DerivedPY {
     let name = name.into();
     let crate_rename = enum_attr.crate_rename();
