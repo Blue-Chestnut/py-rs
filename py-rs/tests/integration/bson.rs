@@ -1,10 +1,10 @@
 #![cfg(feature = "bson-uuid-impl")]
 
 use bson::{oid::ObjectId, Uuid};
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "bson/")]
+#[derive(PY)]
+#[py(export, export_to = "bson/")]
 struct User {
     _id: ObjectId,
     _uuid: Uuid,

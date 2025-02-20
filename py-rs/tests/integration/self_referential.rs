@@ -3,16 +3,16 @@ use std::{collections::HashMap, sync::Arc};
 
 #[cfg(feature = "serde-compat")]
 use serde::Serialize;
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "self_referential/")]
+#[derive(PY)]
+#[py(export, export_to = "self_referential/")]
 struct HasT {
     t: &'static T<'static>,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "self_referential/")]
+#[derive(PY)]
+#[py(export, export_to = "self_referential/")]
 struct T<'a> {
     t_box: Box<T<'a>>,
     self_box: Box<Self>,
@@ -23,7 +23,7 @@ struct T<'a> {
     t_arc: Arc<T<'a>>,
     self_arc: Arc<Self>,
 
-    #[ts(inline)]
+    #[py(inline)]
     has_t: HasT,
 }
 
@@ -43,8 +43,8 @@ fn named() {
     );
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "self_referential/", rename = "E")]
+#[derive(PY)]
+#[py(export, export_to = "self_referential/", rename = "E")]
 enum ExternallyTagged {
     A(Box<ExternallyTagged>),
     B(&'static ExternallyTagged),
@@ -61,9 +61,9 @@ enum ExternallyTagged {
         b: &'static ExternallyTagged,
         c: HashMap<String, ExternallyTagged>,
         d: Option<Arc<ExternallyTagged>>,
-        #[ts(optional = nullable)]
+        #[py(optional = nullable)]
         e: Option<Arc<ExternallyTagged>>,
-        #[ts(optional)]
+        #[py(optional)]
         f: Option<Arc<ExternallyTagged>>,
     },
 
@@ -88,11 +88,11 @@ fn enum_externally_tagged() {
     );
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(rename = "I")]
+#[py(rename = "I")]
 #[cfg_attr(feature = "serde-compat", serde(tag = "tag"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "tag"))]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "tag"))]
 enum InternallyTagged {
     A(Box<InternallyTagged>),
     B(&'static InternallyTagged),
@@ -104,14 +104,14 @@ enum InternallyTagged {
         b: &'static InternallyTagged,
         c: HashMap<InternallyTagged, InternallyTagged>,
         d: Option<&'static InternallyTagged>,
-        #[ts(optional = nullable)]
+        #[py(optional = nullable)]
         e: Option<&'static InternallyTagged>,
-        #[ts(optional)]
+        #[py(optional)]
         f: Option<&'static InternallyTagged>,
     },
 }
 
-// NOTE: The generated type is actually not valid TS here, since the indirections rust enforces for recursive types
+// NOTE: The generated type is actually not valid PY here, since the indirections rust enforces for recursive types
 //       gets lost during the translation to TypeScript (e.g "Box<T>" => "T").
 #[test]
 fn enum_internally_tagged() {
@@ -126,11 +126,11 @@ fn enum_internally_tagged() {
     );
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "self_referential/", rename = "A")]
+#[py(export, export_to = "self_referential/", rename = "A")]
 #[cfg_attr(feature = "serde-compat", serde(tag = "tag", content = "content"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "tag", content = "content"))]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "tag", content = "content"))]
 enum AdjacentlyTagged {
     A(Box<AdjacentlyTagged>),
     B(&'static AdjacentlyTagged),
@@ -142,9 +142,9 @@ enum AdjacentlyTagged {
         b: &'static AdjacentlyTagged,
         c: HashMap<String, AdjacentlyTagged>,
         d: Option<&'static AdjacentlyTagged>,
-        #[ts(optional = nullable)]
+        #[py(optional = nullable)]
         e: Option<&'static AdjacentlyTagged>,
-        #[ts(optional)]
+        #[py(optional)]
         f: Option<&'static AdjacentlyTagged>,
     },
     G(
@@ -154,7 +154,7 @@ enum AdjacentlyTagged {
     ),
 }
 
-// NOTE: The generated type is actually not valid TS here, since the indirections rust enforces for recursive types
+// NOTE: The generated type is actually not valid PY here, since the indirections rust enforces for recursive types
 //       gets lost during the translation to TypeScript (e.g "Box<T>" => "T").
 #[test]
 fn enum_adjacently_tagged() {

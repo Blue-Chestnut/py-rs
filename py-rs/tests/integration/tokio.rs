@@ -1,11 +1,11 @@
 #![cfg(feature = "tokio-impl")]
 
 use tokio::sync::{Mutex, OnceCell, RwLock};
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "tokio/")]
-#[ts(concrete(T = i32))]
+#[derive(PY)]
+#[py(export, export_to = "tokio/")]
+#[py(concrete(T = i32))]
 struct Tokio<T: 'static> {
     mutex: Mutex<T>,
     once_cell: OnceCell<T>,

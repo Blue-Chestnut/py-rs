@@ -1,8 +1,8 @@
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "top_level_type_override/")]
-#[ts(type = "string")]
+#[derive(PY)]
+#[py(export, export_to = "top_level_type_override/")]
+#[py(type = "string")]
 #[non_exhaustive]
 pub enum IncompleteEnum {
     Foo,
@@ -16,9 +16,9 @@ pub fn top_level_type_override_enum() {
     assert_eq!(IncompleteEnum::inline(), r#"string"#)
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "top_level_type_override/")]
-#[ts(type = "string")]
+#[derive(PY)]
+#[py(export, export_to = "top_level_type_override/")]
+#[py(type = "string")]
 pub struct DataUrl {
     pub mime: String,
     pub contents: Vec<u8>,

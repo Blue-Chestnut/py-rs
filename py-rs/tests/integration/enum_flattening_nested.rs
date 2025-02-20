@@ -2,42 +2,42 @@
 
 #[cfg(feature = "serde-compat")]
 use serde::Serialize;
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "enum_flattening_nested/externally_tagged/")]
+#[py(export, export_to = "enum_flattening_nested/externally_tagged/")]
 struct FooExternally {
     #[cfg_attr(feature = "serde-compat", serde(flatten))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(flatten))]
+    #[cfg_attr(not(feature = "serde-compat"), py(flatten))]
     baz: BarExternally,
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "enum_flattening_nested/externally_tagged/")]
+#[py(export, export_to = "enum_flattening_nested/externally_tagged/")]
 enum BarExternally {
     Baz { a: i32, a2: String },
     Biz { b: bool },
     Buz { c: String, d: Option<i32> },
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "enum_flattening_nested/externally_tagged/")]
+#[py(export, export_to = "enum_flattening_nested/externally_tagged/")]
 struct NestedExternally {
     #[cfg_attr(feature = "serde-compat", serde(flatten))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(flatten))]
+    #[cfg_attr(not(feature = "serde-compat"), py(flatten))]
     a: FooExternally,
     u: u32,
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "enum_flattening_nested/externally_tagged/")]
+#[py(export, export_to = "enum_flattening_nested/externally_tagged/")]
 struct NestedExternallyLonely {
     #[cfg_attr(feature = "serde-compat", serde(flatten))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(flatten))]
+    #[cfg_attr(not(feature = "serde-compat"), py(flatten))]
     a: FooExternally,
 }
 
@@ -63,20 +63,20 @@ fn externally_tagged() {
     );
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "enum_flattening_nested/adjacently_tagged/")]
+#[derive(PY)]
+#[py(export, export_to = "enum_flattening_nested/adjacently_tagged/")]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 struct FooAdjecently {
     #[cfg_attr(feature = "serde-compat", serde(flatten))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(flatten))]
+    #[cfg_attr(not(feature = "serde-compat"), py(flatten))]
     baz: BarAdjecently,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "enum_flattening_nested/adjacently_tagged/")]
+#[derive(PY)]
+#[py(export, export_to = "enum_flattening_nested/adjacently_tagged/")]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "type", content = "stuff"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "type", content = "stuff"))]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "type", content = "stuff"))]
 enum BarAdjecently {
     Baz {
         a: i32,
@@ -87,28 +87,28 @@ enum BarAdjecently {
     },
 
     #[cfg_attr(feature = "serde-compat", serde(untagged))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(untagged))]
+    #[cfg_attr(not(feature = "serde-compat"), py(untagged))]
     Buz {
         c: String,
         d: Option<i32>,
     },
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 struct NestedAdjecently {
     #[cfg_attr(feature = "serde-compat", serde(flatten))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(flatten))]
+    #[cfg_attr(not(feature = "serde-compat"), py(flatten))]
     a: FooAdjecently,
     u: u32,
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "enum_flattening_nested/externally_tagged/")]
+#[py(export, export_to = "enum_flattening_nested/externally_tagged/")]
 struct NestedAdjecentlyLonely {
     #[cfg_attr(feature = "serde-compat", serde(flatten))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(flatten))]
+    #[cfg_attr(not(feature = "serde-compat"), py(flatten))]
     a: FooAdjecently,
 }
 
@@ -130,41 +130,41 @@ fn adjacently_tagged() {
     );
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "enum_flattening_nested/internally_tagged/")]
+#[derive(PY)]
+#[py(export, export_to = "enum_flattening_nested/internally_tagged/")]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 struct FooInternally {
     #[cfg_attr(feature = "serde-compat", serde(flatten))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(flatten))]
+    #[cfg_attr(not(feature = "serde-compat"), py(flatten))]
     baz: BarInternally,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "enum_flattening_nested/internally_tagged/")]
+#[derive(PY)]
+#[py(export, export_to = "enum_flattening_nested/internally_tagged/")]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "type"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "type"))]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "type"))]
 enum BarInternally {
     Baz { a: i32, a2: String },
     Biz { b: bool },
     Buz { c: String, d: Option<i32> },
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 struct NestedInternally {
     #[cfg_attr(feature = "serde-compat", serde(flatten))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(flatten))]
+    #[cfg_attr(not(feature = "serde-compat"), py(flatten))]
     a: FooInternally,
     u: u32,
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "enum_flattening_nested/externally_tagged/")]
+#[py(export, export_to = "enum_flattening_nested/externally_tagged/")]
 struct NestedInternallyLonely {
     #[cfg_attr(feature = "serde-compat", serde(flatten))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(flatten))]
+    #[cfg_attr(not(feature = "serde-compat"), py(flatten))]
     a: FooInternally,
 }
 
@@ -186,41 +186,41 @@ fn internally_tagged() {
     );
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "enum_flattening_nested/untagged/")]
+#[derive(PY)]
+#[py(export, export_to = "enum_flattening_nested/untagged/")]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 struct FooUntagged {
     #[cfg_attr(feature = "serde-compat", serde(flatten))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(flatten))]
+    #[cfg_attr(not(feature = "serde-compat"), py(flatten))]
     baz: BarUntagged,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "enum_flattening_nested/untagged/")]
+#[derive(PY)]
+#[py(export, export_to = "enum_flattening_nested/untagged/")]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(untagged))]
-#[cfg_attr(not(feature = "serde-compat"), ts(untagged))]
+#[cfg_attr(not(feature = "serde-compat"), py(untagged))]
 enum BarUntagged {
     Baz { a: i32, a2: String },
     Biz { b: bool },
     Buz { c: String },
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 struct NestedUntagged {
     #[cfg_attr(feature = "serde-compat", serde(flatten))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(flatten))]
+    #[cfg_attr(not(feature = "serde-compat"), py(flatten))]
     a: FooUntagged,
     u: u32,
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "enum_flattening_nested/externally_tagged/")]
+#[py(export, export_to = "enum_flattening_nested/externally_tagged/")]
 struct NestedUntaggedLonely {
     #[cfg_attr(feature = "serde-compat", serde(flatten))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(flatten))]
+    #[cfg_attr(not(feature = "serde-compat"), py(flatten))]
     a: FooUntagged,
 }
 

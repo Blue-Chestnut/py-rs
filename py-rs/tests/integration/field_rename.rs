@@ -1,11 +1,11 @@
 #![allow(dead_code)]
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
+#[derive(PY)]
 struct Rename {
     a: i32,
-    #[ts(rename = "bb")]
+    #[py(rename = "bb")]
     b: i32,
 }
 

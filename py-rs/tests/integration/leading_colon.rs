@@ -1,10 +1,10 @@
 #![allow(unused)]
 
-use ::ts_rs::TS;
+use ::py_rs::PY;
 
 mod ts_rs {}
 
-#[derive(TS)]
+#[derive(PY)]
 struct Foo {
     x: u32,
 }

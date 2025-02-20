@@ -5,10 +5,10 @@ use chrono::{
     Date, DateTime, Duration, FixedOffset, Local, Month, NaiveDate, NaiveDateTime, NaiveTime, Utc,
     Weekday,
 };
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "chrono/")]
+#[derive(PY)]
+#[py(export, export_to = "chrono/")]
 struct Chrono {
     date: (NaiveDate, Date<Utc>, Date<Local>, Date<FixedOffset>),
     time: NaiveTime,

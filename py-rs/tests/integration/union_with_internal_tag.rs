@@ -2,37 +2,37 @@
 
 #[cfg(feature = "serde-compat")]
 use serde::Serialize;
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "type"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "type"))]
-#[ts(export, export_to = "union_with_internal_tag/")]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "type"))]
+#[py(export, export_to = "union_with_internal_tag/")]
 enum EnumWithInternalTag {
     A { foo: String },
     B { bar: i32 },
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "union_with_internal_tag/")]
+#[py(export, export_to = "union_with_internal_tag/")]
 struct InnerA {
     foo: String,
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "union_with_internal_tag/")]
+#[py(export, export_to = "union_with_internal_tag/")]
 struct InnerB {
     bar: i32,
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "type"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "type"))]
-#[ts(export, export_to = "union_with_internal_tag/")]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "type"))]
+#[py(export, export_to = "union_with_internal_tag/")]
 enum EnumWithInternalTag2 {
     A(InnerA),
     B(InnerB),

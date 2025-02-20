@@ -1,14 +1,14 @@
 #![allow(dead_code)]
 
 use serde::Serialize;
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(Serialize, TS)]
-#[ts(export, export_to = "optional_field/")]
+#[derive(Serialize, PY)]
+#[py(export, export_to = "optional_field/")]
 struct OptionalInStruct {
-    #[ts(optional)]
+    #[py(optional)]
     a: Option<i32>,
-    #[ts(optional = nullable)]
+    #[py(optional = nullable)]
     b: Option<i32>,
     c: Option<i32>,
 }
@@ -21,11 +21,11 @@ fn in_struct() {
     assert_eq!(OptionalInStruct::inline(), format!("{{ {a}, {b}, {c}, }}"));
 }
 
-#[derive(Serialize, TS)]
-#[ts(export, export_to = "optional_field/")]
+#[derive(Serialize, PY)]
+#[py(export, export_to = "optional_field/")]
 enum OptionalInEnum {
     A {
-        #[ts(optional)]
+        #[py(optional)]
         a: Option<i32>,
     },
     B {
@@ -41,20 +41,20 @@ fn in_enum() {
     );
 }
 
-#[derive(Serialize, TS)]
-#[ts(export, export_to = "optional_field/")]
+#[derive(Serialize, PY)]
+#[py(export, export_to = "optional_field/")]
 struct OptionalFlatten {
-    #[ts(optional)]
+    #[py(optional)]
     a: Option<i32>,
-    #[ts(optional = nullable)]
+    #[py(optional = nullable)]
     b: Option<i32>,
     c: Option<i32>,
 }
 
-#[derive(Serialize, TS)]
-#[ts(export, export_to = "optional_field/")]
+#[derive(Serialize, PY)]
+#[py(export, export_to = "optional_field/")]
 struct Flatten {
-    #[ts(flatten)]
+    #[py(flatten)]
     x: OptionalFlatten,
 }
 
@@ -63,20 +63,20 @@ fn flatten() {
     assert_eq!(Flatten::inline(), OptionalFlatten::inline());
 }
 
-#[derive(Serialize, TS)]
-#[ts(export, export_to = "optional_field/")]
+#[derive(Serialize, PY)]
+#[py(export, export_to = "optional_field/")]
 struct OptionalInline {
-    #[ts(optional)]
+    #[py(optional)]
     a: Option<i32>,
-    #[ts(optional = nullable)]
+    #[py(optional = nullable)]
     b: Option<i32>,
     c: Option<i32>,
 }
 
-#[derive(Serialize, TS)]
-#[ts(export, export_to = "optional_field/")]
+#[derive(Serialize, PY)]
+#[py(export, export_to = "optional_field/")]
 struct Inline {
-    #[ts(inline)]
+    #[py(inline)]
     x: OptionalInline,
 }
 

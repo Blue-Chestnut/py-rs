@@ -1,12 +1,12 @@
 #![allow(dead_code)]
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "union_rename/")]
-#[ts(rename_all = "lowercase", rename = "SimpleEnum")]
+#[derive(PY)]
+#[py(export, export_to = "union_rename/")]
+#[py(rename_all = "lowercase", rename = "SimpleEnum")]
 enum RenamedEnum {
-    #[ts(rename = "ASDF")]
+    #[py(rename = "ASDF")]
     A,
     B,
     C,

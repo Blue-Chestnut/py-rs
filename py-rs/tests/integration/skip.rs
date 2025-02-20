@@ -3,18 +3,18 @@
 use std::error::Error;
 
 use serde::Serialize;
-use ts_rs::TS;
+use py_rs::PY;
 
 struct Unsupported;
 
-#[derive(TS)]
-#[ts(export, export_to = "skip/")]
+#[derive(PY)]
+#[py(export, export_to = "skip/")]
 struct Skip {
     a: i32,
     b: i32,
-    #[ts(skip)]
+    #[py(skip)]
     c: String,
-    #[ts(skip)]
+    #[py(skip)]
     d: Box<dyn Error>,
 }
 
@@ -23,29 +23,29 @@ fn simple() {
     assert_eq!(Skip::inline(), "{ a: number, b: number, }");
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "skip/")]
+#[py(export, export_to = "skip/")]
 enum Externally {
     A(
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         Unsupported,
     ),
     B(
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         Unsupported,
         i32,
     ),
     C {
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         x: Unsupported,
     },
     D {
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         x: Unsupported,
         y: i32,
     },
@@ -60,25 +60,25 @@ fn externally_tagged() {
     );
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "t"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "t"))]
-#[ts(export, export_to = "skip/")]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "t"))]
+#[py(export, export_to = "skip/")]
 enum Internally {
     A(
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         Unsupported,
     ),
     B {
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         x: Unsupported,
     },
     C {
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         x: Unsupported,
         y: i32,
     },
@@ -92,31 +92,31 @@ fn internally_tagged() {
     );
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "t", content = "c"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "t", content = "c"))]
-#[ts(export, export_to = "skip/")]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "t", content = "c"))]
+#[py(export, export_to = "skip/")]
 enum Adjacently {
     A(
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         Unsupported,
     ),
     B(
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         Unsupported,
         i32,
     ),
     C {
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         x: Unsupported,
     },
     D {
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         x: Unsupported,
         y: i32,
     },

@@ -2,10 +2,10 @@
 
 use std::{borrow::Cow, rc::Rc, sync::Arc};
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "unsized/")]
+#[derive(PY)]
+#[py(export, export_to = "unsized/")]
 struct S<'a> {
     b: Box<str>,
     c: Cow<'a, str>,

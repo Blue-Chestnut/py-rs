@@ -2,18 +2,18 @@
 
 use std::{concat, fs};
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export_to = "export_manually/UserFile.ts")]
+#[derive(PY)]
+#[py(export_to = "export_manually/UserFile.ts")]
 struct User {
     name: String,
     age: i32,
     active: bool,
 }
 
-#[derive(TS)]
-#[ts(export_to = "export_manually/dir/")]
+#[derive(PY)]
+#[py(export_to = "export_manually/dir/")]
 struct UserDir {
     name: String,
     age: i32,

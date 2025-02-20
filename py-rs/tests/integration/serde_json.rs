@@ -1,10 +1,10 @@
 #![cfg(feature = "serde_json")]
 #![allow(unused)]
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "serde_json_impl/")]
+#[derive(PY)]
+#[py(export, export_to = "serde_json_impl/")]
 struct UsingSerdeJson {
     num: serde_json::Number,
     map1: serde_json::Map<String, i32>,
@@ -41,10 +41,10 @@ fn using_serde_json() {
     )
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "serde_json_impl/")]
+#[derive(PY)]
+#[py(export, export_to = "serde_json_impl/")]
 struct InlinedValue {
-    #[ts(inline)]
+    #[py(inline)]
     any: serde_json::Value,
 }
 
@@ -58,8 +58,8 @@ fn inlined_value() {
     );
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "serde_json_impl/")]
+#[derive(PY)]
+#[py(export, export_to = "serde_json_impl/")]
 struct Simple {
     json: serde_json::Value,
 }

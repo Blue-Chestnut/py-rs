@@ -2,21 +2,21 @@
 
 #[cfg(feature = "serde-compat")]
 use serde::Serialize;
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "type"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "type"))]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "type"))]
 struct TaggedType {
     a: i32,
     b: i32,
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "type"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "type"))]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "type"))]
 struct EmptyTaggedType {}
 
 #[test]

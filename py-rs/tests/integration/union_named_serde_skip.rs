@@ -2,62 +2,62 @@
 
 #[cfg(feature = "serde-compat")]
 use serde::Deserialize;
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Deserialize))]
 #[cfg_attr(feature = "serde-compat", serde(untagged))]
-#[cfg_attr(not(feature = "serde-compat"), ts(untagged))]
-#[ts(export, export_to = "union_named_serde/")]
+#[cfg_attr(not(feature = "serde-compat"), py(untagged))]
+#[py(export, export_to = "union_named_serde/")]
 enum TestUntagged {
     A,   // serde_json -> `null`
     B(), // serde_json -> `[]`
     C {
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         val: i32,
     }, // serde_json -> `{}`
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Deserialize))]
-#[ts(export, export_to = "union_named_serde/")]
+#[py(export, export_to = "union_named_serde/")]
 enum TestExternally {
     A,   // serde_json -> `"A"`
     B(), // serde_json -> `{"B":[]}`
     C {
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         val: i32,
     }, // serde_json -> `{"C":{}}`
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Deserialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "type", content = "content"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "type", content = "content"))]
-#[ts(export, export_to = "union_named_serde/")]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "type", content = "content"))]
+#[py(export, export_to = "union_named_serde/")]
 enum TestAdjacently {
     A,   // serde_json -> `{"type":"A"}`
     B(), // serde_json -> `{"type":"B","content":[]}`
     C {
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         val: i32,
     }, // serde_json -> `{"type":"C","content":{}}`
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Deserialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "type"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "type"))]
-#[ts(export, export_to = "union_named_serde/")]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "type"))]
+#[py(export, export_to = "union_named_serde/")]
 enum TestInternally {
     A, // serde_json -> `{"type":"A"}`
     B, // serde_json -> `{"type":"B"}`
     C {
         #[cfg_attr(feature = "serde-compat", serde(skip))]
-        #[cfg_attr(not(feature = "serde-compat"), ts(skip))]
+        #[cfg_attr(not(feature = "serde-compat"), py(skip))]
         val: i32,
     }, // serde_json -> `{"type":"C"}`
 }

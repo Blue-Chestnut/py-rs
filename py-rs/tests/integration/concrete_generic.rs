@@ -1,7 +1,7 @@
 #![allow(unused)]
 
 mod issue_261 {
-    use ts_rs::TS;
+    use py_rs::PY;
 
     trait Driver {
         type Info;
@@ -12,27 +12,27 @@ mod issue_261 {
         type Info = String;
     }
 
-    #[derive(TS)]
-    #[ts(export, export_to = "concrete_generic/issue_261/")]
+    #[derive(PY)]
+    #[py(export, export_to = "concrete_generic/issue_261/")]
     struct OtherInfo {
         x: i32,
     }
 
-    #[derive(TS)]
-    #[ts(export, export_to = "concrete_generic/issue_261/")]
+    #[derive(PY)]
+    #[py(export, export_to = "concrete_generic/issue_261/")]
     struct OtherDriver;
     impl Driver for OtherDriver {
         type Info = OtherInfo;
     }
 
-    #[derive(TS)]
-    #[ts(export, export_to = "concrete_generic/issue_261/", concrete(T = TsDriver))]
+    #[derive(PY)]
+    #[py(export, export_to = "concrete_generic/issue_261/", concrete(T = TsDriver))]
     struct Consumer1<T: Driver> {
         info: T::Info,
     }
 
-    #[derive(TS)]
-    #[ts(export, export_to = "concrete_generic/issue_261/", concrete(T = OtherDriver))]
+    #[derive(PY)]
+    #[py(export, export_to = "concrete_generic/issue_261/", concrete(T = OtherDriver))]
     struct Consumer2<T: Driver> {
         info: T::Info,
         driver: T,
@@ -58,24 +58,24 @@ mod issue_261 {
 }
 
 mod simple {
-    use ts_rs::TS;
+    use py_rs::PY;
 
-    #[derive(TS)]
-    #[ts(export, export_to = "concrete_generic/simple/")]
-    #[ts(concrete(T = i32))]
+    #[derive(PY)]
+    #[py(export, export_to = "concrete_generic/simple/")]
+    #[py(concrete(T = i32))]
     struct Simple<T> {
         t: T,
     }
 
-    #[derive(TS)]
-    #[ts(export, export_to = "concrete_generic/simple/")]
+    #[derive(PY)]
+    #[py(export, export_to = "concrete_generic/simple/")]
     struct Tuple<T> {
         f: Option<T>,
     }
 
-    #[derive(TS)]
-    #[ts(export, export_to = "concrete_generic/simple/")]
-    #[ts(concrete(T = i32))]
+    #[derive(PY)]
+    #[py(export, export_to = "concrete_generic/simple/")]
+    #[py(concrete(T = i32))]
     struct WithOption<T> {
         opt: Option<T>,
     }

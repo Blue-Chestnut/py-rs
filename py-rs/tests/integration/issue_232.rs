@@ -1,41 +1,41 @@
 #![allow(unused)]
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "issue_232/")]
+#[derive(PY)]
+#[py(export, export_to = "issue_232/")]
 struct State {
     a: Result<EnumWithName, String>,
     b: Result<EnumWithName, String>,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "issue_232/")]
+#[derive(PY)]
+#[py(export, export_to = "issue_232/")]
 struct StateInlined {
-    #[ts(inline)]
+    #[py(inline)]
     a: Result<EnumWithName, String>,
-    #[ts(inline)]
+    #[py(inline)]
     b: Result<EnumWithName, String>,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "issue_232/")]
+#[derive(PY)]
+#[py(export, export_to = "issue_232/")]
 struct StateInlinedVec {
-    #[ts(inline)]
+    #[py(inline)]
     a: Vec<Result<EnumWithName, String>>,
-    #[ts(inline)]
+    #[py(inline)]
     b: Vec<Result<EnumWithName, String>>,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "issue_232/")]
+#[derive(PY)]
+#[py(export, export_to = "issue_232/")]
 struct EnumWithName {
     name: String,
     inner: Enum,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "issue_232/")]
+#[derive(PY)]
+#[py(export, export_to = "issue_232/")]
 enum Enum {
     A,
     B,

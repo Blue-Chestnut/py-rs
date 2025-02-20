@@ -4,22 +4,22 @@ use std::time::Instant;
 
 #[cfg(feature = "serde-compat")]
 use serde::Serialize;
-use ts_rs::TS;
+use py_rs::PY;
 
 struct Unsupported<T>(T);
 struct Unsupported2;
 
-#[derive(TS)]
-#[ts(export, export_to = "type_override/")]
+#[derive(PY)]
+#[py(export, export_to = "type_override/")]
 struct Override {
     a: i32,
-    #[ts(type = "0 | 1 | 2")]
+    #[py(type = "0 | 1 | 2")]
     b: i32,
-    #[ts(type = "string")]
+    #[py(type = "string")]
     x: Instant,
-    #[ts(type = "string")]
+    #[py(type = "string")]
     y: Unsupported<Unsupported<Unsupported2>>,
-    #[ts(type = "string | null")]
+    #[py(type = "string | null")]
     z: Option<Unsupported2>,
 }
 
@@ -31,13 +31,13 @@ fn simple() {
     )
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "type_override/")]
-struct New1(#[ts(type = "string")] Unsupported2);
+#[derive(PY)]
+#[py(export, export_to = "type_override/")]
+struct New1(#[py(type = "string")] Unsupported2);
 
-#[derive(TS)]
-#[ts(export, export_to = "type_override/")]
-struct New2(#[ts(type = "string | null")] Unsupported<Unsupported2>);
+#[derive(PY)]
+#[py(export, export_to = "type_override/")]
+struct New2(#[py(type = "string | null")] Unsupported<Unsupported2>);
 
 #[test]
 fn newtype() {
@@ -48,22 +48,22 @@ fn newtype() {
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 struct S;
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "t"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "t"))]
-#[ts(export, export_to = "type_override/")]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "t"))]
+#[py(export, export_to = "type_override/")]
 enum Internal {
-    Newtype(#[ts(type = "unknown")] S),
+    Newtype(#[py(type = "unknown")] S),
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "t", content = "c"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "t", content = "c"))]
-#[ts(export, export_to = "type_override/")]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "t", content = "c"))]
+#[py(export, export_to = "type_override/")]
 enum Adjacent {
-    Newtype(#[ts(type = "unknown")] S),
+    Newtype(#[py(type = "unknown")] S),
 }
 
 #[test]

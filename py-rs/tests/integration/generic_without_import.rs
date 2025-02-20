@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-#[derive(ts_rs::TS)]
+#[derive(py_rs::PY)]
 struct Test<T> {
     field: T,
 }

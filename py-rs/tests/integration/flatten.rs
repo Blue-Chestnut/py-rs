@@ -1,26 +1,26 @@
 #![allow(dead_code)]
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "flatten/")]
+#[derive(PY)]
+#[py(export, export_to = "flatten/")]
 struct A {
     a: i32,
     b: i32,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "flatten/")]
+#[derive(PY)]
+#[py(export, export_to = "flatten/")]
 struct B {
-    #[ts(flatten)]
+    #[py(flatten)]
     a: A,
     c: i32,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "flatten/")]
+#[derive(PY)]
+#[py(export, export_to = "flatten/")]
 struct C {
-    #[ts(inline)]
+    #[py(inline)]
     b: B,
     d: i32,
 }

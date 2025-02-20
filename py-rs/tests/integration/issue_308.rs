@@ -1,10 +1,10 @@
 use std::path::{Path, PathBuf};
 
-use ts_rs::{Dependency, ExportError, TypeVisitor, TS};
+use py_rs::{Dependency, ExportError, TypeVisitor, PY};
 
 #[rustfmt::skip]
 trait Malicious {
-    type WithoutGenerics: TS + ?Sized;
+    type WithoutGenerics: PY + ?Sized;
     const DOCS: Option<&'static str> = None;
     
     fn ident() -> String { unimplemented!() }
@@ -28,6 +28,6 @@ impl<T> Malicious for T {
     type WithoutGenerics = ();
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "issue_308/")]
+#[derive(PY)]
+#[py(export, export_to = "issue_308/")]
 struct MyStruct<A, B>(A, B);

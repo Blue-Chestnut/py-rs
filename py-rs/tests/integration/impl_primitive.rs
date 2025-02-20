@@ -2,12 +2,12 @@
 #[test]
 fn impl_primitive_bigdecimal() {
     assert_eq!(
-        <bigdecimal::BigDecimal as ts_rs::TS>::name(),
-        <String as ts_rs::TS>::name()
+        <bigdecimal::BigDecimal as py_rs::PY>::name(),
+        <String as py_rs::PY>::name()
     );
     assert_eq!(
-        <bigdecimal::BigDecimal as ts_rs::TS>::inline(),
-        <String as ts_rs::TS>::inline()
+        <bigdecimal::BigDecimal as py_rs::PY>::inline(),
+        <String as py_rs::PY>::inline()
     )
 }
 
@@ -15,12 +15,12 @@ fn impl_primitive_bigdecimal() {
 #[test]
 fn impl_primitive_smolstr() {
     assert_eq!(
-        <smol_str::SmolStr as ts_rs::TS>::name(),
-        <String as ts_rs::TS>::name()
+        <smol_str::SmolStr as py_rs::PY>::name(),
+        <String as py_rs::PY>::name()
     );
     assert_eq!(
-        <smol_str::SmolStr as ts_rs::TS>::inline(),
-        <String as ts_rs::TS>::inline()
+        <smol_str::SmolStr as py_rs::PY>::inline(),
+        <String as py_rs::PY>::inline()
     )
 }
 
@@ -28,12 +28,12 @@ fn impl_primitive_smolstr() {
 #[test]
 fn impl_primitive_uuid() {
     assert_eq!(
-        <uuid::Uuid as ts_rs::TS>::name(),
-        <String as ts_rs::TS>::name()
+        <uuid::Uuid as py_rs::PY>::name(),
+        <String as py_rs::PY>::name()
     );
     assert_eq!(
-        <uuid::Uuid as ts_rs::TS>::inline(),
-        <String as ts_rs::TS>::inline()
+        <uuid::Uuid as py_rs::PY>::inline(),
+        <String as py_rs::PY>::inline()
     )
 }
 
@@ -41,12 +41,12 @@ fn impl_primitive_uuid() {
 #[test]
 fn impl_primitive_url() {
     assert_eq!(
-        <url::Url as ts_rs::TS>::name(),
-        <String as ts_rs::TS>::name()
+        <url::Url as py_rs::PY>::name(),
+        <String as py_rs::PY>::name()
     );
     assert_eq!(
-        <url::Url as ts_rs::TS>::inline(),
-        <String as ts_rs::TS>::inline()
+        <url::Url as py_rs::PY>::inline(),
+        <String as py_rs::PY>::inline()
     )
 }
 
@@ -54,20 +54,20 @@ fn impl_primitive_url() {
 #[test]
 fn impl_primitive_order_float() {
     assert_eq!(
-        <ordered_float::OrderedFloat<f64> as ts_rs::TS>::name(),
-        <f64 as ts_rs::TS>::name()
+        <ordered_float::OrderedFloat<f64> as py_rs::PY>::name(),
+        <f64 as py_rs::PY>::name()
     );
     assert_eq!(
-        <ordered_float::OrderedFloat<f64> as ts_rs::TS>::inline(),
-        <f64 as ts_rs::TS>::inline()
+        <ordered_float::OrderedFloat<f64> as py_rs::PY>::inline(),
+        <f64 as py_rs::PY>::inline()
     );
     assert_eq!(
-        <ordered_float::OrderedFloat<f32> as ts_rs::TS>::name(),
-        <f32 as ts_rs::TS>::name()
+        <ordered_float::OrderedFloat<f32> as py_rs::PY>::name(),
+        <f32 as py_rs::PY>::name()
     );
     assert_eq!(
-        <ordered_float::OrderedFloat<f32> as ts_rs::TS>::inline(),
-        <f32 as ts_rs::TS>::inline()
+        <ordered_float::OrderedFloat<f32> as py_rs::PY>::inline(),
+        <f32 as py_rs::PY>::inline()
     )
 }
 
@@ -75,20 +75,20 @@ fn impl_primitive_order_float() {
 #[test]
 fn impl_primitive_bson_uuid() {
     assert_eq!(
-        <bson::oid::ObjectId as ts_rs::TS>::name(),
-        <String as ts_rs::TS>::name()
+        <bson::oid::ObjectId as py_rs::PY>::name(),
+        <String as py_rs::PY>::name()
     );
     assert_eq!(
-        <bson::oid::ObjectId as ts_rs::TS>::inline(),
-        <String as ts_rs::TS>::inline()
+        <bson::oid::ObjectId as py_rs::PY>::inline(),
+        <String as py_rs::PY>::inline()
     );
     assert_eq!(
-        <bson::Uuid as ts_rs::TS>::name(),
-        <String as ts_rs::TS>::name()
+        <bson::Uuid as py_rs::PY>::name(),
+        <String as py_rs::PY>::name()
     );
     assert_eq!(
-        <bson::Uuid as ts_rs::TS>::inline(),
-        <String as ts_rs::TS>::inline()
+        <bson::Uuid as py_rs::PY>::inline(),
+        <String as py_rs::PY>::inline()
     )
 }
 
@@ -96,11 +96,11 @@ fn impl_primitive_bson_uuid() {
 #[test]
 fn impl_primitive_semver() {
     assert_eq!(
-        <semver::Version as ts_rs::TS>::name(),
-        <String as ts_rs::TS>::name()
+        <semver::Version as py_rs::PY>::name(),
+        <String as py_rs::PY>::name()
     );
     assert_eq!(
-        <semver::Version as ts_rs::TS>::inline(),
-        <String as ts_rs::TS>::inline()
+        <semver::Version as py_rs::PY>::inline(),
+        <String as py_rs::PY>::inline()
     )
 }

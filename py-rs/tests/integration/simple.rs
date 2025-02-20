@@ -2,10 +2,10 @@
 
 use std::cell::RefCell;
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "simple/")]
+#[derive(PY)]
+#[py(export, export_to = "simple/")]
 struct Simple {
     a: i32,
     b: String,

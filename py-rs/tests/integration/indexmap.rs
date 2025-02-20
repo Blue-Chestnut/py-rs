@@ -2,10 +2,10 @@
 #![cfg(feature = "indexmap-impl")]
 
 use indexmap::{IndexMap, IndexSet};
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "indexmap/")]
+#[derive(PY)]
+#[py(export, export_to = "indexmap/")]
 struct Indexes {
     map: IndexMap<String, String>,
     set: IndexSet<String>,

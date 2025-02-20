@@ -1,34 +1,34 @@
-use ts_rs_macros::TS;
+use py_rs_macros::PY;
 
 // https://github.com/Aleph-Alpha/ts-rs/issues/335
-#[derive(TS)]
-#[ts(export, export_to = "generics/flatten/")]
+#[derive(PY)]
+#[py(export, export_to = "generics/flatten/")]
 struct Item<D> {
     id: String,
-    #[ts(flatten)]
+    #[py(flatten)]
     inner: D,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "generics/flatten/")]
+#[derive(PY)]
+#[py(export, export_to = "generics/flatten/")]
 struct TwoParameters<A, B> {
     id: String,
-    #[ts(flatten)]
+    #[py(flatten)]
     a: A,
-    #[ts(flatten)]
+    #[py(flatten)]
     b: B,
     ab: (A, B),
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "generics/flatten/")]
+#[derive(PY)]
+#[py(export, export_to = "generics/flatten/")]
 enum Enum<A, B> {
     A {
-        #[ts(flatten)]
+        #[py(flatten)]
         a: A,
     },
     B {
-        #[ts(flatten)]
+        #[py(flatten)]
         b: B,
     },
     AB(A, B),
@@ -36,9 +36,9 @@ enum Enum<A, B> {
 
 #[test]
 fn flattened_generic_parameters() {
-    use ts_rs::TS;
+    use py_rs::PY;
 
-    #[derive(TS)]
+    #[derive(PY)]
     struct Inner {
         x: i32,
     }

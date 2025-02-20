@@ -1,21 +1,21 @@
 #![allow(dead_code)]
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export_to = "imports/ts_rs_test_type_a.ts")]
+#[derive(PY)]
+#[py(export_to = "imports/ts_rs_test_type_a.ts")]
 pub struct TestTypeA<T> {
     value: T,
 }
 
-#[derive(TS)]
-#[ts(export_to = "imports/ts_rs_test_type_b.ts")]
+#[derive(PY)]
+#[py(export_to = "imports/ts_rs_test_type_b.ts")]
 pub struct TestTypeB<T> {
     value: T,
 }
 
-#[derive(TS)]
-#[ts(export_to = "imports/")]
+#[derive(PY)]
+#[py(export_to = "imports/")]
 pub enum TestEnum {
     C { value: TestTypeB<i8> },
     A1 { value: TestTypeA<i32> },

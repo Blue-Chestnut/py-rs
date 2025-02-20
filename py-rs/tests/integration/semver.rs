@@ -2,10 +2,10 @@
 #![cfg(feature = "semver-impl")]
 
 use semver::Version;
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "semver/")]
+#[derive(PY)]
+#[py(export, export_to = "semver/")]
 struct Semver {
     version: Version,
 }

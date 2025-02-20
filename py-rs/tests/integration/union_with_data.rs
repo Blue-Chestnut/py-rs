@@ -1,26 +1,26 @@
 #![allow(dead_code)]
 
+use py_rs::{Dependency, PY};
 #[cfg(feature = "serde-compat")]
 use serde::Serialize;
-use ts_rs::{Dependency, TS};
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "union_with_data/")]
+#[py(export, export_to = "union_with_data/")]
 struct Bar {
     field: i32,
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "union_with_data/")]
+#[py(export, export_to = "union_with_data/")]
 struct Foo {
     bar: Bar,
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
-#[ts(export, export_to = "union_with_data/")]
+#[py(export, export_to = "union_with_data/")]
 enum SimpleEnum {
     A(String),
     B(i32),

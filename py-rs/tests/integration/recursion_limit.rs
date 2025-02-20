@@ -1,11 +1,11 @@
 use std::any::TypeId;
 
-use ts_rs::{TypeVisitor, TS};
+use py_rs::{TypeVisitor, PY};
 
 #[rustfmt::skip]
 #[allow(clippy::all)]
-#[derive(Debug, ts_rs::TS)]
-#[ts(export, export_to = "very_big_types/")]
+#[derive(Debug, py_rs::PY)]
+#[py(export, export_to = "very_big_types/")]
 pub enum Iso4217CurrencyCode {
     AED, AFN, ALL, AMD, ANG, AOA, ARS, AUD, AWG, AZN, BAM, BBD, BDT, BGN, BHD, BIF, BMD, BND, BOB,
     BRL, BSD, BTN, BWP, BYN, BZD, CAD, CDF, CHF, CLP, CNY, COP, CRC, CUC, CUP, CVE, CZK, DJF, DKK,
@@ -19,8 +19,8 @@ pub enum Iso4217CurrencyCode {
 }
 
 #[rustfmt::skip]
-#[derive(Debug, ts_rs::TS)]
-#[ts(export, export_to = "very_big_types/")]
+#[derive(Debug, py_rs::PY)]
+#[py(export, export_to = "very_big_types/")]
 pub enum VeryBigEnum {
     V001(String), V002(String), V003(String), V004(String), V005(String), V006(String), V007(String),
     V008(String), V009(String), V010(String), V011(String), V012(String), V013(String), V014(String),
@@ -66,7 +66,7 @@ fn very_big_enum() {
     struct Visitor(bool);
 
     impl TypeVisitor for Visitor {
-        fn visit<T: TS + 'static + ?Sized>(&mut self) {
+        fn visit<T: PY + 'static + ?Sized>(&mut self) {
             assert!(!self.0, "there must only be one dependency");
             assert_eq!(TypeId::of::<T>(), TypeId::of::<String>());
             self.0 = true;
@@ -81,24 +81,24 @@ fn very_big_enum() {
 
 macro_rules! generate_types {
     ($a:ident, $b:ident $($t:tt)*) => {
-        #[derive(TS)]
-        #[ts(export, export_to = "very_big_types/")]
+        #[derive(PY)]
+        #[py(export, export_to = "very_big_types/")]
         struct $a($b);
         generate_types!($b $($t)*);
     };
     ($a:ident) => {
-        #[derive(TS)]
-        #[ts(export, export_to = "very_big_types/")]
+        #[derive(PY)]
+        #[py(export, export_to = "very_big_types/")]
         struct $a;
     }
 }
 
 // This generates
-// `#[derive(TS)] struct T000(T001)`
-// `#[derive(TS)] struct T001(T002)`
+// `#[derive(PY)] struct T000(T001)`
+// `#[derive(PY)] struct T001(T002)`
 // ...
-// `#[derive(TS)] struct T082(T083)`
-// `#[derive(TS)] struct T083;`
+// `#[derive(PY)] struct T082(T083)`
+// `#[derive(PY)] struct T083;`
 generate_types!(
     T000, T001, T002, T003, T004, T005, T006, T007, T008, T009, T010, T011, T012, T013, T014, T015,
     T016, T017, T018, T019, T020, T021, T022, T023, T024, T025, T026, T027, T028, T029, T030, T031,

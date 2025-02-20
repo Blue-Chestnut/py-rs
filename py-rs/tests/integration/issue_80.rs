@@ -1,12 +1,12 @@
 use serde::Serialize;
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS, Serialize)]
-#[ts(export, export_to = "issue_80/")]
+#[derive(PY, Serialize)]
+#[py(export, export_to = "issue_80/")]
 pub enum SomeTypeList {
     Value1 {
         #[serde(skip)]
-        #[ts(skip)]
+        #[py(skip)]
         skip_this: String,
     },
     Value2,

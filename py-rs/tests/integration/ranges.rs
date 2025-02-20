@@ -5,14 +5,14 @@ use std::{
     ops::{Range, RangeInclusive},
 };
 
-use ts_rs::{Dependency, TS};
+use py_rs::{Dependency, PY};
 
-#[derive(TS)]
-#[ts(export, export_to = "ranges/")]
+#[derive(PY)]
+#[py(export, export_to = "ranges/")]
 struct Inner(i32);
 
-#[derive(TS)]
-#[ts(export, export_to = "ranges/")]
+#[derive(PY)]
+#[py(export, export_to = "ranges/")]
 struct RangeTest {
     a: Range<u32>,
     b: Range<&'static str>,

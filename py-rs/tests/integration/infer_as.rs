@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use ts_rs::TS;
+use py_rs::PY;
 
 trait Bar {
     type Baz;
@@ -10,13 +10,13 @@ impl Bar for String {
     type Baz = i32;
 }
 
-#[derive(TS)]
-#[ts(export)]
+#[derive(PY)]
+#[py(export)]
 struct Foo {
-    #[ts(optional, as = "Option<_>")]
+    #[py(optional, as = "Option<_>")]
     my_optional_bool: bool,
 
-    #[ts(as = "<_ as Bar>::Baz")]
+    #[py(as = "<_ as Bar>::Baz")]
     q_self: String,
 }
 

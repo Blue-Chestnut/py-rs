@@ -1,14 +1,14 @@
 #![allow(dead_code)]
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "path_bug/aaa/")]
+#[derive(PY)]
+#[py(export, export_to = "path_bug/aaa/")]
 struct Foo {
     bar: Bar,
 }
 
-#[derive(TS)]
-#[ts(export_to = "../bindings/path_bug/")]
+#[derive(PY)]
+#[py(export_to = "../bindings/path_bug/")]
 struct Bar {
     i: i32,
 }

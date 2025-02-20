@@ -1,8 +1,8 @@
-use ts_rs::TS;
+use py_rs::PY;
 
 /// Defines the type of input and its intial fields
-#[derive(TS)]
-#[ts(tag = "input_type")]
+#[derive(PY)]
+#[py(tag = "input_type")]
 pub enum InputType {
     Text,
     Expression,
@@ -15,14 +15,14 @@ pub enum InputType {
     },
 }
 
-#[derive(TS)]
-#[ts(tag = "type")]
+#[derive(PY)]
+#[py(tag = "type")]
 pub enum InputFieldElement {
     Label {
         text: String,
     },
     Input {
-        #[ts(flatten)]
+        #[py(flatten)]
         input: InputType,
         name: Option<String>,
         placeholder: Option<String>,
@@ -30,10 +30,10 @@ pub enum InputFieldElement {
     },
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "complex_flattened_type/")]
+#[derive(PY)]
+#[py(export, export_to = "complex_flattened_type/")]
 pub struct InputField {
-    #[ts(flatten)]
+    #[py(flatten)]
     r#type: InputFieldElement,
 }
 

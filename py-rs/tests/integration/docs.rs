@@ -2,14 +2,14 @@
 
 use std::{concat, fs};
 
-use ts_rs::TS;
+use py_rs::PY;
 
 /// Doc comment.
 /// Supports new lines.
 ///
 /// Testing
-#[derive(TS)]
-#[ts(export_to = "docs/")]
+#[derive(PY)]
+#[py(export_to = "docs/")]
 struct A {
     /// Doc of field
     ///
@@ -17,8 +17,8 @@ struct A {
     name: String,
 }
 
-#[derive(TS)]
-#[ts(export_to = "docs/")]
+#[derive(PY)]
+#[py(export_to = "docs/")]
 /// Doc comment.
 /// Supports new lines.
 ///
@@ -30,32 +30,32 @@ struct B {
     name: String,
 }
 
-#[derive(TS)]
-#[ts(export_to = "docs/")]
+#[derive(PY)]
+#[py(export_to = "docs/")]
 /// Doc comment.
 /// Supports new lines.
 ///
 /// Testing
 struct C {}
 
-#[derive(TS)]
-#[ts(export_to = "docs/")]
+#[derive(PY)]
+#[py(export_to = "docs/")]
 /// Doc comment.
 /// Supports new lines.
 ///
 /// Testing
 struct D;
 
-#[derive(TS)]
-#[ts(export_to = "docs/")]
+#[derive(PY)]
+#[py(export_to = "docs/")]
 /// Doc comment.
 /// Supports new lines.
 ///
 /// Testing
 enum E {}
 
-#[derive(TS)]
-#[ts(export_to = "docs/")]
+#[derive(PY)]
+#[py(export_to = "docs/")]
 /// Doc comment.
 /// Supports new lines.
 ///
@@ -80,19 +80,19 @@ enum F {
     },
 }
 
-#[derive(TS)]
-#[ts(export_to = "docs/")]
+#[derive(PY)]
+#[py(export_to = "docs/")]
 struct G {
     /// Docs
     some_other_field: i32,
 
     /// Some documentation that should probably NOT be exported
-    #[ts(flatten)]
+    #[py(flatten)]
     f: F,
 }
 
-#[derive(TS)]
-#[ts(export_to = "docs/")]
+#[derive(PY)]
+#[py(export_to = "docs/")]
 /**
  * Block doc comment
  *

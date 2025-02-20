@@ -1,9 +1,9 @@
 #![allow(non_camel_case_types, dead_code)]
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "raw_idents/")]
+#[derive(PY)]
+#[py(export, export_to = "raw_idents/")]
 struct r#struct {
     r#type: i32,
     r#use: i32,
@@ -13,8 +13,8 @@ struct r#struct {
 }
 
 #[test]
-fn raw_idents() {
-    let out = <r#struct as TS>::decl();
+fn raw_idenpy() {
+    let out = <r#struct as PY>::decl();
     assert_eq!(
         out,
         "type struct = { type: number, use: number, struct: number, let: number, enum: number, };"

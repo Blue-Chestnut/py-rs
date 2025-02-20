@@ -4,30 +4,30 @@ use std::{
     cell::UnsafeCell, mem::MaybeUninit, ptr::NonNull, sync::atomic::AtomicPtr, time::Instant,
 };
 
+use py_rs::PY;
 use serde::Serialize;
-use ts_rs::TS;
 
 type Unsupported = UnsafeCell<MaybeUninit<NonNull<AtomicPtr<i32>>>>;
 
-#[derive(TS)]
-#[ts(export, export_to = "type_as/")]
+#[derive(PY)]
+#[py(export, export_to = "type_as/")]
 struct ExternalTypeDef {
     a: i32,
     b: i32,
     c: i32,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "type_as/")]
+#[derive(PY)]
+#[py(export, export_to = "type_as/")]
 struct Override {
     a: i32,
-    #[ts(as = "ExternalTypeDef")]
-    #[ts(inline)]
+    #[py(as = "ExternalTypeDef")]
+    #[py(inline)]
     x: Instant,
     // here, 'as' just behaves like 'type' (though it adds a dependency!)
-    #[ts(as = "ExternalTypeDef")]
+    #[py(as = "ExternalTypeDef")]
     y: Unsupported,
-    #[ts(as = "(i32, ExternalTypeDef, i32)")]
+    #[py(as = "(i32, ExternalTypeDef, i32)")]
     z: Unsupported,
 }
 
@@ -44,15 +44,15 @@ fn struct_properties() {
     );
     assert!(Override::dependencies()
         .iter()
-        .any(|d| d.ts_name == "ExternalTypeDef"));
+        .any(|d| d.py_name == "ExternalTypeDef"));
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "type_as/")]
+#[derive(PY)]
+#[py(export, export_to = "type_as/")]
 enum OverrideEnum {
-    A(#[ts(as = "ExternalTypeDef")] Instant),
+    A(#[py(as = "ExternalTypeDef")] Instant),
     B {
-        #[ts(as = "ExternalTypeDef")]
+        #[py(as = "ExternalTypeDef")]
         x: Unsupported,
         y: i32,
         z: i32,
@@ -72,15 +72,15 @@ mod deser {
     }
 }
 
-#[derive(TS)]
+#[derive(PY)]
 struct OverrideVariantDef {
     x: i32,
 }
 
-#[derive(TS, Serialize)]
-#[ts(export, export_to = "type_as/")]
+#[derive(PY, Serialize)]
+#[py(export, export_to = "type_as/")]
 enum OverrideVariant {
-    #[ts(as = "OverrideVariantDef")]
+    #[py(as = "OverrideVariantDef")]
     #[serde(with = "deser")]
     A {
         x: Instant,
@@ -92,7 +92,7 @@ enum OverrideVariant {
 }
 
 #[test]
-fn enum_variants() {
+fn enum_varianpy() {
     let a = OverrideVariant::A { x: Instant::now() };
     assert_eq!(serde_json::to_string(&a).unwrap(), r#"{"A":{"x":0}}"#);
     assert_eq!(
@@ -106,14 +106,14 @@ fn enum_variants() {
     );
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "type_as/")]
+#[derive(PY)]
+#[py(export, export_to = "type_as/")]
 struct Outer {
-    #[ts(as = "Option<ExternalTypeDef>")]
-    #[ts(optional = nullable, inline)]
+    #[py(as = "Option<ExternalTypeDef>")]
+    #[py(optional = nullable, inline)]
     x: Unsupported,
-    #[ts(as = "Option<ExternalTypeDef>")]
-    #[ts(optional = nullable)]
+    #[py(as = "Option<ExternalTypeDef>")]
+    #[py(optional = nullable)]
     y: Unsupported,
 }
 

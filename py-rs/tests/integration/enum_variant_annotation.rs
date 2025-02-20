@@ -2,20 +2,20 @@
 
 #[cfg(feature = "serde-compat")]
 use serde::Serialize;
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "enum_variant_anotation/")]
+#[derive(PY)]
+#[py(export, export_to = "enum_variant_anotation/")]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(rename_all = "SCREAMING_SNAKE_CASE"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(rename_all = "SCREAMING_SNAKE_CASE"))]
+#[cfg_attr(not(feature = "serde-compat"), py(rename_all = "SCREAMING_SNAKE_CASE"))]
 enum A {
     MessageOne {
         sender_id: String,
         number_of_snakes: u64,
     },
     #[cfg_attr(feature = "serde-compat", serde(rename_all = "camelCase"))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(rename_all = "camelCase"))]
+    #[cfg_attr(not(feature = "serde-compat"), py(rename_all = "camelCase"))]
     MessageTwo {
         sender_id: String,
         number_of_camels: u64,
@@ -30,18 +30,18 @@ fn test_enum_variant_rename_all() {
     );
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "enum_variant_anotation/")]
+#[derive(PY)]
+#[py(export, export_to = "enum_variant_anotation/")]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 enum B {
     #[cfg_attr(feature = "serde-compat", serde(rename = "SnakeMessage"))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(rename = "SnakeMessage"))]
+    #[cfg_attr(not(feature = "serde-compat"), py(rename = "SnakeMessage"))]
     MessageOne {
         sender_id: String,
         number_of_snakes: u64,
     },
     #[cfg_attr(feature = "serde-compat", serde(rename = "CamelMessage"))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(rename = "CamelMessage"))]
+    #[cfg_attr(not(feature = "serde-compat"), py(rename = "CamelMessage"))]
     MessageTwo {
         sender_id: String,
         number_of_camels: u64,
@@ -56,14 +56,14 @@ fn test_enum_variant_rename() {
     );
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "enum_variant_anotation/")]
+#[derive(PY)]
+#[py(export, export_to = "enum_variant_anotation/")]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "kind"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "kind"))]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "kind"))]
 pub enum C {
     #[cfg_attr(feature = "serde-compat", serde(rename = "SQUARE_THING"))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(rename = "SQUARE_THING"))]
+    #[cfg_attr(not(feature = "serde-compat"), py(rename = "SQUARE_THING"))]
     SquareThing {
         name: String,
         // ...
@@ -78,7 +78,7 @@ fn test_enum_variant_with_tag() {
 #[cfg(feature = "serde-compat")]
 #[test]
 fn test_tag_and_content_quoted() {
-    #[derive(Serialize, TS)]
+    #[derive(Serialize, PY)]
     #[serde(tag = "kebab-cased-tag", content = "whitespace in content")]
     enum E {
         V { f: String },
@@ -92,7 +92,7 @@ fn test_tag_and_content_quoted() {
 #[cfg(feature = "serde-compat")]
 #[test]
 fn test_variant_quoted() {
-    #[derive(Serialize, TS)]
+    #[derive(Serialize, PY)]
     #[serde(rename_all = "kebab-case")]
     enum E {
         VariantName { f: String },
@@ -100,14 +100,14 @@ fn test_variant_quoted() {
     assert_eq!(E::inline(), r#"{ "variant-name": { f: string, } }"#)
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "enum_variant_anotation/")]
+#[derive(PY)]
+#[py(export, export_to = "enum_variant_anotation/")]
 enum D {
     Foo {},
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "enum_variant_anotation/", tag = "type")]
+#[derive(PY)]
+#[py(export, export_to = "enum_variant_anotation/", tag = "type")]
 enum E {
     Foo {},
     Bar {},

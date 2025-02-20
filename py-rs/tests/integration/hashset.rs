@@ -2,20 +2,20 @@
 
 use std::collections::{BTreeSet, HashSet};
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS, Eq, PartialEq, Hash)]
-#[ts(export, export_to = "hashset/")]
+#[derive(PY, Eq, PartialEq, Hash)]
+#[py(export, export_to = "hashset/")]
 struct CustomValue;
 
-#[derive(TS)]
-#[ts(export, export_to = "hashset/")]
+#[derive(PY)]
+#[py(export, export_to = "hashset/")]
 struct HashSetWithCustomType {
     set: HashSet<CustomValue>,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "hashset/")]
+#[derive(PY)]
+#[py(export, export_to = "hashset/")]
 struct BTreeSetWithCustomType {
     set: BTreeSet<CustomValue>,
 }

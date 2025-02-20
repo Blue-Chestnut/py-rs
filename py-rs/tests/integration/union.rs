@@ -1,11 +1,11 @@
 #![allow(dead_code)]
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "union/")]
+#[derive(PY)]
+#[py(export, export_to = "union/")]
 enum SimpleEnum {
-    #[ts(rename = "asdf")]
+    #[py(rename = "asdf")]
     A,
     B,
     C,
@@ -13,7 +13,7 @@ enum SimpleEnum {
 
 #[test]
 fn test_empty() {
-    #[derive(TS)]
+    #[derive(PY)]
     enum Empty {}
 
     assert_eq!(Empty::decl(), "type Empty = never;")

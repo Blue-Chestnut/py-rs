@@ -1,9 +1,9 @@
 #![allow(dead_code)]
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "references/")]
+#[derive(PY)]
+#[py(export, export_to = "references/")]
 struct FullOfRefs<'a> {
     str_slice: &'a str,
     ref_slice: &'a [&'a str],

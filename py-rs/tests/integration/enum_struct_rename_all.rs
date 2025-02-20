@@ -1,19 +1,19 @@
 #[cfg(feature = "serde-compat")]
 use serde::Serialize;
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "enum_struct_rename_all/")]
+#[derive(PY)]
+#[py(export, export_to = "enum_struct_rename_all/")]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(rename_all = "camelCase"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(rename_all = "camelCase"))]
+#[cfg_attr(not(feature = "serde-compat"), py(rename_all = "camelCase"))]
 pub enum TaskStatus {
     #[cfg_attr(feature = "serde-compat", serde(rename_all = "camelCase"))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(rename_all = "camelCase"))]
+    #[cfg_attr(not(feature = "serde-compat"), py(rename_all = "camelCase"))]
     Running { started_time: String },
 
     #[cfg_attr(feature = "serde-compat", serde(rename_all = "camelCase"))]
-    #[cfg_attr(not(feature = "serde-compat"), ts(rename_all = "camelCase"))]
+    #[cfg_attr(not(feature = "serde-compat"), py(rename_all = "camelCase"))]
     Terminated {
         status: i32,
         stdout: String,
@@ -29,11 +29,11 @@ pub fn enum_struct_rename_all() {
     )
 }
 
-#[derive(TS, Clone)]
-#[ts(export, export_to = "enum_struct_rename_all/")]
+#[derive(PY, Clone)]
+#[py(export, export_to = "enum_struct_rename_all/")]
 #[cfg_attr(feature = "serde-compat", derive(Serialize))]
 #[cfg_attr(feature = "serde-compat", serde(rename_all_fields = "kebab-case"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(rename_all_fields = "kebab-case"))]
+#[cfg_attr(not(feature = "serde-compat"), py(rename_all_fields = "kebab-case"))]
 pub enum TaskStatus2 {
     Running {
         started_time: String,

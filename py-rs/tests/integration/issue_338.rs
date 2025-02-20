@@ -1,16 +1,16 @@
 use std::collections::HashMap;
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "issue_338/")]
+#[derive(PY)]
+#[py(export, export_to = "issue_338/")]
 pub struct MyType {
     pub my_field_0: bool,
     pub my_field_1: HashMap<MyEnum, MyStruct>,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "issue_338/")]
+#[derive(PY)]
+#[py(export, export_to = "issue_338/")]
 pub enum MyEnum {
     Variant0,
     Variant1,
@@ -18,8 +18,8 @@ pub enum MyEnum {
     Variant3,
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "issue_338/")]
+#[derive(PY)]
+#[py(export, export_to = "issue_338/")]
 pub struct MyStruct {
     pub my_field_0: bool,
     pub my_field_1: u32,

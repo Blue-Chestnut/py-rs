@@ -2,23 +2,23 @@
 
 #[cfg(feature = "serde-compat")]
 use serde::Deserialize;
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Deserialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "kind", content = "d"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "kind", content = "d"))]
-#[ts(export, export_to = "union_serde/")]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "kind", content = "d"))]
+#[py(export, export_to = "union_serde/")]
 enum SimpleEnum {
     A,
     B,
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Deserialize))]
 #[cfg_attr(feature = "serde-compat", serde(tag = "kind", content = "data"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(tag = "kind", content = "data"))]
-#[ts(export, export_to = "union_serde/")]
+#[cfg_attr(not(feature = "serde-compat"), py(tag = "kind", content = "data"))]
+#[py(export, export_to = "union_serde/")]
 enum ComplexEnum {
     A,
     B { foo: String, bar: f64 },
@@ -27,11 +27,11 @@ enum ComplexEnum {
     T(i32, SimpleEnum),
 }
 
-#[derive(TS)]
+#[derive(PY)]
 #[cfg_attr(feature = "serde-compat", derive(Deserialize))]
 #[cfg_attr(feature = "serde-compat", serde(untagged))]
-#[cfg_attr(not(feature = "serde-compat"), ts(untagged))]
-#[ts(export, export_to = "union_serde/")]
+#[cfg_attr(not(feature = "serde-compat"), py(untagged))]
+#[py(export, export_to = "union_serde/")]
 enum Untagged {
     Foo(String),
     Bar(i32),

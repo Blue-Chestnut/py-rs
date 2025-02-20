@@ -2,10 +2,10 @@
 
 use std::borrow::Cow;
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "generic_fields/")]
+#[derive(PY)]
+#[py(export, export_to = "generic_fields/")]
 struct Newtype(Vec<Cow<'static, i32>>);
 
 #[test]
@@ -13,8 +13,8 @@ fn newtype() {
     assert_eq!(Newtype::inline(), "Array<number>");
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "generic_fields/")]
+#[derive(PY)]
+#[py(export, export_to = "generic_fields/")]
 struct NewtypeNested(Vec<Vec<i32>>);
 
 #[test]
@@ -34,8 +34,8 @@ fn alias_nested() {
     assert_eq!(Alias::inline(), "Array<Array<string>>");
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "generic_fields/")]
+#[derive(PY)]
+#[py(export, export_to = "generic_fields/")]
 struct Struct {
     a: Box<Vec<String>>,
     b: (Vec<String>, Vec<String>),
@@ -50,8 +50,8 @@ fn named() {
     );
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "generic_fields/")]
+#[derive(PY)]
+#[py(export, export_to = "generic_fields/")]
 struct StructNested {
     a: Vec<Vec<String>>,
     b: (Vec<Vec<String>>, Vec<Vec<String>>),
@@ -63,8 +63,8 @@ fn named_nested() {
     assert_eq!(StructNested::inline(), "{ a: Array<Array<string>>, b: [Array<Array<string>>, Array<Array<string>>], c: [Array<Array<string>>, Array<Array<string>>, Array<Array<string>>], }");
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "generic_fields/")]
+#[derive(PY)]
+#[py(export, export_to = "generic_fields/")]
 struct Tuple(Vec<i32>, (Vec<i32>, Vec<i32>), [Vec<i32>; 3]);
 
 #[test]
@@ -75,8 +75,8 @@ fn tuple() {
     );
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "generic_fields/")]
+#[derive(PY)]
+#[py(export, export_to = "generic_fields/")]
 struct TupleNested(
     Vec<Vec<i32>>,
     (Vec<Vec<i32>>, Vec<Vec<i32>>),

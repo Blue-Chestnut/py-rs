@@ -1,8 +1,8 @@
 #![allow(dead_code)]
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "list/")]
+#[derive(PY)]
+#[py(export, export_to = "list/")]
 struct List {
     data: Option<Vec<u32>>,
 }

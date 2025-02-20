@@ -1,14 +1,14 @@
 #![allow(unused, dead_code, clippy::disallowed_names)]
 
 use serde::{Deserialize, Serialize};
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(Serialize, Deserialize, TS)]
+#[derive(Serialize, Deserialize, PY)]
 struct Foo {
     a: i32,
 }
 
-#[derive(Serialize, Deserialize, TS)]
+#[derive(Serialize, Deserialize, PY)]
 struct Bar {
     a: i32,
 }
@@ -32,7 +32,7 @@ mod deser {
 #[test]
 #[cfg(not(feature = "serde-compat"))]
 fn no_serde_compat() {
-    #[derive(Serialize, Deserialize, TS)]
+    #[derive(Serialize, Deserialize, PY)]
     struct Baz {
         #[serde(with = "deser")]
         a: Foo,
@@ -43,10 +43,10 @@ fn no_serde_compat() {
 
 #[test]
 fn serde_compat_as() {
-    #[derive(Serialize, Deserialize, TS)]
+    #[derive(Serialize, Deserialize, PY)]
     struct Baz {
         #[serde(with = "deser")]
-        #[ts(as = "Bar")]
+        #[py(as = "Bar")]
         a: Foo,
     }
 
@@ -55,10 +55,10 @@ fn serde_compat_as() {
 
 #[test]
 fn serde_compat_type() {
-    #[derive(Serialize, Deserialize, TS)]
+    #[derive(Serialize, Deserialize, PY)]
     struct Baz {
         #[serde(with = "deser")]
-        #[ts(type = "{ a: number }")]
+        #[py(type = "{ a: number }")]
         a: Foo,
     }
 

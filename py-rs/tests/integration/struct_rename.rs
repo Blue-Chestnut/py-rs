@@ -1,10 +1,10 @@
 #![allow(non_snake_case)]
 #![allow(dead_code)]
 
-use ts_rs::TS;
+use py_rs::PY;
 
-#[derive(TS)]
-#[ts(export, export_to = "struct_rename/", rename_all = "UPPERCASE")]
+#[derive(PY)]
+#[py(export, export_to = "struct_rename/", rename_all = "UPPERCASE")]
 struct RenameAllUpper {
     a: i32,
     b: i32,
@@ -15,8 +15,8 @@ fn rename_all() {
     assert_eq!(RenameAllUpper::inline(), "{ A: number, B: number, }");
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "struct_rename/", rename_all = "camelCase")]
+#[derive(PY)]
+#[py(export, export_to = "struct_rename/", rename_all = "camelCase")]
 struct RenameAllCamel {
     crc32c_hash: i32,
     b: i32,
@@ -31,8 +31,8 @@ fn rename_all_camel_case() {
     );
 }
 
-#[derive(TS)]
-#[ts(export, export_to = "struct_rename/", rename_all = "PascalCase")]
+#[derive(PY)]
+#[py(export, export_to = "struct_rename/", rename_all = "PascalCase")]
 struct RenameAllPascal {
     crc32c_hash: i32,
     b: i32,
@@ -46,10 +46,10 @@ fn rename_all_pascal_case() {
     );
 }
 
-#[derive(TS, Default, serde::Serialize)]
-#[ts(export, export_to = "struct_rename/")]
+#[derive(PY, Default, serde::Serialize)]
+#[py(export, export_to = "struct_rename/")]
 #[cfg_attr(feature = "serde-compat", serde(rename_all = "SCREAMING-KEBAB-CASE"))]
-#[cfg_attr(not(feature = "serde-compat"), ts(rename_all = "SCREAMING-KEBAB-CASE"))]
+#[cfg_attr(not(feature = "serde-compat"), py(rename_all = "SCREAMING-KEBAB-CASE"))]
 struct RenameAllScreamingKebab {
     crc32c_hash: i32,
     some_field: i32,
@@ -65,8 +65,8 @@ fn rename_all_screaming_kebab_case() {
     );
 }
 
-#[derive(serde::Serialize, TS)]
-#[ts(export, export_to = "struct_rename/", rename_all = "camelCase")]
+#[derive(serde::Serialize, PY)]
+#[py(export, export_to = "struct_rename/", rename_all = "camelCase")]
 struct RenameSerdeSpecialChar {
     #[serde(rename = "a/b")]
     b: i32,
