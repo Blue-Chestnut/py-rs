@@ -44,6 +44,7 @@ pub(crate) fn newtype(attr: &StructAttr, name: &str, fields: &FieldsUnnamed) -> 
         export: attr.export,
         export_to: attr.export_to.clone(),
         py_name: name.to_owned(),
+        is_enum: false,
         concrete: attr.concrete.clone(),
         bound: attr.bound.clone(),
     })

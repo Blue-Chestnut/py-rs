@@ -22,6 +22,7 @@ pub(crate) fn empty_object(attr: &StructAttr, name: &str) -> Result<DerivedPY> {
         py_name: name.to_owned(),
         concrete: attr.concrete.clone(),
         bound: attr.bound.clone(),
+        is_enum: false,
     })
 }
 
@@ -40,6 +41,7 @@ pub(crate) fn empty_array(attr: &StructAttr, name: &str) -> Result<DerivedPY> {
         py_name: name.to_owned(),
         concrete: attr.concrete.clone(),
         bound: attr.bound.clone(),
+        is_enum: false,
     })
 }
 
@@ -58,6 +60,7 @@ pub(crate) fn null(attr: &StructAttr, name: &str) -> Result<DerivedPY> {
         py_name: name.to_owned(),
         concrete: attr.concrete.clone(),
         bound: attr.bound.clone(),
+        is_enum: false,
     })
 }
 

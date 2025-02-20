@@ -29,6 +29,7 @@ pub(crate) fn tuple(attr: &StructAttr, name: &str, fields: &FieldsUnnamed) -> Re
                 [#(#formatted_fields),*].join(", ")
             )
         },
+        is_enum: false,
         inline_flattened: None,
         docs: attr.docs.clone(),
         dependencies,
