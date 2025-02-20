@@ -429,7 +429,7 @@ fn used_type_params<'ty, 'out>(
 /// Derives [PY](./trait.PY.html) for a struct or enum.
 /// Please take a look at [PY](./trait.PY.html) for documentation.
 #[proc_macro_derive(PY, attributes(py))]
-pub fn typescript(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+pub fn python(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     match entry(input) {
         Err(err) => err.to_compile_error(),
         Ok(result) => result,
