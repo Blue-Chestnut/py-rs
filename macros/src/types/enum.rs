@@ -55,7 +55,7 @@ pub(crate) fn r#enum_def(s: &ItemEnum) -> syn::Result<DerivedPY> {
         docs: enum_attr.docs,
         export: enum_attr.export,
         export_to: enum_attr.export_to,
-        ts_name: name,
+        py_name: name,
         concrete: enum_attr.concrete,
         bound: enum_attr.bound,
     })
@@ -203,7 +203,7 @@ fn empty_enum(name: impl Into<String>, enum_attr: EnumAttr) -> DerivedPY {
         dependencies: Dependencies::new(crate_rename),
         export: enum_attr.export,
         export_to: enum_attr.export_to,
-        ts_name: name,
+        py_name: name,
         concrete: enum_attr.concrete,
         bound: enum_attr.bound,
     }

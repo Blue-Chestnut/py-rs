@@ -22,7 +22,7 @@ pub(crate) fn type_override_struct(
         dependencies: Dependencies::new(crate_rename),
         export: attr.export,
         export_to: attr.export_to.clone(),
-        ts_name: name.to_owned(),
+        py_name: name.to_owned(),
         concrete: attr.concrete.clone(),
         bound: attr.bound.clone(),
     })
@@ -43,7 +43,7 @@ pub(crate) fn type_override_enum(
         dependencies: Dependencies::new(crate_rename),
         export: attr.export,
         export_to: attr.export_to.clone(),
-        ts_name: name.to_owned(),
+        py_name: name.to_owned(),
         concrete: attr.concrete.clone(),
         bound: attr.bound.clone(),
     })

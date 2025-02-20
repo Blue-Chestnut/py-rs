@@ -21,9 +21,9 @@ pub struct FieldAttr {
     pub using_serde_with: bool,
 }
 
-/// Indicates whether the field is marked with `#[ts(optional)]`.
-/// `#[ts(optional)]` turns an `t: Option<T>` into `t?: T`, while
-/// `#[ts(optional = nullable)]` turns it into `t?: T | null`.
+/// Indicates whether the field is marked with `#[py(optional)]`.
+/// `#[py(optional)]` turns an `t: Option<T>` into `t?: T`, while
+/// `#[py(optional = nullable)]` turns it into `t?: T | null`.
 #[derive(Default)]
 pub struct Optional {
     pub optional: bool,
@@ -90,7 +90,7 @@ impl Attr for FieldAttr {
         {
             syn_err_spanned!(
                 field;
-                r#"using `#[serde(with = "...")]` requires the use of `#[ts(as = "...")]` or `#[ts(type = "...")]`"#
+                r#"using `#[serde(with = "...")]` requires the use of `#[py(as = "...")]` or `#[py(type = "...")]`"#
             )
         }
 

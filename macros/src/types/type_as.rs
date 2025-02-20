@@ -18,7 +18,7 @@ pub(crate) fn type_as_struct(attr: &StructAttr, name: &str, type_as: &Type) -> R
         dependencies: Dependencies::new(crate_rename),
         export: attr.export,
         export_to: attr.export_to.clone(),
-        ts_name: name.to_owned(),
+        py_name: name.to_owned(),
         concrete: attr.concrete.clone(),
         bound: attr.bound.clone(),
     })
@@ -35,7 +35,7 @@ pub(crate) fn type_as_enum(attr: &EnumAttr, name: &str, type_as: &Type) -> Resul
         dependencies: Dependencies::new(crate_rename),
         export: attr.export,
         export_to: attr.export_to.clone(),
-        ts_name: name.to_owned(),
+        py_name: name.to_owned(),
         concrete: attr.concrete.clone(),
         bound: attr.bound.clone(),
     })

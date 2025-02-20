@@ -70,7 +70,7 @@ pub(crate) fn named(attr: &StructAttr, name: &str, fields: &FieldsNamed) -> Resu
         dependencies,
         export: attr.export,
         export_to: attr.export_to.clone(),
-        ts_name: name.to_owned(),
+        py_name: name.to_owned(),
         concrete: attr.concrete.clone(),
         bound: attr.bound.clone(),
     })
