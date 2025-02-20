@@ -312,7 +312,8 @@ fn generate_assoc_type(
         G::Lifetime(LifetimeParam { lifetime, .. }) => quote! { #lifetime },
     });
 
-    quote! { type WithoutGenerics = #rust_ty<#(#generics_params),*>; } // This error is not actually breaking the build
+    quote! { type WithoutGenerics = #rust_ty<#(#generics_params),*>; }
+    // This error is not actually breaking the build
 }
 
 // generate start of the `impl PY for #ty` block, up to (excluding) the open brace

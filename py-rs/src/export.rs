@@ -284,7 +284,6 @@ fn generate_decl<T: PY + ?Sized>(out: &mut String) {
     }
 
     // Type Definition
-    out.push_str("export ");
     out.push_str(&T::decl());
 }
 
@@ -321,11 +320,7 @@ fn generate_imports<T: PY + ?Sized + 'static>(
             continue;
         }
 
-        writeln!(
-            out,
-            r#"import type {{ {} }} from "{}";"#,
-            &dep.py_name, rel_path
-        )?;
+        writeln!(out, r#"from {} import {}"#, rel_path, &dep.py_name)?;
     }
     writeln!(out)?;
     Ok(())
@@ -336,22 +331,16 @@ fn import_path(from: &Path, import: &Path) -> Result<String, ExportError> {
     let rel_path = diff_paths(import, from.parent().unwrap())?;
     let str_path = match rel_path.components().next() {
         Some(Component::Normal(_)) => {
-            format!("./{}", rel_path.to_string_lossy())
+            format!(".{}", rel_path.to_string_lossy())
         }
         _ => rel_path.to_string_lossy().into(),
     };
 
     let path = if cfg!(target_os = "windows") {
-        str_path.replace('\\', "/")
+        str_path.replace('\\', ".")
     } else {
         str_path
     };
 
-    let path_without_extension = path.trim_end_matches(".ts");
-
-    Ok(if cfg!(feature = "import-esm") {
-        format!("{}.js", path_without_extension)
-    } else {
-        path_without_extension.to_owned()
-    })
+    Ok(path.trim_end_matches(".py").to_string())
 }
