@@ -57,7 +57,7 @@
 //! and will contain the following code:
 //!
 //! ```python
-//! import attr
+//! import attr TODO use pydantic
 //!
 //! @attr.s(slots=True)
 //! class User(object):
@@ -409,6 +409,39 @@ pub trait PY {
         }
     }
 
+    /// Generate the classes for variants of enums
+    /// Python does not support nested enum types like Rust
+    /// nor are Union types well supported like in TypeScript
+    /// For convinience we generate a enum with all the types
+    /// of the enum as a class without the nesting.
+    /// # Example:
+    /// ```
+    /// #[derive(Serialize, PY)]
+    /// #[serde(tag = "kind", content = "data")]
+    /// #[py(export)]
+    /// enum ComplexEnum {
+    ///     A,
+    ///     B { foo: String, bar: f64 },
+    ///     W(SimpleEnum),
+    ///     F { nested: SimpleEnum },
+    ///     V(Vec<Series>),
+    ///     U(Box<User>),
+    /// }
+    /// ```
+    /// ```python
+    /// class ComplexEnumIdentifier(StrEnum):
+    ///     A = "A"
+    ///     B = "B"
+    ///     W = "W"
+    ///     F = "F"
+    ///     V = "V"
+    ///     U = "U"
+    ///
+    /// ...
+    ///
+    ///  ```
+    fn variant_classes_decl() -> String;
+
     /// Declaration of this type, e.g. `type User = { user_id: number, ... }`. TODO update
     /// This function will panic if the type has no declaration.
     ///
@@ -633,6 +666,7 @@ macro_rules! impl_primitives {
             fn inline_flattened() -> String { panic!("{} cannot be flattened", <Self as $crate::PY>::name()) }
             fn decl() -> String { panic!("{} cannot be declared", <Self as $crate::PY>::name()) }
             fn decl_concrete() -> String { panic!("{} cannot be declared", <Self as $crate::PY>::name()) }
+            fn variant_classes_decl() -> String { panic!("{} cannot be declared", <Self as $crate::PY>::name()) }
         }
     )*)* };
 }
@@ -659,6 +693,7 @@ macro_rules! impl_tuples {
             fn inline_flattened() -> String { panic!("tuple cannot be flattened") }
             fn decl() -> String { panic!("tuple cannot be declared") }
             fn decl_concrete() -> String { panic!("tuple cannot be declared") }
+            fn variant_classes_decl() -> String { panic!("{} cannot be declared", <Self as $crate::PY>::name()) }
         }
     };
     ( $i2:ident $(, $i:ident)* ) => {
@@ -692,6 +727,7 @@ macro_rules! impl_wrapper {
             }
             fn decl() -> String { panic!("wrapper type cannot be declared") }
             fn decl_concrete() -> String { panic!("wrapper type cannot be declared") }
+            fn variant_classes_decl() -> String { panic!("{} cannot be declared", <Self as $crate::PY>::name()) }
         }
     };
 }
@@ -720,6 +756,7 @@ macro_rules! impl_shadow {
             fn decl() -> String { <$s as $crate::PY>::decl() }
             fn decl_concrete() -> String { <$s as $crate::PY>::decl_concrete() }
             fn output_path() -> Option<&'static std::path::Path> { <$s as $crate::PY>::output_path() }
+            fn variant_classes_decl() -> String { panic!("{} cannot be declared", <Self as $crate::PY>::name()) }
         }
     };
 }
@@ -760,6 +797,9 @@ impl<T: PY> PY for Option<T> {
 
     fn inline_flattened() -> String {
         panic!("{} cannot be flattened", Self::name())
+    }
+    fn variant_classes_decl() -> String {
+        panic!("{} cannot be declared", Self::name())
     }
 }
 
@@ -803,6 +843,9 @@ impl<T: PY, E: PY> PY for Result<T, E> {
     fn inline_flattened() -> String {
         panic!("{} cannot be flattened", Self::name())
     }
+    fn variant_classes_decl() -> String {
+        panic!("{} cannot be declared", Self::name())
+    }
 }
 
 impl<T: PY> PY for Vec<T> {
@@ -845,6 +888,9 @@ impl<T: PY> PY for Vec<T> {
 
     fn inline_flattened() -> String {
         panic!("{} cannot be flattened", Self::name())
+    }
+    fn variant_classes_decl() -> String {
+        panic!("{} cannot be declared", Self::name())
     }
 }
 
@@ -900,6 +946,9 @@ impl<T: PY, const N: usize> PY for [T; N] {
     fn inline_flattened() -> String {
         panic!("{} cannot be flattened", Self::name())
     }
+    fn variant_classes_decl() -> String {
+        panic!("{} cannot be declared", Self::name())
+    }
 }
 
 impl<K: PY, V: PY, H> PY for HashMap<K, V, H> {
@@ -946,6 +995,9 @@ impl<K: PY, V: PY, H> PY for HashMap<K, V, H> {
     fn inline_flattened() -> String {
         panic!("{} cannot be flattened", Self::name())
     }
+    fn variant_classes_decl() -> String {
+        panic!("{} cannot be declared", Self::name())
+    }
 }
 
 impl<I: PY> PY for Range<I> {
@@ -983,6 +1035,9 @@ impl<I: PY> PY for Range<I> {
 
     fn inline_flattened() -> String {
         panic!("{} cannot be flattened", Self::name())
+    }
+    fn variant_classes_decl() -> String {
+        panic!("{} cannot be declared", Self::name())
     }
 }
 
@@ -1101,5 +1156,9 @@ impl PY for Dummy {
 
     fn inline_flattened() -> String {
         panic!("{} cannot be flattened", Self::name())
+    }
+
+    fn variant_classes_decl() -> String {
+        panic!("{} cannot be declared", Self::name())
     }
 }

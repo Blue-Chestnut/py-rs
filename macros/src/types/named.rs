@@ -74,6 +74,7 @@ pub(crate) fn named(attr: &StructAttr, name: &str, fields: &FieldsNamed) -> Resu
         concrete: attr.concrete.clone(),
         bound: attr.bound.clone(),
         is_enum: false,
+        variants: vec![],
     })
 }
 

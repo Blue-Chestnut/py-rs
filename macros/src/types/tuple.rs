@@ -30,6 +30,7 @@ pub(crate) fn tuple(attr: &StructAttr, name: &str, fields: &FieldsUnnamed) -> Re
             )
         },
         is_enum: false,
+        variants: vec![],
         inline_flattened: None,
         docs: attr.docs.clone(),
         dependencies,

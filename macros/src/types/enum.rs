@@ -44,6 +44,10 @@ pub(crate) fn r#enum_def(s: &ItemEnum) -> syn::Result<DerivedPY> {
             variant,
         )?;
     }
+    let mut variants: Vec<String> = vec![];
+    for variant in &s.variants {
+        variants.push(variant.ident.to_string());
+    }
 
     Ok(DerivedPY {
         crate_rename,
@@ -57,6 +61,7 @@ pub(crate) fn r#enum_def(s: &ItemEnum) -> syn::Result<DerivedPY> {
         export_to: enum_attr.export_to,
         py_name: name,
         is_enum: true,
+        variants,
         concrete: enum_attr.concrete,
         bound: enum_attr.bound,
     })
@@ -198,7 +203,7 @@ fn empty_enum(name: impl Into<String>, enum_attr: EnumAttr) -> DerivedPY {
     let crate_rename = enum_attr.crate_rename();
     DerivedPY {
         crate_rename: crate_rename.clone(),
-        inline: quote!("never".to_owned()),
+        inline: quote!("None".to_owned()),
         docs: enum_attr.docs,
         inline_flattened: None,
         dependencies: Dependencies::new(crate_rename),
@@ -208,5 +213,6 @@ fn empty_enum(name: impl Into<String>, enum_attr: EnumAttr) -> DerivedPY {
         concrete: enum_attr.concrete,
         bound: enum_attr.bound,
         is_enum: true,
+        variants: vec![],
     }
 }

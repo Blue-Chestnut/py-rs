@@ -29,6 +29,7 @@ struct DerivedPY {
     concrete: HashMap<Ident, Type>,
     bound: Option<Vec<WherePredicate>>,
     is_enum: bool,
+    variants: Vec<String>,
     export: bool,
     export_to: Option<String>,
 }
@@ -76,6 +77,7 @@ impl DerivedPY {
         let decl = self.generate_decl_fn(&rust_ty, &generics);
         let dependencies = &self.dependencies;
         let generics_fn = self.generate_generics_fn(&generics);
+        let enum_decl = self.generate_variant_classes_decl();
 
         quote! {
             #impl_start {
@@ -84,7 +86,7 @@ impl DerivedPY {
                 fn ident() -> String {
                     #ident.to_owned()
                 }
-
+                #enum_decl
                 #docs
                 #name
                 #decl
@@ -161,8 +163,37 @@ impl DerivedPY {
                     fn inline_flattened() -> String { stringify!(#generics).to_owned() }
                     fn decl() -> String { panic!("{} cannot be declared", #name) }
                     fn decl_concrete() -> String { panic!("{} cannot be declared", #name) }
+                    fn variant_classes_decl() -> String {
+                        panic!("{} cannot be declared", #name)
+                    }
                 }
             )*
+        }
+    }
+
+    /// generate the variant class decl function
+    fn generate_variant_classes_decl(&self) -> TokenStream {
+        let name = &self.py_name;
+        let variant_text = self
+            .variants
+            .iter()
+            .map(|i| format!("{} = \"{}\"", i, i))
+            .collect::<Vec<String>>()
+            .join("\n\t");
+
+        if !self.is_enum {
+            return quote! {
+                fn variant_classes_decl() -> String {
+                    String::new()
+                }
+            };
+        }
+        quote! {
+            fn variant_classes_decl() -> String {
+                let variants = format!("{}", #variant_text); // TODO get the variants and put them here
+                let enum_def = format!("class {}Identifier(StrEnum):\n\t{variants}\n", #name);
+                enum_def
+            }
         }
     }
 
@@ -281,17 +312,17 @@ impl DerivedPY {
             // use instead. This might be something to change in the future.
             G::Const(ConstParam { ident, .. }) => Some(quote!(#ident)),
         });
-        // TODO we need to handle the case where the type is a enum or a struct differently
+
         if self.is_enum {
             quote! {
                     fn decl_concrete() -> String {
-                        format!("type {} = {}", #name, <Self as #crate_rename::PY>::inline())
+                        format!("{}\n\n{} = {}", <Self as #crate_rename::PY>::variant_classes_decl(), #name, <Self as #crate_rename::PY>::inline())
                 }
                 fn decl() -> String { // TODO we need to handle the case where the type is a enum or a struct differently
                     #generic_types
                     let inline = <#rust_ty<#(#generic_idents,)*> as #crate_rename::PY>::inline();
                     let generics = #py_generics;
-                    format!("type {}{generics} = {inline}", #name)
+                    format!("{}\n\n{}{generics} = {inline}", <Self as #crate_rename::PY>::variant_classes_decl(), #name)
                 }
             }
         } else {
