@@ -6,7 +6,7 @@ use crate::{
     attr::{Attr, EnumAttr, FieldAttr, StructAttr, Tagged, VariantAttr},
     deps::Dependencies,
     types::{self, type_as, type_override},
-    DerivedPY,
+    DerivedPY, EnumDef,
 };
 
 pub(crate) fn r#enum_def(s: &ItemEnum) -> syn::Result<DerivedPY> {
@@ -60,8 +60,12 @@ pub(crate) fn r#enum_def(s: &ItemEnum) -> syn::Result<DerivedPY> {
         export: enum_attr.export,
         export_to: enum_attr.export_to,
         py_name: name,
-        is_enum: true,
-        variants,
+        enum_def: Some(EnumDef {
+            variant_names: variants,
+            test_str: format!("{:?}", s.variants),
+            variants: s.variants.clone(),
+            ..Default::default()
+        }),
         concrete: enum_attr.concrete,
         bound: enum_attr.bound,
     })
@@ -212,7 +216,8 @@ fn empty_enum(name: impl Into<String>, enum_attr: EnumAttr) -> DerivedPY {
         py_name: name,
         concrete: enum_attr.concrete,
         bound: enum_attr.bound,
-        is_enum: true,
-        variants: vec![],
+        enum_def: Some(EnumDef {
+            ..Default::default()
+        }),
     }
 }

@@ -4,7 +4,7 @@ use syn::Result;
 use crate::{
     attr::{ContainerAttr, EnumAttr, StructAttr},
     deps::Dependencies,
-    DerivedPY,
+    DerivedPY, EnumDef,
 };
 
 pub(crate) fn type_override_struct(
@@ -25,8 +25,7 @@ pub(crate) fn type_override_struct(
         py_name: name.to_owned(),
         concrete: attr.concrete.clone(),
         bound: attr.bound.clone(),
-        is_enum: false,
-        variants: vec![],
+        enum_def: None,
     })
 }
 
@@ -48,7 +47,8 @@ pub(crate) fn type_override_enum(
         py_name: name.to_owned(),
         concrete: attr.concrete.clone(),
         bound: attr.bound.clone(),
-        is_enum: true,
-        variants: vec![], // TODO implement
+        enum_def: Some(EnumDef {
+            ..Default::default()
+        }), // TODO implement
     })
 }

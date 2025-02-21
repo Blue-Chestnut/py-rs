@@ -6,9 +6,9 @@ use std::collections::{HashMap, HashSet};
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 use syn::{
-    parse_quote, spanned::Spanned, ConstParam, GenericParam, Generics, Item, LifetimeParam, Path,
-    Result, Type, TypeArray, TypeParam, TypeParen, TypePath, TypeReference, TypeSlice, TypeTuple,
-    WhereClause, WherePredicate,
+    parse_quote, punctuated::Punctuated, spanned::Spanned, token::Comma, ConstParam, GenericParam,
+    Generics, Item, LifetimeParam, Path, Result, Type, TypeArray, TypeParam, TypeParen, TypePath,
+    TypeReference, TypeSlice, TypeTuple, Variant, WhereClause, WherePredicate,
 };
 
 use crate::{deps::Dependencies, utils::format_generics};
@@ -19,6 +19,28 @@ mod attr;
 mod deps;
 mod types;
 
+// #[derive(Default, Clone)]
+// enum EnumTypeDecl {
+//     #[default]
+//     Default,
+//     Unit {
+//         ident: String,
+//     },
+//     Tuple {
+//         idents: Vec<Type>,
+//     },
+//     Struct {
+//         fields: Vec<(String, Type)>,
+//     },
+// }
+
+#[derive(Default, Clone)]
+struct EnumDef {
+    pub variant_names: Vec<String>,
+    pub test_str: String,
+    pub variants: Punctuated<Variant, Comma>,
+}
+
 struct DerivedPY {
     crate_rename: Path,
     py_name: String,
@@ -28,8 +50,7 @@ struct DerivedPY {
     dependencies: Dependencies,
     concrete: HashMap<Ident, Type>,
     bound: Option<Vec<WherePredicate>>,
-    is_enum: bool,
-    variants: Vec<String>,
+    enum_def: Option<EnumDef>,
     export: bool,
     export_to: Option<String>,
 }
@@ -173,27 +194,42 @@ impl DerivedPY {
 
     /// generate the variant class decl function
     fn generate_variant_classes_decl(&self) -> TokenStream {
-        let name = &self.py_name;
-        let variant_text = self
-            .variants
-            .iter()
-            .map(|i| format!("{} = \"{}\"", i, i))
-            .collect::<Vec<String>>()
-            .join("\n\t");
+        if let Some(enum_def) = self.enum_def.clone() {
+            let name = &self.py_name;
+            let variant_text = enum_def
+                .variant_names
+                .iter()
+                .map(|i| format!("{} = \"{}\"", i, i))
+                .collect::<Vec<String>>()
+                .join("\n\t");
+            let debug_text = enum_def.test_str;
+            let variants_text = format!(
+                "{}",
+                enum_def
+                    .variants
+                    .iter()
+                    .map(|i| format!("{:?}\n", i))
+                    .collect::<Vec<String>>()
+                    .join("")
+            );
 
-        if !self.is_enum {
+            // TODO unit enums do not get a class
+            // TODO named enums are (B { foo: String, bar: f64 },) they need to be a class and a nested class
+            // TODO unnamed enums just have a class with the kind and data field
+
+            quote! {
+                fn variant_classes_decl() -> String {
+                    let variants = format!("{}\n\n{}", #variant_text, #variants_text); // TODO get the variants and put them here
+                    let enum_str = format!("class {}Identifier(StrEnum):\n\t{variants}\n\n{}", #name, #debug_text);
+                    enum_str
+                }
+            }
+        } else {
             return quote! {
                 fn variant_classes_decl() -> String {
                     String::new()
                 }
             };
-        }
-        quote! {
-            fn variant_classes_decl() -> String {
-                let variants = format!("{}", #variant_text); // TODO get the variants and put them here
-                let enum_def = format!("class {}Identifier(StrEnum):\n\t{variants}\n", #name);
-                enum_def
-            }
         }
     }
 
@@ -313,7 +349,7 @@ impl DerivedPY {
             G::Const(ConstParam { ident, .. }) => Some(quote!(#ident)),
         });
 
-        if self.is_enum {
+        if let Some(_) = self.enum_def.clone() {
             quote! {
                     fn decl_concrete() -> String {
                         format!("{}\n\n{} = {}", <Self as #crate_rename::PY>::variant_classes_decl(), #name, <Self as #crate_rename::PY>::inline())
