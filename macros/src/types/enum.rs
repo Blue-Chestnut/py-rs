@@ -84,7 +84,6 @@ pub(crate) fn r#enum_def(s: &ItemEnum) -> syn::Result<DerivedPY> {
         enum_def: Some(EnumDef {
             variant_names: variants,
             test_str: quote!([#(#formatted_variant_classes),*].join("\n\n")),
-            variants: s.variants.clone(),
             num_variant_classes: formatted_variant_classes.len(),
             ..Default::default()
         }),
@@ -172,7 +171,7 @@ fn format_variant_class(
                 format!("class {}Variant{}(BaseModel):\n\t{}", #enum_name, #name, #parsed_ty) // TODO parsed_ty needs to change
             ),
         },
-        (false, Tagged::Adjacently { tag, content }) => match &variant.fields {
+        (false, Tagged::Adjacently { tag, .. }) => match &variant.fields {
             Fields::Unnamed(unnamed) if unnamed.unnamed.len() == 1 => {
                 let field = &unnamed.unnamed[0];
                 let field_attr = FieldAttr::from_attrs(&unnamed.unnamed[0].attrs)?;

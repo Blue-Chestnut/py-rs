@@ -55,9 +55,9 @@ pub(crate) fn named(attr: &StructAttr, name: &str, fields: &FieldsNamed) -> Resu
 
     let inline_flattened = match (formatted_fields.len(), flattened_fields.len()) {
         (0, 0) => quote!("{  }".to_owned()),
-        (_, 0) => quote!(format!("{{ {} }}", #fields)),
+        (_, 0) => quote!(format!("{}", #fields)),
         (0, _) => quote!(#flattened),
-        (_, _) => quote!(format!("{{ {} }} & {}", #fields, #flattened)),
+        (_, _) => quote!(format!("{{ {} }} & {}", #fields, #flattened)), // TODO fix
     };
 
     Ok(DerivedPY {

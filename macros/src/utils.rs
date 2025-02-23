@@ -162,18 +162,18 @@ pub fn parse_docs(attrs: &[Attribute]) -> Result<String> {
 
         // Regular doc comment(s) (///) or single line block doc comment
         _ => {
-            let mut buffer = String::from("#\n");
+            let mut buffer = String::from("\t\"\"\"\n");
             let mut lines = doc_attrs.iter().peekable();
 
             while let Some(line) = lines.next() {
-                buffer.push_str(" *");
+                buffer.push_str("\t");
                 buffer.push_str(line);
 
                 if lines.peek().is_some() {
                     buffer.push('\n');
                 }
             }
-            buffer.push_str("\n */\n");
+            buffer.push_str("\n\t\"\"\"\n");
             buffer
         }
     })

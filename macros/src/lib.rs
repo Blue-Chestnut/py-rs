@@ -1,14 +1,14 @@
 #![macro_use]
-// #![deny(unused)]
+#![deny(unused)]
 
 use std::collections::{HashMap, HashSet};
 
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 use syn::{
-    parse_quote, punctuated::Punctuated, spanned::Spanned, token::Comma, ConstParam, GenericParam,
-    Generics, Item, LifetimeParam, Path, Result, Type, TypeArray, TypeParam, TypeParen, TypePath,
-    TypeReference, TypeSlice, TypeTuple, Variant, WhereClause, WherePredicate,
+    parse_quote, spanned::Spanned, ConstParam, GenericParam, Generics, Item, LifetimeParam, Path,
+    Result, Type, TypeArray, TypeParam, TypeParen, TypePath, TypeReference, TypeSlice, TypeTuple,
+    WhereClause, WherePredicate,
 };
 
 use crate::{deps::Dependencies, utils::format_generics};
@@ -19,37 +19,11 @@ mod attr;
 mod deps;
 mod types;
 
-// fn parse_fields(fields: Fields, ident: &Ident) -> String {
-//     match fields {
-//         // TODO named enums are (B { foo: String, bar: f64 },) they need to be a class and a nested class
-//         // TODO unnamed enums just have a class with the kind and data field
-//         Fields::Named(_) => {
-//             // for field in fields.named.iter() {
-//             //     let ty = &field.ty;
-//             //     let ident = &field.ident;
-//             //     println!("field: {}: {}", ident, ty);
-//             // }
-//             "".into()
-//         }
-//         Fields::Unnamed(_) => {
-//             let named_enum_variant = format!("@dataclass\nclass {}:\n", ident.to_string());
-//             // for field in fields.unnamed.iter() {
-
-//             //     let ty = &field.ty;
-//             //     println!("field: {}", ty);
-//             // }
-//             named_enum_variant
-//         }
-//         Fields::Unit => "".to_owned(),
-//     }
-// }
-
 #[derive(Default, Clone)]
 struct EnumDef {
     pub variant_names: Vec<String>,
     pub test_str: TokenStream,
     pub num_variant_classes: usize,
-    pub variants: Punctuated<Variant, Comma>,
 }
 
 struct DerivedPY {
@@ -372,13 +346,13 @@ impl DerivedPY {
         } else {
             quote! {
                     fn decl_concrete() -> String {
-                        format!("@dataclass\nclass {}\n\t{}", #name, <Self as #crate_rename::PY>::inline())
+                        format!("\nclass {}(BaseModel):\n\t{}", #name, <Self as #crate_rename::PY>::inline())
                 }
                 fn decl() -> String { // TODO we need to handle the case where the type is a enum or a struct differently
                     #generic_types
                     let inline = <#rust_ty<#(#generic_idents,)*> as #crate_rename::PY>::inline();
                     let generics = #py_generics;
-                    format!("@dataclass\nclass {}{generics}:\n\t{inline}", #name)
+                    format!("\nclass {}{generics}(BaseModel):\n\t{inline}", #name)
                 }
             }
         }

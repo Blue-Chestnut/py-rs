@@ -98,6 +98,7 @@ enum InlineComplexEnum {
     U(Box<User>),
 }
 
+/// This is a complex struct
 #[derive(Serialize, PY)]
 #[serde(rename_all = "camelCase")]
 #[py(export)]
