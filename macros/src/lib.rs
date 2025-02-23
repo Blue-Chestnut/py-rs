@@ -217,7 +217,7 @@ impl DerivedPY {
 
     fn generate_export_test(&self, rust_ty: &Ident, generics: &Generics) -> TokenStream {
         let test_fn = format_ident!(
-            "export_bindings_{}",
+            "export_bindings_{}_py",
             rust_ty.to_string().to_lowercase().replace("r#", "")
         );
         let crate_rename = &self.crate_rename;
