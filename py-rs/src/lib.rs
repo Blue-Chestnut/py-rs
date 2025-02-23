@@ -676,7 +676,7 @@ macro_rules! impl_tuples {
         impl<$($i: PY),*> PY for ($($i,)*) {
             type WithoutGenerics = (Dummy, );
             fn name() -> String {
-                format!("[{}]", [$(<$i as $crate::PY>::name()),*].join(", "))
+                format!("tuple[{}]", [$(<$i as $crate::PY>::name()),*].join(", "))
             }
             fn inline() -> String {
                 panic!("tuple cannot be inlined!");

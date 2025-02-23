@@ -1,5 +1,5 @@
 #![macro_use]
-#![deny(unused)]
+// #![deny(unused)]
 
 use std::collections::{HashMap, HashSet};
 
@@ -19,25 +19,36 @@ mod attr;
 mod deps;
 mod types;
 
-// #[derive(Default, Clone)]
-// enum EnumTypeDecl {
-//     #[default]
-//     Default,
-//     Unit {
-//         ident: String,
-//     },
-//     Tuple {
-//         idents: Vec<Type>,
-//     },
-//     Struct {
-//         fields: Vec<(String, Type)>,
-//     },
+// fn parse_fields(fields: Fields, ident: &Ident) -> String {
+//     match fields {
+//         // TODO named enums are (B { foo: String, bar: f64 },) they need to be a class and a nested class
+//         // TODO unnamed enums just have a class with the kind and data field
+//         Fields::Named(_) => {
+//             // for field in fields.named.iter() {
+//             //     let ty = &field.ty;
+//             //     let ident = &field.ident;
+//             //     println!("field: {}: {}", ident, ty);
+//             // }
+//             "".into()
+//         }
+//         Fields::Unnamed(_) => {
+//             let named_enum_variant = format!("@dataclass\nclass {}:\n", ident.to_string());
+//             // for field in fields.unnamed.iter() {
+
+//             //     let ty = &field.ty;
+//             //     println!("field: {}", ty);
+//             // }
+//             named_enum_variant
+//         }
+//         Fields::Unit => "".to_owned(),
+//     }
 // }
 
 #[derive(Default, Clone)]
 struct EnumDef {
     pub variant_names: Vec<String>,
-    pub test_str: String,
+    pub test_str: TokenStream,
+    pub num_variant_classes: usize,
     pub variants: Punctuated<Variant, Comma>,
 }
 
@@ -202,25 +213,22 @@ impl DerivedPY {
                 .map(|i| format!("{} = \"{}\"", i, i))
                 .collect::<Vec<String>>()
                 .join("\n\t");
-            let debug_text = enum_def.test_str;
-            let variants_text = format!(
-                "{}",
-                enum_def
-                    .variants
-                    .iter()
-                    .map(|i| format!("{:?}\n", i))
-                    .collect::<Vec<String>>()
-                    .join("")
-            );
-
-            // TODO unit enums do not get a class
-            // TODO named enums are (B { foo: String, bar: f64 },) they need to be a class and a nested class
-            // TODO unnamed enums just have a class with the kind and data field
+            if enum_def.num_variant_classes > 0 {
+                let variant_classes = enum_def.test_str;
+                return quote! {
+                    fn variant_classes_decl() -> String {
+                        let variant_classes = #variant_classes;
+                        let variants = format!("{}", #variant_text); // TODO get the variants and put them here
+                        let enum_str = format!("class {}Identifier(StrEnum):\n\t{variants}\n\n{variant_classes}", #name);
+                        enum_str
+                    }
+                };
+            }
 
             quote! {
                 fn variant_classes_decl() -> String {
-                    let variants = format!("{}\n\n{}", #variant_text, #variants_text); // TODO get the variants and put them here
-                    let enum_str = format!("class {}Identifier(StrEnum):\n\t{variants}\n\n{}", #name, #debug_text);
+                    let variants = format!("{}", #variant_text); // TODO get the variants and put them here
+                    let enum_str = format!("class {}Identifier(StrEnum):\n\t{variants}\n", #name);
                     enum_str
                 }
             }

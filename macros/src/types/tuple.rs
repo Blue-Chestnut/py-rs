@@ -25,7 +25,7 @@ pub(crate) fn tuple(attr: &StructAttr, name: &str, fields: &FieldsUnnamed) -> Re
         crate_rename,
         inline: quote! {
             format!(
-                "[{}]",
+                "tuple[{}]",
                 [#(#formatted_fields),*].join(", ")
             )
         },

@@ -80,7 +80,7 @@ enum SimpleEnum {
 enum ComplexEnum {
     A,
     B { foo: String, bar: f64 },
-    W(SimpleEnum),
+    W((SimpleEnum, SimpleEnum)),
     F { nested: SimpleEnum },
     V(Vec<Series>),
     U(Box<User>),
