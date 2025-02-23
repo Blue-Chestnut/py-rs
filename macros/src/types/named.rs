@@ -19,7 +19,7 @@ pub(crate) fn named(attr: &StructAttr, name: &str, fields: &FieldsNamed) -> Resu
     let mut dependencies = Dependencies::new(crate_rename.clone());
 
     if let Some(tag) = &attr.tag {
-        let formatted = format!("\"{}\": \"{}\",", tag, name);
+        let formatted = format!("\t{}: {}\n", tag, name);
         formatted_fields.push(quote! {
             #formatted.to_string()
         });
@@ -36,12 +36,12 @@ pub(crate) fn named(attr: &StructAttr, name: &str, fields: &FieldsNamed) -> Resu
         )?;
     }
 
-    let fields = quote!(<[String]>::join(&[#(#formatted_fields),*], " "));
+    let fields = quote!(<[String]>::join(&[#(#formatted_fields),*], "\n\t"));
     let flattened = quote!(<[String]>::join(&[#(#flattened_fields),*], " & "));
 
     let inline = match (formatted_fields.len(), flattened_fields.len()) {
         (0, 0) => quote!("{  }".to_owned()),
-        (_, 0) => quote!(format!("{{ {} }}", #fields)),
+        (_, 0) => quote!(format!("{}", #fields)),
         (0, 1) => quote! {{
             if #flattened.starts_with('(') && #flattened.ends_with(')') {
                 #flattened[1..#flattened.len() - 1].trim().to_owned()
@@ -155,7 +155,7 @@ fn format_field(
     };
 
     formatted_fields.push(quote! {
-        format!("{}{}{}: {},", #docs, #valid_name, #optional_annotation, #formatted_ty)
+        format!("{}{}{}: {}", #docs, #valid_name, #optional_annotation, #formatted_ty)
     });
 
     Ok(())

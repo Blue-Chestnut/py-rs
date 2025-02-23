@@ -141,9 +141,9 @@ fn format_variant_class(
         (Some(ty), None) => {
             dependencies.push(ty);
             // quote!(<#ty as #crate_rename::PY>::name())
-            quote!(#ty)
+            quote!(format!("ty, None: {}", #ty))
         }
-        (None, Some(ty)) => quote!(#ty.to_owned()),
+        (None, Some(ty)) => quote!(format!("None, ty: {}", #ty)), //quote!(#ty.to_owned()),
         (None, None) => {
             dependencies.append(variant_dependencies);
             inline_type
@@ -161,12 +161,16 @@ fn format_variant_class(
                 field_attr.assert_validity(field)?;
 
                 if field_attr.skip {
-                    quote!(format!("tagged externally unnamed\"{}\" {}", #name, #enum_name))
+                    quote!(format!("tagged externally unnamed skip\"{}\" {}", #name, #enum_name))
                 } else {
-                    quote!(format!("tagged externally unnamed{{ \"{}\": {} }}", #name, #parsed_ty))
+                    quote!(
+                        format!("class {}Variant{}(BaseModel):\n\t{}: {}", #enum_name, #name, #name, #parsed_ty)
+                    )
                 }
             }
-            _ => quote!(format!("tagged externally named {}\n{}\n", #name, #parsed_ty)),
+            _ => quote!(
+                format!("class {}Variant{}(BaseModel):\n\t{}", #enum_name, #name, #parsed_ty) // TODO parsed_ty needs to change
+            ),
         },
         (false, Tagged::Adjacently { tag, content }) => match &variant.fields {
             Fields::Unnamed(unnamed) if unnamed.unnamed.len() == 1 => {
@@ -185,17 +189,19 @@ fn format_variant_class(
                             quote!(<#ty as #crate_rename::PY>::name())
                         }
                     };
-                    quote!(
-                        format!("tagged adjecent unnamed {{ \"{}\": \"{}\", \"{}\": {} }}", #tag, #name, #content, #ty)
-                    )
+                    quote!(format!("{}Variant{} = {}", #enum_name, #name, #ty))
                 }
             }
             Fields::Unit => {
                 quote!()
             }
-            _ => quote!(
-                format!("tagged adjecent rest{{ \"{}\": \"{}\", \"{}\": {} }}", #tag, #name, #content, #parsed_ty)
-            ),
+            _ => {
+                // TODO make this code better
+                quote!(
+                    format!("class {}Variant{}(BaseModel):\n\t{}", #enum_name, #name, format!("{}", 
+                    #parsed_ty.to_string()).replace(", ", "\n\t").replace("{ ", "").replace("}", ""))
+                )
+            }
         },
         (false, Tagged::Internally { tag }) => match variant_type.inline_flattened {
             Some(_) => {
@@ -311,9 +317,9 @@ fn format_variant(
             //     }
             // }
             // _ => quote!(format!("{{ \"{}\": {} }}", #name, #parsed_ty)),
-            _ => quote!(format!("{}\n{}\n", #name, #parsed_ty)),
+            _ => quote!(format!("{}Variant{}", #enum_name, #name)),
         },
-        (false, Tagged::Adjacently { tag, content }) => match &variant.fields {
+        (false, Tagged::Adjacently { tag, .. }) => match &variant.fields {
             Fields::Unnamed(unnamed) if unnamed.unnamed.len() == 1 => {
                 let field = &unnamed.unnamed[0];
                 let field_attr = FieldAttr::from_attrs(&unnamed.unnamed[0].attrs)?;
@@ -323,20 +329,11 @@ fn format_variant(
                 if field_attr.skip {
                     quote!(format!("{{ \"{}\": \"{}\" }}", #tag, #name))
                 } else {
-                    let ty = match field_attr.type_override {
-                        Some(type_override) => quote!(#type_override),
-                        None => {
-                            let ty = field_attr.type_as(&field.ty);
-                            quote!(<#ty as #crate_rename::PY>::name())
-                        }
-                    };
-                    quote!(format!("{{ \"{}\": \"{}\", \"{}\": {} }}", #tag, #name, #content, #ty))
+                    quote!(format!("{}Variant{}", #enum_name, #name))
                 }
             }
             Fields::Unit => quote!(format!("{}Identifier.{}", #enum_name, #name)),
-            _ => quote!(
-                format!("{{ \"{}\": \"{}\", \"{}\": {} }}", #tag, #name, #content, #parsed_ty)
-            ),
+            _ => quote!(format!("{}Variant{}", #enum_name, #name)),
         },
         (false, Tagged::Internally { tag }) => match variant_type.inline_flattened {
             Some(_) => {

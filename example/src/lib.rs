@@ -75,7 +75,7 @@ enum SimpleEnum {
 }
 
 #[derive(Serialize, PY)]
-#[serde(tag = "kind", content = "data")]
+// #[serde(tag = "kind", content = "data")]
 #[py(export)]
 enum ComplexEnum {
     A,

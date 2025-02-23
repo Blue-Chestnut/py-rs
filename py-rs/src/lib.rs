@@ -804,6 +804,8 @@ impl<T: PY> PY for Option<T> {
 }
 
 impl<T: PY, E: PY> PY for Result<T, E> {
+    // TODO update
+    // maybe just not support this or add the result import from python
     type WithoutGenerics = Result<Dummy, Dummy>;
 
     fn name() -> String {
@@ -963,7 +965,7 @@ impl<K: PY, V: PY, H> PY for HashMap<K, V, H> {
     }
 
     fn inline() -> String {
-        format!("{{ [key in {}]?: {} }}", K::inline(), V::inline())
+        format!("dict[{}, {}]", K::inline(), V::inline())
     }
 
     fn visit_dependencies(v: &mut impl TypeVisitor)
@@ -1000,6 +1002,7 @@ impl<K: PY, V: PY, H> PY for HashMap<K, V, H> {
     }
 }
 
+// TODO should not be supported
 impl<I: PY> PY for Range<I> {
     type WithoutGenerics = Range<Dummy>;
     fn name() -> String {
