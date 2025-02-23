@@ -103,6 +103,7 @@ enum InlineComplexEnum {
 #[serde(rename_all = "camelCase")]
 #[py(export)]
 struct ComplexStruct {
+    /// This is a field
     #[serde(default)]
     pub string_tree: Option<Rc<BTreeSet<String>>>,
 }

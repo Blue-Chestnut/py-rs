@@ -344,15 +344,16 @@ impl DerivedPY {
                 }
             }
         } else {
+            let docs = self.docs.clone();
             quote! {
                     fn decl_concrete() -> String {
-                        format!("\nclass {}(BaseModel):\n\t{}", #name, <Self as #crate_rename::PY>::inline())
+                        format!("\nclass {}(BaseModel):\n\t{}\n\t{}", #name, #docs, <Self as #crate_rename::PY>::inline())
                 }
                 fn decl() -> String { // TODO we need to handle the case where the type is a enum or a struct differently
                     #generic_types
                     let inline = <#rust_ty<#(#generic_idents,)*> as #crate_rename::PY>::inline();
                     let generics = #py_generics;
-                    format!("\nclass {}{generics}(BaseModel):\n\t{inline}", #name)
+                    format!("\nclass {}{generics}(BaseModel):\n{}\n\t{inline}", #name, #docs)
                 }
             }
         }

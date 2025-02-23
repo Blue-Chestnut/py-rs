@@ -173,7 +173,7 @@ pub fn parse_docs(attrs: &[Attribute]) -> Result<String> {
                     buffer.push('\n');
                 }
             }
-            buffer.push_str("\n\t\"\"\"\n");
+            buffer.push_str("\n\t\"\"\"\n\t");
             buffer
         }
     })
