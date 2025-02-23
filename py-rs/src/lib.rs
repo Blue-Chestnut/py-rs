@@ -1,5 +1,5 @@
 //! <h1 align="center" style="padding-top: 0; margin-top: 0;">
-//! <img width="150px" src="https://raw.githubusercontent.com/Aleph-Alpha/py-rs/main/logo.png" alt="logo">
+//! <img width="150px" src="https://raw.githubusercontent.com/Blue-Chestnut/py-rs/main/logo.png" alt="logo">
 //! <br/>
 //! py-rs
 //! </h1>
@@ -9,7 +9,7 @@
 //!
 //! <div align="center">
 //! <!-- Github Actions -->
-//! <img src="https://img.shields.io/github/actions/workflow/status/Aleph-Alpha/py-rs/test.yml?branch=main" alt="actions status" />
+//! <img src="https://img.shields.io/github/actions/workflow/status/Blue-Chestnut/py-rs/test.yml?branch=main" alt="actions status" />
 //! <a href="https://crates.io/crates/py-rs">
 //! <img src="https://img.shields.io/crates/v/py-rs.svg?style=flat-square"
 //! alt="Crates.io version" />
@@ -29,6 +29,8 @@
 //! and client. Using this library, you can easily generate python bindings to your
 //! rust structs & enums so that you can keep your types in one place.
 //!
+//! > **Note:** This is a work in progress. There are still some features of `ts-rs` that are not tested or converted.
+//!
 //! ## How?
 //! py-rs exposes a single trait, `PY`. Using a derive macro, you can implement this interface for your types.
 //! Then, you can use this trait to obtain the Python bindings.
@@ -38,7 +40,7 @@
 //! ## Get started
 //! ```toml
 //! [dependencies]
-//! py-rs = "0.1"
+//! py-rs = "0.1.0"
 //! ```
 //!
 //! ```rust
@@ -57,24 +59,23 @@
 //! and will contain the following code:
 //!
 //! ```python
-//! import attr TODO use pydantic
+//! from pydanic import BaseModel
 //!
-//! @attr.s(slots=True)
-//! class User(object):
-//!     user_id = attr.ib(validator=attr.validators.instance_of(int))
-//!     first_name = attr.ib(validator=attr.validators.instance_of(str))
-//!     last_name = attr.ib(validator=attr.validators.instance_of(str))
+//! class User(BaseModel):
+//!     user_id: int
+//!     first_name: str
+//!     last_name: str
 //! ```
 //!
 //! ## Features
 //! - generate type declarations from rust structs
 //! - generate union declarations from rust enums
-//! - inline types
-//! - flatten structs/types
 //! - generate necessary imports when exporting to multiple files
 //! - serde compatibility
 //! - generic types
 //! - support for ESM imports
+//!
+//! > **Note:** not all the features are tested for Python.
 //!
 //! ## cargo features
 //! | **Feature**        | **Description**                                                                                                                                                                                           |

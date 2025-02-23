@@ -2,8 +2,8 @@
 If you are unsure what to work on or want to discuss your idea, feel free to open an issue.  
 
 ### Documentation
-After implementing a new feature, please document it in the doc comment on `TS` in `ts_rs/lib.rs`.  
-`README.md` is generated from the module doc comment in `ts_rs/lib.rs`. If you added/updated documentation there, go to the `ts-rs/` directory and run one of the following commands:
+After implementing a new feature, please document it in the doc comment on `PY` in `py_rs/lib.rs`.  
+`README.md` is generated from the module doc comment in `py_rs/lib.rs`. If you added/updated documentation there, go to the `py-rs/` directory and run one of the following commands:
 
 On Windows:
 `cargo readme -o ..\README.md`
