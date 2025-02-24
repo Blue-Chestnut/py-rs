@@ -190,14 +190,16 @@ const DECLARATION_START: &str = "export type ";
 /// both imports and declarations alphabetically
 fn merge(original_contents: String, new_contents: String) -> String {
     let (original_header, original_decls) = original_contents
-        .split_once("\n\n")
+        .split_once("\n\n\n")
         .expect(HEADER_ERROR_MESSAGE);
-    let (new_header, new_decl) = new_contents.split_once("\n\n").expect(HEADER_ERROR_MESSAGE);
+    let (new_header, new_decl) = new_contents
+        .split_once("\n\n\n")
+        .expect(HEADER_ERROR_MESSAGE);
 
     let imports = original_header
         .lines()
-        .skip(1)
-        .chain(new_header.lines().skip(1))
+        .skip(3)
+        .chain(new_header.lines().skip(3))
         .collect::<BTreeSet<_>>();
 
     let import_len = imports.iter().map(|&x| x.len()).sum::<usize>() + imports.len();
@@ -311,9 +313,9 @@ fn generate_imports<T: PY + ?Sized + 'static>(
         let is_same_file = path
             .file_name()
             .and_then(std::ffi::OsStr::to_str)
-            .map(|x| x.trim_end_matches(".ts"))
-            .map(|x| format!("./{x}"))
-            .map(|x| x == rel_path.trim_end_matches(".js"))
+            .map(|x| x.trim_end_matches(".py"))
+            .map(|x| format!(".{x}"))
+            .map(|x| x == rel_path)
             .unwrap_or(false);
 
         if is_same_file {
@@ -322,6 +324,7 @@ fn generate_imports<T: PY + ?Sized + 'static>(
 
         writeln!(out, r#"from {} import {}"#, rel_path, &dep.py_name)?;
     }
+    writeln!(out)?;
     writeln!(out)?;
     Ok(())
 }

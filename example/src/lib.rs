@@ -17,6 +17,13 @@ enum Role {
 }
 
 #[derive(Serialize, PY)]
+#[py(rename_all = "lowercase")]
+#[py(export, export_to = "UserRole.py")]
+struct Person {
+    role: Role,
+}
+
+#[derive(Serialize, PY)]
 // when 'serde-compat' is enabled, py-rs tries to use supported serde attributes.
 #[serde(rename_all = "UPPERCASE")]
 #[py(export)]
