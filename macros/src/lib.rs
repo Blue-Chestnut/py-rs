@@ -193,7 +193,7 @@ impl DerivedPY {
                     fn variant_classes_decl() -> String {
                         let variant_classes = #variant_classes;
                         let variants = format!("{}", #variant_text); // TODO get the variants and put them here
-                        let enum_str = format!("class {}Identifier(StrEnum):\n\t{variants}\n\n{variant_classes}", #name);
+                        let enum_str = format!("class {}Identifier(Enum):\n\t{variants}\n\n{variant_classes}", #name);
                         enum_str
                     }
                 };
@@ -202,7 +202,7 @@ impl DerivedPY {
             quote! {
                 fn variant_classes_decl() -> String {
                     let variants = format!("{}", #variant_text); // TODO get the variants and put them here
-                    let enum_str = format!("class {}Identifier(StrEnum):\n\t{variants}\n", #name);
+                    let enum_str = format!("class {}Identifier(Enum):\n\t{variants}\n", #name);
                     enum_str
                 }
             }
@@ -332,15 +332,17 @@ impl DerivedPY {
         });
 
         if let Some(_) = self.enum_def.clone() {
+            // self.dependencies.append();
+            // TODO add TypeAlias and Enum as dependencies
             quote! {
                     fn decl_concrete() -> String {
-                        format!("{}\n\n{} = {}", <Self as #crate_rename::PY>::variant_classes_decl(), #name, <Self as #crate_rename::PY>::inline())
+                        format!("{}\n\n{}: TypeAlias = {}", <Self as #crate_rename::PY>::variant_classes_decl(), #name, <Self as #crate_rename::PY>::inline())
                 }
                 fn decl() -> String { // TODO we need to handle the case where the type is a enum or a struct differently
                     #generic_types
                     let inline = <#rust_ty<#(#generic_idents,)*> as #crate_rename::PY>::inline();
                     let generics = #py_generics;
-                    format!("{}\n\n{}{generics} = {inline}", <Self as #crate_rename::PY>::variant_classes_decl(), #name)
+                    format!("{}\n\n{}: TypeAlias{generics} = {inline}", <Self as #crate_rename::PY>::variant_classes_decl(), #name)
                 }
             }
         } else {

@@ -4,8 +4,23 @@ use std::{collections::BTreeSet, rc::Rc};
 
 use chrono::NaiveDateTime;
 use py_rs::PY;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+
+#[derive(Serialize, Deserialize, Default, Debug, PartialEq, Clone, Copy, PY)]
+#[py(export, export_to = "../../example/bindings/DataType.py")]
+pub enum FloatPrecision {
+    #[default]
+    Single,
+    Double,
+    Fixed(u32, u32),
+}
+
+#[derive(Serialize, Deserialize, Default, Debug, PartialEq, Clone, Copy, PY)]
+#[py(export, export_to = "../../example/bindings/DataType.py")]
+pub struct FloatType {
+    pub precision: FloatPrecision,
+}
 
 #[derive(Serialize, PY)]
 #[py(rename_all = "lowercase")]

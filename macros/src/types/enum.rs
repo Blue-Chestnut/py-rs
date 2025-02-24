@@ -168,7 +168,7 @@ fn format_variant_class(
                 }
             }
             _ => quote!(
-                format!("class {}Variant{}(BaseModel):\n\t{}", #enum_name, #name, #parsed_ty) // TODO parsed_ty needs to change
+                format!("class {}Variant{}(BaseModel):\n\t{}: {}", #enum_name, #name, #name, #parsed_ty) // TODO parsed_ty needs to change
             ),
         },
         (false, Tagged::Adjacently { tag, .. }) => match &variant.fields {

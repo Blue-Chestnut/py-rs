@@ -430,7 +430,7 @@ pub trait PY {
     /// }
     /// ```
     /// ```python
-    /// class ComplexEnumIdentifier(StrEnum):
+    /// class ComplexEnumIdentifier(Enum):
     ///     A = "A"
     ///     B = "B"
     ///     W = "W"
