@@ -1,6 +1,6 @@
 [package]
 name = "py-rs-macros"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Matthias Ruiz <matthias.ruiz@blue-chestnut.com>"]
 edition = "2021"
 description = "derive macro for py-rs"

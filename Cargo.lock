@@ -902,7 +902,7 @@ dependencies = [
 
 [[package]]
 name = "py-rs"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "bigdecimal",
  "bson",
@@ -926,7 +926,7 @@ dependencies = [
 
 [[package]]
 name = "py-rs-macros"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "proc-macro2",
  "quote",
